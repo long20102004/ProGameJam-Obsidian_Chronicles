@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+<form th:action="@{/upload-image}" method="post" class="form"  enctype="multipart/form-data">
+    Tile-Width (px):
+    <input type="number" name="width" id="" />
+    Tile-Height (px):
+    <input type="number" name="height" />
+
+    Map width (Number tiles in width) <input type="number" name="map-width">
+    Map height (Number tiles in height) <input type="number" name="map-height">
+    <input type="file" name="image"/>
+    <input type="submit" name="" />
+</form>
+<script src="../static/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../edit.css">
+</head>
+<body>
+<button type="submit">Export</button>
+
+<div class="container">
+<div class="images">
+    <div class="image-container" th:each="image, stat : ${images}">
+        <img class="image" th:id="${stat.index}" th:src="'data:image/png;base64,'+${image}"/>
+    </div>
+</div>
+<div class="map">
+    <div class="information map-width" th:text="${mapWidth}"></div>
+    <div class="information map-height" th:text="${mapHeight}"></div>
+</div>
+</div>
+<script src="../main.js"></script>
+</body>
+</html>

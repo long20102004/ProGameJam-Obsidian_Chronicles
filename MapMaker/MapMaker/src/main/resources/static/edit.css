@@ -1,0 +1,49 @@
+body{
+    background-color: transparent;
+    display: block;
+}
+.images{
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    border: black solid 2px;
+    /*position: fixed;*/
+}
+.image-container{
+    width: 60px;
+    height: 60px;
+}
+.image{
+    width: 60px;
+    height: 60px;
+    max-width: 60px;
+    max-height: 60px;
+    min-width: 60px;
+    min-height: 60px;
+    border: black solid 1px;
+}
+.information{
+    display: none;
+}
+table{
+    border: black solid 1px;
+}
+td {
+    width: 50px;
+    height: 50px;
+    max-width: 50px;
+    max-height: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    overflow: auto;
+    border: black solid 0.2px;
+}
+button{
+    /*width: 100%;*/
+}
+.container{
+    /*width: 100%;*/
+    /*display: inline-flex;*/
+}
