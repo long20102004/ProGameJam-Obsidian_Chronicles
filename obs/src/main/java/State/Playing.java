@@ -15,10 +15,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.*;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -27,6 +24,7 @@ import static Main.Game.reward;
 @Component
 public class Playing implements StateMethods {
     public static int countReceivedAction = 0;
+    public static int maxActionCount = 50000;
     public boolean readyToSend = false;
     public boolean readyToUpdate = false;
     private Game game;
@@ -303,7 +301,7 @@ public class Playing implements StateMethods {
         if (receivedAction) {
             countReceivedAction++;
             reward--;
-            if (countReceivedAction >= 5000){
+            if (countReceivedAction >= maxActionCount){
                 Game.state = 1;
                 ImageSender.sendGameState();
                 game.resetAll();
@@ -312,8 +310,19 @@ public class Playing implements StateMethods {
             readyToSend = true;
             switch (action) {
                 case "MOVE_RIGHT" -> {
-                    game.getPlayer().setRight(true);
-                    game.getPlayer().setMoving(true);
+                    int x = new Random().nextInt(0, 3);
+                    switch (x){
+                        case 0 -> {
+                            game.getPlayer().setRight(true);
+                            game.getPlayer().setMoving(true);
+                        }
+                        case 1 -> {
+                            game.getPlayer().setAttacking(true);
+                        }
+                        case 2 -> {
+                            game.getPlayer().setJump(true);
+                        }
+                    }
                 }
                 case "MOVE_LEFT" -> {
                     game.getPlayer().setLeft(true);
