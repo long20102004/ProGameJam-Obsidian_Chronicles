@@ -147,7 +147,6 @@ public class ExtraMethods {
               Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
               Rectangle screenRect = new Rectangle(screenSize);
               screenCapture = robot.createScreenCapture(screenRect);
-              System.out.println(screenRect);
               ImageIO.write(screenCapture, "png", new File("screenshot" + indexPicture + ".png"));
               indexPicture++;
           } catch (AWTException | IOException e) {

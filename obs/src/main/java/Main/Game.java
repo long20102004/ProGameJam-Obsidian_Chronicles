@@ -48,14 +48,8 @@ public class Game implements Runnable{
     public Game() {
         initClass();
     }
-    int cnt = 0;
     private void initClass() {
         Point spawnPoint = levelManager.getLevel().getPlayerSpawn();
-        if (cnt == 0) {
-            System.out.println(spawnPoint);
-            System.out.println("Width:  " + GAME_WIDTH + ", Height: " + GAME_HEIGHT);
-            cnt = 1;
-        }
         player = new SwordHero(spawnPoint.x, spawnPoint.y, this);
         gamePanel = new GamePanel(this);
         gameWindow = new GameWindow(gamePanel);

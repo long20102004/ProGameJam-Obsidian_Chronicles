@@ -26,6 +26,8 @@ import static Main.Game.reward;
 
 @Component
 public class Playing implements StateMethods {
+    public static int countReceivedAction = 0;
+    public boolean readyToSend = false;
     public boolean readyToUpdate = false;
     private Game game;
     public static boolean receivedAction;
@@ -155,7 +157,7 @@ public class Playing implements StateMethods {
     }
 
     private void playerTransform() {
-        if (timerTask != null){
+        if (timerTask != null) {
             timerTask.cancel();
             timerTask = null;
         }
@@ -291,29 +293,53 @@ public class Playing implements StateMethods {
     public Game getGame() {
         return game;
     }
-    public void action(){
+
+    public void action() {
         readDataFromFile();
-        if (receivedAction){
+        if (!readyToUpdate && readyToSend){
+            sendData();
+            readyToSend = false;
+        }
+        if (receivedAction) {
+            countReceivedAction++;
+            if (countReceivedAction >= 5000){
+                Game.state = 1;
+                ImageSender.sendGameState();
+                game.resetAll();
+            }
             readyToUpdate = true;
-            switch (action){
-                case "MOVE" -> {
+            readyToSend = true;
+            switch (action) {
+                case "MOVE_RIGHT" -> {
                     game.getPlayer().setRight(true);
                     game.getPlayer().setMoving(true);
                 }
+                case "MOVE_LEFT" -> {
+                    game.getPlayer().setLeft(true);
+                    game.getPlayer().setMoving(true);
+                }
+                case "DASH" -> {
+                    game.getPlayer().setDash(true);
+                }
                 case "ATTACK" -> {
-
+                    game.getPlayer().setAttacking(true);
+                }
+                case "JUMP" -> {
+                    game.getPlayer().setJump(true);
                 }
             }
-            ImageSender.sendImage(ExtraMethods.getScreenShot());
-            ImageSender.sendReward();
-            ImageSender.sendGameState();
+
             resetDataFile();
-        }
-        else {
+        } else {
             readyToUpdate = false;
             game.getPlayer().setRight(false);
             game.getPlayer().setMoving(false);
+            game.getPlayer().setLeft(false);
+            game.getPlayer().setDash(false);
+            game.getPlayer().setAttacking(false);
+            game.getPlayer().setJump(false);
         }
+
     }
 
     private void resetDataFile() {
@@ -350,19 +376,24 @@ public class Playing implements StateMethods {
     }
 
 
-   public void readDataFromFile() {
-    try {
-        BufferedReader reader = new BufferedReader(new FileReader("data"));
-        String line;
-        if ((line = reader.readLine()) != null) {
-            receivedAction = Boolean.parseBoolean(line.trim());
+    public void readDataFromFile() {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("data"));
+            String line;
             if ((line = reader.readLine()) != null) {
-                action = line.trim();
+                receivedAction = Boolean.parseBoolean(line.trim());
+                if ((line = reader.readLine()) != null) {
+                    action = line.trim();
+                }
             }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        reader.close();
-    } catch (IOException e) {
-        e.printStackTrace();
     }
-}
+    public void sendData(){
+        ImageSender.sendImage(ExtraMethods.getScreenShot());
+        ImageSender.sendReward();
+        ImageSender.sendGameState();
+    }
 }
