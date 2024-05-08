@@ -309,33 +309,19 @@ public class Playing implements StateMethods {
             readyToUpdate = true;
             readyToSend = true;
             switch (action) {
-                case "MOVE_RIGHT" -> {
-                    int x = new Random().nextInt(0, 3);
-                    switch (x){
-                        case 0 -> {
-                            game.getPlayer().setRight(true);
-                            game.getPlayer().setMoving(true);
-                        }
-                        case 1 -> {
-                            game.getPlayer().setAttacking(true);
-                        }
-                        case 2 -> {
-                            game.getPlayer().setJump(true);
-                        }
-                    }
-                }
-                case "MOVE_LEFT" -> {
+                case "0" -> {
                     game.getPlayer().setLeft(true);
                     game.getPlayer().setMoving(true);
                 }
-                case "DASH" -> {
-                    game.getPlayer().setDash(true);
-                }
-                case "ATTACK" -> {
-                    game.getPlayer().setAttacking(true);
-                }
-                case "JUMP" -> {
+                case "1" -> {
                     game.getPlayer().setJump(true);
+                }
+                case "2" -> {
+                    game.getPlayer().setRight(true);
+                    game.getPlayer().setMoving(true);
+                }
+                case "3" -> {
+                    game.getPlayer().setAttacking(true);
                 }
             }
 
