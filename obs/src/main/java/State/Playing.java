@@ -302,6 +302,7 @@ public class Playing implements StateMethods {
         }
         if (receivedAction) {
             countReceivedAction++;
+            reward--;
             if (countReceivedAction >= 5000){
                 Game.state = 1;
                 ImageSender.sendGameState();
