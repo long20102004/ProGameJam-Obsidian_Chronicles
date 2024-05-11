@@ -1,34 +1,36 @@
 from flask import Flask, request
 import requests
-
 app = Flask(__name__)
 id = 1
-
 @app.route('/', methods=['POST'])
 def receive_image():
     global id
+    global checkdata
     image_data = request.data
-    with open('received_image' + str(id) + '.jpg', 'wb') as f:
+    with open('received_image' + str(id) + '.png', 'wb') as f:
         f.write(image_data)
     id = id + 1
-    send_data()
+    checkdata = True
     return '', 204
 
 @app.route('/reward', methods=['POST'])
 def receive_reward():
     reward = request.get_json()
-    print(reward)
+    with open("Reward.txt","w") as file:
+        file.write(str(reward))
     return '', 204
 
 @app.route('/state', methods=['POST'])
 def receive_game_state():
     state = request.get_json()
-    print(state)
+    with open("Done.txt","w") as file:
+        file.write(str(state))
     return '', 204
 
 
 def send_data():
-    data = "MOVE"
+    global action
+    data = str(action)
     response = requests.post("http://localhost:8000/data", data=data)
 
 if __name__ == '__main__':
