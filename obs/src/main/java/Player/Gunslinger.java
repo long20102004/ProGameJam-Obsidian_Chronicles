@@ -154,6 +154,12 @@ public class Gunslinger extends Player{
     public void updateProperties() {
         healthBar.update();
     }
+
+    @Override
+    public void update() {
+
+    }
+
     private void handleIdleState() {
         updateInAir();
         setAction();

@@ -196,6 +196,12 @@ public class HoarderTransform extends Player {
     public void updateProperties() {
         healthBar.update();
     }
+
+    @Override
+    public void update() {
+
+    }
+
     @Override
     public void updateXPos(float speed) {
         float xspeed = speed;

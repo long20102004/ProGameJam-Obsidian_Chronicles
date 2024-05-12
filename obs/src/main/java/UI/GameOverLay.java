@@ -46,7 +46,7 @@ public class GameOverLay {
         exitButtons.setReleased(true);
         if (ExtraMethods.isIn(e, newGameButtons.getBound())){
             game.resetAll();
-            game.getPlaying().sendData();
+//            game.getPlaying().sendData();
             GameState.gameState = GameState.PLAYING;
         }
         if (ExtraMethods.isIn(e, continueButtons.getBound())) {

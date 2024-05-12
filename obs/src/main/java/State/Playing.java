@@ -16,6 +16,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.*;
 import java.util.*;
+import Player.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -177,6 +178,8 @@ public class Playing implements StateMethods {
                 };
                 timer.schedule(timerTask, 5000);
             }
+            case Player.SWORD_WOMAN -> game.setPlayer(new SwordWoman(currentPoint.x, currentPoint.y, game));
+
         }
         Player.currentHero = Player.NOT_CHANGE;
     }
@@ -293,9 +296,9 @@ public class Playing implements StateMethods {
     }
 
     public void action() {
-        readDataFromFile();
+//        readDataFromFile();
         if (!readyToUpdate && readyToSend){
-            sendData();
+//            sendData();
             readyToSend = false;
         }
         if (receivedAction) {
@@ -372,24 +375,24 @@ public class Playing implements StateMethods {
     }
 
 
-    public void readDataFromFile() {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("data"));
-            String line;
-            if ((line = reader.readLine()) != null) {
-                receivedAction = Boolean.parseBoolean(line.trim());
-                if ((line = reader.readLine()) != null) {
-                    action = line.trim();
-                }
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    public void sendData(){
-        ImageSender.sendImage(ExtraMethods.getScreenShot());
-        ImageSender.sendReward();
-        ImageSender.sendGameState();
-    }
+//    public void readDataFromFile() {
+//        try {
+//            BufferedReader reader = new BufferedReader(new FileReader("data"));
+//            String line;
+//            if ((line = reader.readLine()) != null) {
+//                receivedAction = Boolean.parseBoolean(line.trim());
+//                if ((line = reader.readLine()) != null) {
+//                    action = line.trim();
+//                }
+//            }
+//            reader.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//    public void sendData(){
+//        ImageSender.sendImage(ExtraMethods.getScreenShot());
+//        ImageSender.sendReward();
+//        ImageSender.sendGameState();
+//    }
 }
