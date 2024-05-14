@@ -307,6 +307,7 @@ public class Playing implements StateMethods {
             if (countReceivedAction >= maxActionCount || checkLevelEndPoint()){
                 Game.state = 1;
                 ImageSender.sendGameState();
+                reward += 1000;
                 game.resetAll();
             }
             readyToUpdate = true;
