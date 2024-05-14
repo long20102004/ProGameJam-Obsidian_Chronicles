@@ -15,6 +15,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.*;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import Player.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -343,6 +345,7 @@ public class Playing implements StateMethods {
     }
 
     private boolean checkLevelEndPoint() {
+        if (currentPlayer == null) return false;
         if (currentPlayer.getHitbox().getY() > game.getLevelManager().getLevel().getPlayerEndPoint().getY()){
             return true;
         }
@@ -402,5 +405,23 @@ public class Playing implements StateMethods {
         ImageSender.sendImage(ExtraMethods.getScreenShot());
         ImageSender.sendReward();
         ImageSender.sendGameState();
+        deleteAllCurrentImage();
+    }
+
+    private void deleteAllCurrentImage() {
+        String directoryPath = System.getProperty("user.dir"); // Get the current working directory
+        try {
+            Files.walkFileTree(Paths.get(directoryPath), new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    if (file.getFileName().toString().startsWith("screenshot")) {
+                        Files.delete(file);
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
