@@ -32,6 +32,7 @@ public class Level {
     private final Random random = new Random();
 
     private Point playerSpawn;
+    private Point playerEndPoint;
 
     private Point playerTeleport;
     private final int indexLevel;
@@ -96,6 +97,7 @@ public class Level {
         switch (redValue){
             case 255 -> playerSpawn = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
             case 250 -> playerTeleport = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
+            case 254 -> playerEndPoint = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
         }
     }
     private void loadEnemies(int blueValue, int i, int j){
@@ -191,5 +193,9 @@ public class Level {
 //            }
 //        }
         return new ArrayList<>();
+    }
+
+    public Point getPlayerEndPoint() {
+        return playerEndPoint;
     }
 }

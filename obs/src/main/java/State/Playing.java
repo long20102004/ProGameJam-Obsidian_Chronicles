@@ -143,7 +143,7 @@ public class Playing implements StateMethods {
                 playerTransform();
                 break;
             case KeyEvent.VK_G:
-                Player.currentHero = Player.GUN_SLINGER;
+                Player.currentHero = Player.SWORD_WOMAN;
                 playerTransform();
                 break;
             case KeyEvent.VK_F:
@@ -257,7 +257,7 @@ public class Playing implements StateMethods {
 
     @Override
     public void update() {
-        if (!readyToUpdate) return;
+//        if (!readyToUpdate) return;
         if (game.getPlayer().getActive()) game.getPlayer().update(game);
         updateDrawOffset();
         game.getEnemyManager().update();
@@ -296,15 +296,15 @@ public class Playing implements StateMethods {
     }
 
     public void action() {
-//        readDataFromFile();
+        readDataFromFile();
         if (!readyToUpdate && readyToSend){
-//            sendData();
+            sendData();
             readyToSend = false;
         }
         if (receivedAction) {
             countReceivedAction++;
             reward--;
-            if (countReceivedAction >= maxActionCount){
+            if (countReceivedAction >= maxActionCount || checkLevelEndPoint()){
                 Game.state = 1;
                 ImageSender.sendGameState();
                 game.resetAll();
@@ -341,6 +341,13 @@ public class Playing implements StateMethods {
 
     }
 
+    private boolean checkLevelEndPoint() {
+        if (currentPlayer.getHitbox().getY() > game.getLevelManager().getLevel().getPlayerEndPoint().getY()){
+            return true;
+        }
+        return false;
+    }
+
     private void resetDataFile() {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("data", false));
@@ -375,24 +382,24 @@ public class Playing implements StateMethods {
     }
 
 
-//    public void readDataFromFile() {
-//        try {
-//            BufferedReader reader = new BufferedReader(new FileReader("data"));
-//            String line;
-//            if ((line = reader.readLine()) != null) {
-//                receivedAction = Boolean.parseBoolean(line.trim());
-//                if ((line = reader.readLine()) != null) {
-//                    action = line.trim();
-//                }
-//            }
-//            reader.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//    public void sendData(){
-//        ImageSender.sendImage(ExtraMethods.getScreenShot());
-//        ImageSender.sendReward();
-//        ImageSender.sendGameState();
-//    }
+    public void readDataFromFile() {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("data"));
+            String line;
+            if ((line = reader.readLine()) != null) {
+                receivedAction = Boolean.parseBoolean(line.trim());
+                if ((line = reader.readLine()) != null) {
+                    action = line.trim();
+                }
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void sendData(){
+        ImageSender.sendImage(ExtraMethods.getScreenShot());
+        ImageSender.sendReward();
+        ImageSender.sendGameState();
+    }
 }

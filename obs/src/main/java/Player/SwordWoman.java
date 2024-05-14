@@ -24,7 +24,7 @@ public class SwordWoman extends Player{
         hitbox = new Rectangle2D.Float(xPos, yPos, 15 * MODE, 17 * MODE);
         attackBox = new Rectangle2D.Float(xPos, yPos, 60 * MODE, 40 * MODE);
         healthBar = new HealthBar(this, maxHealth, maxPower);
-        BufferedImage tmp = LoadSave.getImg(LoadSave.SWORD_HERO);
+        BufferedImage tmp = LoadSave.getImg(LoadSave.SWORD_WOMAN_3);
         for (int i = 0; i < animation.length; i++) {
             for (int j = 0; j < animation[0].length; j++) {
                 animation[i][j] = tmp.getSubimage(Constant.PLAYER.SWORD_WOMAN.DEFAULT_WIDTH * j, Constant.PLAYER.SWORD_WOMAN.DEFAULT_HEIGHT * i, Constant.PLAYER.SWORD_WOMAN.DEFAULT_WIDTH, Constant.PLAYER.SWORD_WOMAN.DEFAULT_HEIGHT);
