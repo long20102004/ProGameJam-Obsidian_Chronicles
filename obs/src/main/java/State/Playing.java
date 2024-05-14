@@ -28,7 +28,7 @@ import static Main.Game.reward;
 public class Playing implements StateMethods {
     public static int countReceivedAction = 0;
     public static int maxActionCount = 50000;
-    public boolean readyToSend = false;
+    public boolean readyToSend = true;
     public boolean readyToUpdate = false;
     private Game game;
     public static boolean receivedAction;
@@ -259,7 +259,7 @@ public class Playing implements StateMethods {
 
     @Override
     public void update() {
-//        if (!readyToUpdate) return;
+        if (!readyToUpdate) return;
         if (game.getPlayer().getActive()) game.getPlayer().update(game);
         updateDrawOffset();
         game.getEnemyManager().update();
@@ -308,7 +308,7 @@ public class Playing implements StateMethods {
             reward--;
             if (countReceivedAction >= maxActionCount || checkLevelEndPoint()){
                 Game.state = 1;
-                ImageSender.sendGameState();
+                sendData();
                 reward += 1000;
                 game.resetAll();
             }
@@ -346,7 +346,7 @@ public class Playing implements StateMethods {
 
     private boolean checkLevelEndPoint() {
         if (currentPlayer == null) return false;
-        if (currentPlayer.getHitbox().getY() > game.getLevelManager().getLevel().getPlayerEndPoint().getY()){
+        if (currentPlayer.getHitbox().getY() < game.getLevelManager().getLevel().getPlayerEndPoint().getY()){
             return true;
         }
         return false;
@@ -401,14 +401,14 @@ public class Playing implements StateMethods {
             e.printStackTrace();
         }
     }
-    public void sendData(){
+    public static void sendData(){
         ImageSender.sendImage(ExtraMethods.getScreenShot());
         ImageSender.sendReward();
         ImageSender.sendGameState();
         deleteAllCurrentImage();
     }
 
-    private void deleteAllCurrentImage() {
+    private static void deleteAllCurrentImage() {
         String directoryPath = System.getProperty("user.dir"); // Get the current working directory
         try {
             Files.walkFileTree(Paths.get(directoryPath), new SimpleFileVisitor<Path>() {
