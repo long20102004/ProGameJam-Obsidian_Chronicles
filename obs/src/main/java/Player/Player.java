@@ -63,6 +63,11 @@ public abstract class Player implements PlayerMethods {
     protected boolean inAir;
     protected boolean isActive = true;
     protected boolean isAttacked;
+    // SWORD WOMAN
+    protected boolean isBuffs;
+    protected int lightCutBuff;
+    //
+
     protected boolean readyToDash = true;
     protected Game game;
     protected int state;
@@ -153,6 +158,8 @@ public abstract class Player implements PlayerMethods {
         readyToDash = true;
         readyToAttack = true;
         aniSpeed = 20;
+        isBuffs = false;
+        lightCutBuff = 0;
     }
     public void update(Game game){
 
@@ -356,5 +363,17 @@ public abstract class Player implements PlayerMethods {
 
     public void setChangeDir(boolean changeDir) {
         this.changeDir = changeDir;
+    }
+    public void setBuffs(boolean buffs){
+        isBuffs = buffs;
+    }
+    public void setLightCutBuff(int lightCutBuff){
+        this.lightCutBuff = lightCutBuff;
+    }
+    public boolean isBuffs(){
+        return isBuffs;
+    }
+    public int getLightCutBuff(){
+        return lightCutBuff;
     }
 }

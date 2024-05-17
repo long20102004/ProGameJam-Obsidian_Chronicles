@@ -62,8 +62,8 @@ public class HoarderTransform extends Player {
         else
             g.drawImage(animation[state][drawIndex], (int) ((int) hitbox.x - xLevelOffset - xDrawOffset), (int) ((int) hitbox.y - yLevelOffset - yDrawOffset), Constant.HOARDER.WIDTH, Constant.HOARDER.HEIGHT, null);
         g.setColor(Color.RED);
-//        g.drawRect((int) ((int) attackBox.x - xLevelOffset), (int) ((int) attackBox.y - yLevelOffset), (int) attackBox.width, (int) attackBox.height);
-//        g.drawRect((int) ((int) hitbox.x - xLevelOffset), (int) ((int) hitbox.y - yLevelOffset), (int) hitbox.width, (int) hitbox.height);
+        g.drawRect((int) ((int) attackBox.x - xLevelOffset), (int) ((int) attackBox.y - yLevelOffset), (int) attackBox.width, (int) attackBox.height);
+        g.drawRect((int) ((int) hitbox.x - xLevelOffset), (int) ((int) hitbox.y - yLevelOffset), (int) hitbox.width, (int) hitbox.height);
     }
 
     private void drawTransform(Graphics g) {
