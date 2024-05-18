@@ -17,8 +17,6 @@ import java.awt.event.MouseEvent;
 import java.io.*;
 import java.util.*;
 import Player.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static Main.Game.reward;
 
@@ -27,6 +25,7 @@ public class Playing implements StateMethods {
     public static int countReceivedAction = 0;
     public static int maxActionCount = 50000;
 //    public boolean readyToSend = false;
+
 //    public boolean readyToUpdate = false;
     private Game game;
     public static boolean receivedAction;
@@ -73,39 +72,66 @@ public class Playing implements StateMethods {
     @Override
     public void keyPressed(KeyEvent e) {
         pressedKeys.add(e.getKeyCode());
-        if (pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_W)) {
+        if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_I)){
+            game.getPlayer().setBuffs(true);
+            game.getPlayer().setLightCutBuff(true);
+            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        }
+        else if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_O)){
+            game.getPlayer().setBuffs(true);
+            game.getPlayer().setHolySlashBuff(true);
+            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        }
+        else if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_S)){
+            game.getPlayer().setBuffs(true);
+            game.getPlayer().setCastShieldBuff(true);
+            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        }
+        else if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_K)){
+            game.getPlayer().setBuffs(true);
+            game.getPlayer().setCastBuff(true);
+            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        }
+        else if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_X)){
+            game.getPlayer().setBuffs(true);
+            game.getPlayer().setGreatHealBuff(true);
+            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        }
+        else if (pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_W)) {
             game.getPlayer().setLedgeGrab(true);
             return;
         }
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_A:
-                game.getPlayer().setRight(false);
-                game.getPlayer().setLeft(true);
-                game.getPlayer().setMoving(true);
+        else{
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_A:
+                    game.getPlayer().setRight(false);
+                    game.getPlayer().setLeft(true);
+                    game.getPlayer().setMoving(true);
 
-                break;
-            case KeyEvent.VK_D:
-                game.getPlayer().setRight(true);
-                game.getPlayer().setLeft(false);
-                game.getPlayer().setMoving(true);
+                    break;
+                case KeyEvent.VK_D:
+                    game.getPlayer().setRight(true);
+                    game.getPlayer().setLeft(false);
+                    game.getPlayer().setMoving(true);
 
-                break;
-            case KeyEvent.VK_W:
-            case KeyEvent.VK_SPACE:
-                game.getPlayer().setJump(true);
-                break;
-            case KeyEvent.VK_J:
-                setAttackDueToTimeAndPressed();
-                break;
-            case KeyEvent.VK_ESCAPE:
-                GameState.gameState = GameState.PAUSE;
-                break;
-            case KeyEvent.VK_S:
-                game.getPlayer().setBlock(true);
-                break;
-            case KeyEvent.VK_F:
-                game.getPlayer().setDash(true);
-                break;
+                    break;
+                case KeyEvent.VK_W:
+                case KeyEvent.VK_SPACE:
+                    game.getPlayer().setJump(true);
+                    break;
+                case KeyEvent.VK_J:
+                    setAttackDueToTimeAndPressed();
+                    break;
+                case KeyEvent.VK_ESCAPE:
+                    GameState.gameState = GameState.PAUSE;
+                    break;
+                case KeyEvent.VK_S:
+                    game.getPlayer().setBlock(true);
+                    break;
+                case KeyEvent.VK_F:
+                    game.getPlayer().setDash(true);
+                    break;
+            }
         }
     }
 
@@ -143,6 +169,10 @@ public class Playing implements StateMethods {
                 playerTransform();
                 break;
             case KeyEvent.VK_G:
+                Player.currentHero = Player.SWORD_WOMAN;
+                playerTransform();
+                break;
+            case KeyEvent.VK_H:
                 Player.currentHero = Player.GUN_SLINGER;
                 playerTransform();
                 break;
@@ -210,7 +240,7 @@ public class Playing implements StateMethods {
                 game.getPlayer().setDash(false);
                 break;
             case MouseEvent.BUTTON1:
-                game.getPlayer().setAttacking(false);
+                //game.getPlayer().setAttacking(false);
         }
     }
 
@@ -235,14 +265,14 @@ public class Playing implements StateMethods {
     }
 
     private void resetAttack() {
-        game.getPlayer().setAttacking(false);
+        game.getPlayer().setAttacking(true);
         game.getPlayer().setDoubleAttack(false);
         game.getPlayer().setTripleAttack(false);
     }
 
     @Override
     public void draw(Graphics g) {
-//        action();
+        //action();
         game.getLevelManager().draw(g, xDrawOffset, yDrawOffset);
         Color color = new Color(0, 0, 0, 80);
         g.setColor(color);
