@@ -13,40 +13,37 @@ public class Shielder extends Enemy {
     public static int damage = 20;
 
     public Shielder(int xPos, int yPos) {
-        this.xPos = xPos;
-        this.yPos = yPos;
         initClass();
+        initEnemy(xPos, yPos);
     }
     private void initClass() {
-        aniSpeed = 40;
-        attackSight = Game.TILE_SIZE;
-        sight = 30 * attackSight;
-        xDrawOffset = (int) (25 * Game.MODE);
-        yDrawOffset = (int) (10 * Game.MODE);
-
-        animation = new BufferedImage[6][17];
-        revAnimation = new BufferedImage[6][17];
-        currentHealth = maxHealth = 400;
-        hitbox = new Rectangle2D.Float(xPos, yPos, Constant.SHIELDER.DEFAULT_WIDTH - 20 * Game.MODE, Constant.SHIELDER.DEFAULT_HEIGHT + 15 * Game.MODE);
-        attackBox = new Rectangle2D.Float(xPos, yPos, Constant.SHIELDER.DEFAULT_WIDTH, Constant.SHIELDER.HEIGHT);
-        BufferedImage tmp = LoadSave.getImg(LoadSave.SHIELDER);
-        for (int i = 0; i < animation.length; i++) {
-            for (int j = 0; j < animation[0].length; j++) {
-                animation[i][j] = tmp.getSubimage(j * Constant.SHIELDER.DEFAULT_WIDTH, i * Constant.SHIELDER.DEFAULT_HEIGHT, Constant.SHIELDER.DEFAULT_WIDTH, Constant.SHIELDER.DEFAULT_HEIGHT);
-                revAnimation[i][j] = ExtraMethods.reverseImg(animation[i][j]);
-            }
-        }
-        speed = 1f;
-    }
-
-    public void draw(Graphics g, int xLevelOffset, int yLevelOffset) {
-        if (isLeft)
-            g.drawImage(revAnimation[state][drawIndex], (int) hitbox.x - xLevelOffset - 2 * xDrawOffset, (int) hitbox.y - yLevelOffset - yDrawOffset, Constant.SHIELDER.WIDTH, Constant.SHIELDER.HEIGHT, null);
-        else
-            g.drawImage(animation[state][drawIndex], (int) ((int) hitbox.x - xLevelOffset - 1.5 * xDrawOffset), (int) hitbox.y - yLevelOffset - yDrawOffset, Constant.SHIELDER.WIDTH, Constant.SHIELDER.HEIGHT, null);
-        g.setColor(Color.RED);
-//        g.drawRect(((int) attackBox.x - xLevelOffset), (int) ((int) attackBox.y - yLevelOffset), (int) attackBox.width, (int) attackBox.height);
-//        g.drawRect(((int) hitbox.x - xLevelOffset), (int) ((int) hitbox.y - yLevelOffset), (int) hitbox.width, (int) hitbox.height);
+        setRawImage(LoadSave.getImg(LoadSave.SHIELDER));
+        setAniSpeed(20);
+        setAttackSight(Game.TILE_SIZE * 4);
+        setSight(10 * attackSight);
+        setXDrawOffset((int) (25 * Game.MODE));
+        setYDrawOffset((int) (10 * Game.MODE));
+        setImageHeight(6);
+        setImageWidth(17);
+        setMaxHealth(400);
+        setCurrentHealth(maxHealth);
+        setHitboxWidth((int) (Constant.SHIELDER.DEFAULT_WIDTH - 20 * Game.MODE));
+        setHitBoxHeight((int) (Constant.SHIELDER.DEFAULT_HEIGHT + 15 * Game.MODE));
+        setAttackBoxWidth((int) (Constant.SHIELDER.WIDTH));
+        setAttackBoxHeight((int) (Constant.SHIELDER.HEIGHT));
+        setTileWidth(Constant.SHIELDER.DEFAULT_WIDTH);
+        setTileHeight(Constant.SHIELDER.DEFAULT_HEIGHT);
+        setHealthBarWidth((int) (0.4 * Constant.SHIELDER.WIDTH));
+        setHealthBarHeight(Constant.SHIELDER.WIDTH / 15);
+        setSpeed(1f);
+        setDrawWidth(Constant.SHIELDER.WIDTH);
+        setDrawHeight(Constant.SHIELDER.HEIGHT);
+        setAttackBoxChange(hitboxWidth / 2);
+        setDeadState(Constant.SHIELDER.DEAD);
+        setHitState(Constant.SHIELDER.HIT);
+        setAttackState(Constant.SHIELDER.ATTACK);
+        setDefaultState(Constant.SHIELDER.IDLE);
+        setSpeed(1f);
     }
 
     public void update(Game game) {
@@ -63,17 +60,10 @@ public class Shielder extends Enemy {
         }
     }
 
-    private void updateAttackBox() {
-        if (isRight) {
-            attackBox.x = hitbox.x;
-            attackBox.y = hitbox.y;
-        } else {
-            attackBox.x = hitbox.x - hitbox.width / 2;
-            attackBox.y = hitbox.y;
-        }
-    }
 
     private void updatePos(Game game) {
+        if (isLeft) setAttackSight(Game.TILE_SIZE * 2);
+        else setAttackSight(Game.TILE_SIZE * 5);
         updateDir(game);
         switch (state) {
             case Constant.SHIELDER.IDLE -> handleIdleState();
@@ -103,9 +93,10 @@ public class Shielder extends Enemy {
 
     private void handleWalkState() {
         if (!ExtraMethods.ableToDo(hitbox, sight, isFly)) setState(Constant.SHIELDER.IDLE);
+        if (ExtraMethods.ableToDo(hitbox, attackSight, isFly)) setState(Constant.SHIELDER.ATTACK);
+
         move();
 //        if (ExtraMethods.ableToDo(hitbox, shotSight, isFly)) setState(SHOT);
-        if (ExtraMethods.ableToDo(hitbox, attackSight, isFly)) setState(Constant.SHIELDER.ATTACK);
     }
 
     private void handleHitState() {
@@ -125,15 +116,6 @@ public class Shielder extends Enemy {
         if (drawIndex == Constant.SHIELDER.getType(Constant.SHIELDER.DEAD) - 1) isActive = false;
     }
 
-    private void updateDir(Game game) {
-        if (game.getPlayer().getHitbox().x < hitbox.x) {
-            isLeft = true;
-            isRight = false;
-        } else {
-            isRight = true;
-            isLeft = false;
-        }
-    }
 
     private void updateAniTick() {
         aniTick++;
@@ -145,28 +127,12 @@ public class Shielder extends Enemy {
             }
         }
     }
+//
+//    @Override
+//    public void setState(int state) {
+//        if (this.state == Constant.SHIELDER.DEAD) return;
+//        if (state != this.state) drawIndex = 0;
+//        this.state = state;
+//    }
 
-    @Override
-    public void setState(int state) {
-        if (this.state == Constant.SHIELDER.DEAD) return;
-        if (state != this.state) drawIndex = 0;
-        this.state = state;
-    }
-
-    @Override
-    public void resetAll() {
-        super.resetAll();
-        isActive = true;
-        state = Constant.SHIELDER.IDLE;
-        currentHealth = maxHealth = 400;
-        drawIndex = 0;
-        hitbox = new Rectangle2D.Float(xPos, yPos, Constant.SHIELDER.DEFAULT_WIDTH - 20 * Game.MODE, Constant.SHIELDER.DEFAULT_HEIGHT + 15 * Game.MODE);
-        attackBox = new Rectangle2D.Float(xPos, yPos, Constant.SHIELDER.WIDTH / 1.5f, Constant.SHIELDER.HEIGHT / 1.5f);
-    }
-
-    @Override
-    public void hurt(int damage) {
-        setState(Constant.SHIELDER.HIT);
-        updateHealth(-damage);
-    }
 }

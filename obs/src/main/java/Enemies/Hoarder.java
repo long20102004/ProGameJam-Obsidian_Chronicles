@@ -14,38 +14,28 @@ public class Hoarder extends Enemy {
 
     public Hoarder(int xPos, int yPos) {
         initClass(xPos, yPos);
+        initEnemy(xPos, yPos);
     }
 
     private void initClass(int xPos, int yPos) {
-        aniSpeed = 40;
-        attackSight = (int) (Game.TILE_SIZE * 2.5);
-        sight = 20 * attackSight;
-        xDrawOffset = (int) (50 * Game.MODE);
-        yDrawOffset = (int) (50 * Game.MODE);
-        animation = new BufferedImage[13][36];
-        revAnimation = new BufferedImage[13][36];
-        this.xPos = xPos;
-        this.yPos = yPos;
-        hitbox = new Rectangle2D.Float(xPos, yPos, Constant.HOARDER.DEFAULT_WIDTH - 5 * Game.MODE, Constant.HOARDER.DEFAULT_HEIGHT + 15 * Game.MODE);
-        attackBox = new Rectangle2D.Float(xPos, yPos, Constant.HOARDER.WIDTH / 1.5f, Constant.HOARDER.HEIGHT / 1.5f);
-        BufferedImage tmp = LoadSave.getImg(LoadSave.HOARDER);
-        for (int i = 0; i < animation.length; i++) {
-            for (int j = 0; j < animation[0].length; j++) {
-                animation[i][j] = tmp.getSubimage(j * Constant.HOARDER.DEFAULT_WIDTH, i * Constant.HOARDER.DEFAULT_HEIGHT, Constant.HOARDER.DEFAULT_WIDTH, Constant.HOARDER.DEFAULT_HEIGHT);
-                revAnimation[i][j] = ExtraMethods.reverseImg(animation[i][j]);
-            }
-        }
-        speed = 1f;
-    }
-
-    public void draw(Graphics g, int xLevelOffset, int yLevelOffset) {
-        if (isLeft)
-            g.drawImage(revAnimation[state][drawIndex], (int) hitbox.x - xLevelOffset - xDrawOffset, (int) hitbox.y - yLevelOffset - yDrawOffset, Constant.HOARDER.WIDTH, Constant.HOARDER.HEIGHT, null);
-        else
-            g.drawImage(animation[state][drawIndex], (int) hitbox.x - xLevelOffset - xDrawOffset, (int) hitbox.y - yLevelOffset - yDrawOffset, Constant.HOARDER.WIDTH, Constant.HOARDER.HEIGHT, null);
-        g.setColor(Color.RED);
-//        g.drawRect((int) ((int) attackBox.x - xLevelOffset), (int) ((int) attackBox.y - yLevelOffset), (int) attackBox.width, (int) attackBox.height);
-//        g.drawRect((int) ((int) hitbox.x - xLevelOffset), (int) ((int) hitbox.y - yLevelOffset), (int) hitbox.width, (int) hitbox.height);
+        setRawImage(LoadSave.getImg(LoadSave.HOARDER));
+        setAniSpeed(40);
+        setAttackSight((int) (Game.TILE_SIZE * 2.5));
+        setSight(20 * attackSight);
+        setXDrawOffset((int) (50 * Game.MODE));
+        setYDrawOffset((int) (50 * Game.MODE));
+        setImageHeight(13);
+        setImageWidth(36);
+        setHitboxWidth((int) (Constant.HOARDER.DEFAULT_WIDTH - 5 * Game.MODE));
+        setHitBoxHeight((int) (Constant.HOARDER.DEFAULT_HEIGHT + 15 * Game.MODE));
+        setAttackBoxWidth((int) (Constant.HOARDER.WIDTH / 1.5f));
+        setAttackBoxHeight((int) (Constant.HOARDER.HEIGHT / 1.5f));
+        setDrawWidth(Constant.HOARDER.WIDTH);
+        setDrawHeight(Constant.HOARDER.HEIGHT);
+        setTileWidth(Constant.HOARDER.DEFAULT_WIDTH);
+        setTileHeight(Constant.HOARDER.DEFAULT_HEIGHT);
+        setSpeed(1f);
+        setAttackBoxChange(-50 * Game.MODE);
     }
 
     public void update(Game game) {
@@ -54,23 +44,7 @@ public class Hoarder extends Enemy {
         updateAttackBox();
     }
 
-    public void updateHealth(int damage) {
-        currentHealth += damage;
-        if (currentHealth <= 0) {
-            currentHealth = 0;
-            setState(Constant.HOARDER.DEAD);
-        }
-    }
 
-    private void updateAttackBox() {
-        if (isRight) {
-            attackBox.x = hitbox.x;
-            attackBox.y = hitbox.y;
-        } else {
-            attackBox.x = hitbox.x - hitbox.width + 50 * Game.MODE;
-            attackBox.y = hitbox.y;
-        }
-    }
 
     private void updatePos(Game game) {
         updateDir(game);
@@ -112,15 +86,6 @@ public class Hoarder extends Enemy {
         if (drawIndex == Constant.HOARDER.getType(Constant.HOARDER.DEAD) - 1) isActive = false;
     }
 
-    private void updateDir(Game game) {
-        if (game.getPlayer().getHitbox().x < hitbox.x) {
-            isLeft = true;
-            isRight = false;
-        } else {
-            isRight = true;
-            isLeft = false;
-        }
-    }
 
     private void updateAniTick() {
         aniTick++;
@@ -140,21 +105,5 @@ public class Hoarder extends Enemy {
         this.state = state;
     }
 
-    @Override
-    public void resetAll() {
-        super.resetAll();
-        isActive = true;
-        state = Constant.HOARDER.IDLE_LOW;
-        currentHealth = maxHealth = 100;
-        drawIndex = 0;
-        hitbox = new Rectangle2D.Float(xPos, yPos, Constant.HOARDER.DEFAULT_WIDTH - 5 * Game.MODE, Constant.HOARDER.DEFAULT_HEIGHT + 15 * Game.MODE);
-        attackBox = new Rectangle2D.Float(xPos, yPos, Constant.HOARDER.WIDTH / 1.5f, Constant.HOARDER.HEIGHT / 1.5f);
-    }
-
-    @Override
-    public void hurt(int damage) {
-        setState(Constant.HOARDER.HIT);
-        updateHealth(-damage);
-    }
 }
 

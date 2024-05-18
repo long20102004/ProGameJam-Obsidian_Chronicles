@@ -24,7 +24,8 @@ import static Main.Game.reward;
 public class Playing implements StateMethods {
     public static int countReceivedAction = 0;
     public static int maxActionCount = 50000;
-    public boolean readyToSend = false;
+//    public boolean readyToSend = false;
+
 //    public boolean readyToUpdate = false;
     private Game game;
     public static boolean receivedAction;
@@ -287,7 +288,7 @@ public class Playing implements StateMethods {
     @Override
     public void update() {
 //        if (!readyToUpdate) return;
-        game.getPlayer().update(game);
+        if (game.getPlayer().getActive()) game.getPlayer().update(game);
         updateDrawOffset();
         game.getEnemyManager().update();
         game.getObjectManager().update();

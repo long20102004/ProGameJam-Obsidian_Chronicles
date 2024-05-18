@@ -17,43 +17,44 @@ public class Spitter extends Enemy {
 
     public Spitter(int xPos, int yPos) {
         initClass(xPos, yPos);
+        initEnemy(xPos, yPos);
     }
 
     private void initClass(int xPos, int yPos) {
-        aniSpeed = 60;
-        attackSight = Game.TILE_SIZE * 10;
-        sight = 10 * attackSight;
-        xDrawOffset = (int) (15 * Game.MODE);
-        yDrawOffset = (int) (10 * Game.MODE);
-
-        canShoot = true;
-        animation = new BufferedImage[5][9];
-        revAnimation = new BufferedImage[5][9];
+        setRawImage(LoadSave.getImg(LoadSave.SPITTER));
+        setAniSpeed(60);
+        setAttackSight(Game.TILE_SIZE * 10);
+        setSight(10 * attackSight);
+        setXDrawOffset((int) (15 * Game.MODE));
+        setYDrawOffset((int) (10 * Game.MODE));
+        setImageHeight(5);
+        setImageWidth(9);
         this.xPos = xPos;
         this.yPos = yPos;
-        hitbox = new Rectangle2D.Float(xPos, yPos, Constant.SPITTER.WIDTH / 2f, Constant.SPITTER.DEFAULT_HEIGHT * 1.5f);
-        BufferedImage tmp = LoadSave.getImg(LoadSave.SPITTER);
-        for (int i = 0; i < animation.length; i++) {
-            for (int j = 0; j < animation[0].length; j++) {
-                animation[i][j] = tmp.getSubimage(j * Constant.SPITTER.DEFAULT_WIDTH, i * Constant.SPITTER.DEFAULT_HEIGHT, Constant.SPITTER.DEFAULT_WIDTH, Constant.SPITTER.DEFAULT_HEIGHT);
-                revAnimation[i][j] = ExtraMethods.reverseImg(animation[i][j]);
-            }
-        }
-        speed = 1f;
-        healthBar = new EnemyHealthBar(this, (int) (0.4 * Constant.SPITTER.WIDTH), Constant.SPITTER.WIDTH / 15);
+        setHitboxWidth((int) (Constant.SPITTER.WIDTH / 2f));
+        setHitBoxHeight((int) (Constant.SPITTER.DEFAULT_HEIGHT * 1.5f));
+        setAttackBoxWidth((int) (Constant.SPITTER.WIDTH * 1.2f));
+        setAttackBoxHeight((int) (Constant.SPITTER.HEIGHT * 1.5f));
+        setTileWidth(Constant.SPITTER.DEFAULT_WIDTH);
+        setTileHeight(Constant.SPITTER.DEFAULT_HEIGHT);
+        setHealthBarWidth((int) (0.4 * Constant.SPITTER.WIDTH));
+        setHealthBarHeight(Constant.SPITTER.WIDTH / 12);
+        setSpeed(1f);
+        setDrawWidth(Constant.SPITTER.WIDTH);
+        setDrawHeight(Constant.SPITTER.HEIGHT);
+        setAttackBoxChange(10 * Game.MODE);
+        setDeadState(Constant.SPITTER.DEAD);
+        setHitState(Constant.SPITTER.HIT);
+        setAttackState(Constant.SPITTER.ATTACK);
+        setDefaultState(Constant.SPITTER.WAKE);
+        setCanShoot(true);
     }
 
     public void draw(Graphics g, int xLevelOffset, int yLevelOffset) {
         for (ProjectTile projectTile : projectTileList) {
             if (projectTile.isActive()) projectTile.draw(g, xLevelOffset, yLevelOffset);
         }
-        if (isLeft)
-            g.drawImage(revAnimation[state][drawIndex], (int) hitbox.x - xLevelOffset - xDrawOffset, (int) hitbox.y - yLevelOffset - yDrawOffset, Constant.SPITTER.WIDTH, Constant.SPITTER.HEIGHT, null);
-        else
-            g.drawImage(animation[state][drawIndex], (int) hitbox.x - xLevelOffset - xDrawOffset, (int) hitbox.y - yLevelOffset - yDrawOffset, Constant.SPITTER.WIDTH, Constant.SPITTER.HEIGHT, null);
-        g.setColor(Color.RED);
-        healthBar.draw(g, xLevelOffset, yLevelOffset);
-//            g.drawRect((int) ((int) hitbox.x - xLevelOffset), (int) ((int) hitbox.y - yLevelOffset), (int) hitbox.width, (int) hitbox.height);
+        super.draw(g,xLevelOffset,yLevelOffset);
     }
 
     public void update(Game game) {
@@ -71,15 +72,6 @@ public class Spitter extends Enemy {
         } healthBar.update();
     }
 
-
-    public void updateHealth(int damage) {
-        currentHealth += damage;
-        if (currentHealth <= 0) {
-            currentHealth = 0;
-            setState(Constant.SPITTER.DEAD);
-            Game.reward += 100;
-        }
-    }
 
 
     private void updatePos(Game game) {
@@ -122,15 +114,7 @@ public class Spitter extends Enemy {
         if (drawIndex == Constant.SPITTER.getType(Constant.SPITTER.DEAD) - 1) isActive = false;
     }
 
-    private void updateDir(Game game) {
-        if (game.getPlayer().getHitbox().x < hitbox.x) {
-            isLeft = true;
-            isRight = false;
-        } else {
-            isRight = true;
-            isLeft = false;
-        }
-    }
+
 
     private void updateAniTick() {
         aniTick++;
@@ -150,24 +134,7 @@ public class Spitter extends Enemy {
         this.state = state;
     }
 
-    @Override
-    public void resetAll() {
-        super.resetAll();
-        isActive = true;
-        state = Constant.SPITTER.WAKE;
-        currentHealth = maxHealth = 100;
-        drawIndex = 0;
-        hitbox = new Rectangle2D.Float(xPos, yPos, Constant.SPITTER.WIDTH / 2f, Constant.SPITTER.DEFAULT_HEIGHT * 1.5f);
-    }
-
-    @Override
-    public void hurt(int damage) {
-        Game.reward += damage;
-        setState(Constant.SPITTER.HIT);
-        updateHealth(-damage);
-    }
-
-    class ProjectTile {
+    static class ProjectTile {
         private BufferedImage[][] animation;
         private int status = 0;
         private int MOVING = 0;

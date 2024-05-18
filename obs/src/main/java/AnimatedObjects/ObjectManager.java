@@ -27,6 +27,7 @@ public class ObjectManager{
     public void update(){
         for (AnimatedObject object : currentLevel.objects){
             object.update();
+            object.update(game);
         }
     }
 
