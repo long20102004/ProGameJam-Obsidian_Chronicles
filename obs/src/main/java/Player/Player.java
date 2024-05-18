@@ -16,7 +16,7 @@ import java.util.Timer;
 import static Main.Game.reward;
 
 @Component
-public class Player implements PlayerMethods {
+public abstract class Player implements PlayerMethods {
     protected BufferedImage[][] animation;
     protected BufferedImage[][] revAnimation;
     protected HealthBar healthBar;
@@ -63,6 +63,11 @@ public class Player implements PlayerMethods {
     protected boolean inAir;
     protected boolean isActive = true;
     protected boolean isAttacked;
+    // SWORD WOMAN
+    protected boolean isBuffs;
+    protected int lightCutBuff;
+    //
+
     protected boolean readyToDash = true;
     protected Game game;
     protected int state;
@@ -78,6 +83,7 @@ public class Player implements PlayerMethods {
     public static final int SWORD_HERO = 1;
     public static final int GUN_SLINGER = 2;
     public static final int HOARDER = 3;
+    public static final int SWORD_WOMAN = 4;
     public static int currentHero = NOT_CHANGE;
     public static int coins;
     protected boolean changeDir;
@@ -110,6 +116,8 @@ public class Player implements PlayerMethods {
 
     public void updateProperties() {
     }
+
+    public abstract void update();
 
     public void draw(Graphics g, float xLevelOffset, float yLevelOffset) {
     }
@@ -150,6 +158,8 @@ public class Player implements PlayerMethods {
         readyToDash = true;
         readyToAttack = true;
         aniSpeed = 20;
+        isBuffs = false;
+        lightCutBuff = 0;
     }
     public void update(Game game){
 
@@ -353,5 +363,17 @@ public class Player implements PlayerMethods {
 
     public void setChangeDir(boolean changeDir) {
         this.changeDir = changeDir;
+    }
+    public void setBuffs(boolean buffs){
+        isBuffs = buffs;
+    }
+    public void setLightCutBuff(int lightCutBuff){
+        this.lightCutBuff = lightCutBuff;
+    }
+    public boolean isBuffs(){
+        return isBuffs;
+    }
+    public int getLightCutBuff(){
+        return lightCutBuff;
     }
 }
