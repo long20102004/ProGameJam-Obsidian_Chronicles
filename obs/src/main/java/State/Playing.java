@@ -17,8 +17,6 @@ import java.awt.event.MouseEvent;
 import java.io.*;
 import java.util.*;
 import Player.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static Main.Game.reward;
 
@@ -75,9 +73,28 @@ public class Playing implements StateMethods {
         pressedKeys.add(e.getKeyCode());
         if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_I)){
             game.getPlayer().setBuffs(true);
-            if(game.getPlayer().getLightCutBuff() == 0){
-                game.getPlayer().setLightCutBuff(1);
-            }
+            game.getPlayer().setLightCutBuff(true);
+            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        }
+        else if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_O)){
+            game.getPlayer().setBuffs(true);
+            game.getPlayer().setHolySlashBuff(true);
+            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        }
+        else if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_S)){
+            game.getPlayer().setBuffs(true);
+            game.getPlayer().setCastShieldBuff(true);
+            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        }
+        else if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_K)){
+            game.getPlayer().setBuffs(true);
+            game.getPlayer().setCastBuff(true);
+            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        }
+        else if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_X)){
+            game.getPlayer().setBuffs(true);
+            game.getPlayer().setGreatHealBuff(true);
+            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
         }
         else if (pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_W)) {
             game.getPlayer().setLedgeGrab(true);

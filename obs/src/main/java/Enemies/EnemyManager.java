@@ -7,6 +7,7 @@ import Player.Player;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 @Component
@@ -24,7 +25,7 @@ public class EnemyManager {
         while (!extraSpitter.isEmpty()){
             currentLevel.enemies.add(extraSpitter.poll());
         }
-        for (Enemy enemy : currentLevel.enemies){
+        for (Enemy enemy : new ArrayList<>(currentLevel.enemies)){
             if (enemy.isActive){
                 enemy.update(game);
                 playerAttack(enemy, game.getPlayer());
@@ -36,7 +37,7 @@ public class EnemyManager {
         while (!extraSpitter.isEmpty()){
             currentLevel.enemies.add(extraSpitter.poll());
         }
-        for (Enemy enemy : currentLevel.enemies){
+        for (Enemy enemy :new ArrayList<>(currentLevel.enemies)){
             if (enemy.isActive) enemy.draw(g, xLevelOffset, yLevelOffset);
         }
     }

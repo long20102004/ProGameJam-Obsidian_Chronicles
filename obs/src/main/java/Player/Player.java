@@ -3,7 +3,6 @@ package Player;
 import AnimatedObjects.Light;
 import Main.Game;
 import OnlineData.ImageSender;
-import State.GameState;
 import UI.HealthBar;
 import Weapon.Gun;
 import org.springframework.stereotype.Component;
@@ -65,7 +64,14 @@ public abstract class Player implements PlayerMethods {
     protected boolean isAttacked;
     // SWORD WOMAN
     protected boolean isBuffs;
-    protected int lightCutBuff;
+    protected int countAniBuffs;
+    protected boolean castBuff;
+    protected boolean castShieldBuff;
+    protected boolean lightCutBuff;
+    protected boolean healBuff;
+    protected boolean holySlashBuff;
+    protected boolean greatHealBuff;
+
     //
 
     protected boolean readyToDash = true;
@@ -159,7 +165,14 @@ public abstract class Player implements PlayerMethods {
         readyToAttack = true;
         aniSpeed = 20;
         isBuffs = false;
-        lightCutBuff = 0;
+        countAniBuffs = 0;
+        castBuff = false;
+        castShieldBuff = false;
+        lightCutBuff = false;
+        healBuff = false;
+        holySlashBuff = false;
+        greatHealBuff = false;
+
     }
     public void update(Game game){
 
@@ -367,13 +380,69 @@ public abstract class Player implements PlayerMethods {
     public void setBuffs(boolean buffs){
         isBuffs = buffs;
     }
-    public void setLightCutBuff(int lightCutBuff){
-        this.lightCutBuff = lightCutBuff;
+    public void setCountAniBuffs(int countAniBuffs){
+        this.countAniBuffs = countAniBuffs;
     }
     public boolean isBuffs(){
         return isBuffs;
     }
-    public int getLightCutBuff(){
+    public int getCountAniBuffs(){
+        return countAniBuffs;
+    }
+
+    public BufferedImage[][] getAnimation() {
+        return animation;
+    }
+
+    public void setAnimation(BufferedImage[][] animation) {
+        this.animation = animation;
+    }
+
+    public boolean isCastBuff() {
+        return castBuff;
+    }
+
+    public void setCastBuff(boolean castBuff) {
+        this.castBuff = castBuff;
+    }
+
+    public boolean isCastShieldBuff() {
+        return castShieldBuff;
+    }
+
+    public void setCastShieldBuff(boolean castShieldBuff) {
+        this.castShieldBuff = castShieldBuff;
+    }
+
+    public boolean isLightCutBuff() {
         return lightCutBuff;
+    }
+
+    public void setLightCutBuff(boolean lightCutBuff) {
+        this.lightCutBuff = lightCutBuff;
+    }
+
+    public boolean isHealBuff() {
+        return healBuff;
+    }
+
+    public void setHealBuff(boolean healBuff) {
+        this.healBuff = healBuff;
+    }
+
+    public boolean isHolySlashBuff() {
+        return holySlashBuff;
+    }
+
+    public void setHolySlashBuff(boolean holySlashBuff) {
+        this.holySlashBuff = holySlashBuff;
+    }
+
+    public boolean isGreatHealBuff() {
+        return greatHealBuff;
+    }
+
+    public void setGreatHealBuff(boolean greatHealBuff) {
+        this.greatHealBuff = greatHealBuff;
     }
 }
