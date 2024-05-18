@@ -26,8 +26,8 @@ import static Main.Game.reward;
 public class Playing implements StateMethods {
     public static int countReceivedAction = 0;
     public static int maxActionCount = 50000;
-    public boolean readyToSend = false;
-    public boolean readyToUpdate = false;
+//    public boolean readyToSend = false;
+//    public boolean readyToUpdate = false;
     private Game game;
     public static boolean receivedAction;
     public static String action;
@@ -242,7 +242,7 @@ public class Playing implements StateMethods {
 
     @Override
     public void draw(Graphics g) {
-        action();
+//        action();
         game.getLevelManager().draw(g, xDrawOffset, yDrawOffset);
         Color color = new Color(0, 0, 0, 80);
         g.setColor(color);
@@ -257,7 +257,7 @@ public class Playing implements StateMethods {
 
     @Override
     public void update() {
-        if (!readyToUpdate) return;
+//        if (!readyToUpdate) return;
         if (game.getPlayer().getActive()) game.getPlayer().update(game);
         updateDrawOffset();
         game.getEnemyManager().update();
@@ -295,51 +295,51 @@ public class Playing implements StateMethods {
         return game;
     }
 
-    public void action() {
-//        readDataFromFile();
-        if (!readyToUpdate && readyToSend){
-//            sendData();
-            readyToSend = false;
-        }
-        if (receivedAction) {
-            countReceivedAction++;
-            reward--;
-            if (countReceivedAction >= maxActionCount){
-                Game.state = 1;
-                ImageSender.sendGameState();
-                game.resetAll();
-            }
-            readyToUpdate = true;
-            readyToSend = true;
-            switch (action) {
-                case "0" -> {
-                    game.getPlayer().setLeft(true);
-                    game.getPlayer().setMoving(true);
-                }
-                case "1" -> {
-                    game.getPlayer().setJump(true);
-                }
-                case "2" -> {
-                    game.getPlayer().setRight(true);
-                    game.getPlayer().setMoving(true);
-                }
-                case "3" -> {
-                    game.getPlayer().setAttacking(true);
-                }
-            }
-
-            resetDataFile();
-        } else {
-            readyToUpdate = false;
-            game.getPlayer().setRight(false);
-            game.getPlayer().setMoving(false);
-            game.getPlayer().setLeft(false);
-            game.getPlayer().setDash(false);
-            game.getPlayer().setAttacking(false);
-            game.getPlayer().setJump(false);
-        }
-
-    }
+//    public void action() {
+////        readDataFromFile();
+//        if (!readyToUpdate && readyToSend){
+////            sendData();
+//            readyToSend = false;
+//        }
+//        if (receivedAction) {
+//            countReceivedAction++;
+//            reward--;
+//            if (countReceivedAction >= maxActionCount){
+//                Game.state = 1;
+//                ImageSender.sendGameState();
+//                game.resetAll();
+//            }
+//            readyToUpdate = true;
+//            readyToSend = true;
+//            switch (action) {
+//                case "0" -> {
+//                    game.getPlayer().setLeft(true);
+//                    game.getPlayer().setMoving(true);
+//                }
+//                case "1" -> {
+//                    game.getPlayer().setJump(true);
+//                }
+//                case "2" -> {
+//                    game.getPlayer().setRight(true);
+//                    game.getPlayer().setMoving(true);
+//                }
+//                case "3" -> {
+//                    game.getPlayer().setAttacking(true);
+//                }
+//            }
+//
+//            resetDataFile();
+//        } else {
+//            readyToUpdate = false;
+//            game.getPlayer().setRight(false);
+//            game.getPlayer().setMoving(false);
+//            game.getPlayer().setLeft(false);
+//            game.getPlayer().setDash(false);
+//            game.getPlayer().setAttacking(false);
+//            game.getPlayer().setJump(false);
+//        }
+//
+//    }
 
     private void resetDataFile() {
         try {

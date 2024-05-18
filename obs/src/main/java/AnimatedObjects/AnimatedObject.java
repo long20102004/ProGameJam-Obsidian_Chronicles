@@ -1,5 +1,6 @@
 package AnimatedObjects;
 
+import Main.Game;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
@@ -15,6 +16,9 @@ public class AnimatedObject {
         this.yPos = yPos;
     }
     public AnimatedObject(){
+
+    }
+    public void update(Game game){
 
     }
     public void update(){

@@ -17,6 +17,9 @@ public class NPC_Manager {
     private void initClass() {
         level = game.getLevelManager().getLevel();
     }
+    public void loadNpc(Level level){
+        this.level = level;
+    }
 
     public void update(Game game){
         for (NPC npc : level.npcList){

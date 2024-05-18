@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
+
 public class Portal extends AnimatedObject{
     private BufferedImage[][] animation;
     private ObjectLight objectLight;
@@ -25,7 +26,7 @@ public class Portal extends AnimatedObject{
         aniSpeed = 20;
         BufferedImage temp = LoadSave.getImg(LoadSave.BLOOD_PORTAL);
         animation = new BufferedImage[3][24];
-        border = new Rectangle2D.Float(xPos + Constant.PORTAL.DEFAULT_WIDTH / 3, yPos, Constant.PORTAL.DEFAULT_WIDTH / 2, Constant.PORTAL.DEFAULT_HEIGHT);
+        border = new Rectangle2D.Float(xPos + (float) Constant.PORTAL.DEFAULT_WIDTH / 3, yPos, (float) Constant.PORTAL.DEFAULT_WIDTH / 2, Constant.PORTAL.DEFAULT_HEIGHT);
         for (int i=0; i<3; i++){
             for (int j=0; j<24; j++){
                 animation[i][j] = temp.getSubimage(j * Constant.PORTAL.DEFAULT_WIDTH, i * Constant.PORTAL.DEFAULT_HEIGHT, Constant.PORTAL.DEFAULT_WIDTH, Constant.PORTAL.DEFAULT_HEIGHT);

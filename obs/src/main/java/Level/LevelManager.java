@@ -56,6 +56,7 @@ public class LevelManager {
             game.getObjectManager().loadObject(levels.get(indexLevel));
             game.getEnemyManager().loadEnemies(levels.get(indexLevel));
             game.getItemsManager().loadItems(levels.get(indexLevel));
+            game.getNpcManager().loadNpc(levels.get(indexLevel));
             game.getPlaying().setMaxOffset();
             game.getPlayer().resetAll();
             game.getPlayer().getHitbox().x = levels.get(indexLevel).getPlayerSpawn().x;
