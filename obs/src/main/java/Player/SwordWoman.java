@@ -90,15 +90,15 @@ public class SwordWoman extends Player{
             aniTick = 0;
             drawIndex++;
             if(isBuffs){
-                if(lightCutBuff > 0){
+                if(countAniBuffs > 0){
                     if (drawIndex >= Constant.PLAYER.SWORD_WOMAN.BUFFS.getType(state)) {
-                        if(lightCutBuff > 2){
-                            lightCutBuff = 0;
+                        if((countAniBuffs > 2 && !greatHealBuff) || countAniBuffs == 4){
+                            countAniBuffs = 0;
                             resetStatus();
                             setState(Constant.PLAYER.SWORD_WOMAN.DEFAULT_ACTIONS.IDLE);
                         }
                         else{
-                            lightCutBuff++;
+                            countAniBuffs++;
                         }
                         drawIndex = 0;
                     }
@@ -157,6 +157,7 @@ public class SwordWoman extends Player{
         healthBar.draw(g);
         light.draw(g, xLevelOffset, yLevelOffset);
         if(isBuffs){
+            aniSpeed = 12;
             if (isLeft)
                 g.drawImage(revAnimationBuffs[state][drawIndex], (int) ((int) hitbox.x - xDrawOffset - xLevelOffset - 300), (int) ((int) hitbox.y - yDrawOffset - yLevelOffset - 65), (int)(Constant.PLAYER.SWORD_WOMAN.BUFFS.WIDTH), (int)(Constant.PLAYER.SWORD_WOMAN.BUFFS.HEIGHT), null);
             else
@@ -164,6 +165,7 @@ public class SwordWoman extends Player{
 
         }
         else if(isAttacking){ // isAttacking
+            aniSpeed = 12;
             if (isLeft)
                 g.drawImage(revAnimationAttack[state][drawIndex], (int) ((int) hitbox.x - xDrawOffset - xLevelOffset - 60), (int) ((int) hitbox.y - yDrawOffset - yLevelOffset - 25), (int)(Constant.PLAYER.SWORD_WOMAN.WIDTH * 1.3f), (int)(Constant.PLAYER.SWORD_WOMAN.HEIGHT * 1.3f), null);
             else
@@ -221,11 +223,39 @@ public class SwordWoman extends Player{
     }
     @Override
     public void setAction() {
-        if (lightCutBuff > 0){
-            System.out.println(lightCutBuff);
-            if(lightCutBuff == 1) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.LIGHT_CUT_1);
-            else if(lightCutBuff == 2) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.LIGHT_CUT_2);
-            else if(lightCutBuff == 3) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.LIGHT_CUT_3);
+        if (countAniBuffs > 0 && isBuffs){
+            if(castBuff){
+                if(countAniBuffs == 1) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.CAST_BUFF_1);
+                else if(countAniBuffs == 2) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.CAST_BUFF_2);
+                else if(countAniBuffs == 3) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.CAST_BUFF_3);
+            }
+            else if(castShieldBuff){
+                if(countAniBuffs == 1) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.CAST_SHIELD_BUFF_1);
+                else if(countAniBuffs == 2) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.CAST_SHIELD_BUFF_2);
+                else if(countAniBuffs == 3) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.CAST_SHIELD_BUFF_3);
+            }
+            else if(lightCutBuff){
+                if(countAniBuffs == 1) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.LIGHT_CUT_1);
+                else if(countAniBuffs == 2) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.LIGHT_CUT_2);
+                else if(countAniBuffs == 3) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.LIGHT_CUT_3);
+            }
+            else if(healBuff){
+                if(countAniBuffs == 1) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.HEAL_1);
+                else if(countAniBuffs == 2) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.HEAL_2);
+                else if(countAniBuffs == 3) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.HEAL_3);
+            }
+            else if(holySlashBuff){
+                if(countAniBuffs == 1) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.HOLY_SLASH_1);
+                else if(countAniBuffs == 2) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.HOLY_SLASH_2);
+                else if(countAniBuffs == 3) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.HOLY_SLASH_3);
+            }
+            else if(greatHealBuff){
+                if(countAniBuffs == 1) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.GREAT_HEAL_1);
+                else if(countAniBuffs == 2) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.GREAT_HEAL_2);
+                else if(countAniBuffs == 3) setState(Constant.PLAYER.SWORD_WOMAN.BUFFS.GREAT_HEAL_3);
+                else if(countAniBuffs == 4) setState((Constant.PLAYER.SWORD_WOMAN.BUFFS.GREAT_HEAL_4));
+            }
+
         }
         if (isBlock) setState(Constant.PLAYER.SWORD_WOMAN.DEFAULT_ACTIONS.BLOCK);
         if (isRun) setState(Constant.PLAYER.SWORD_WOMAN.DEFAULT_ACTIONS.RUN);

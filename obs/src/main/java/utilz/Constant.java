@@ -213,7 +213,7 @@ public class Constant {
                 public static final int WIDTH = (int) (DEFAULT_WIDTH * MODE / 1.5f);
                 public static final int CAST_BUFF_1 = 0;
                 public static final int CAST_BUFF_2 = 1;
-                public static final int CASS_BUFF_3 = 2;
+                public static final int CAST_BUFF_3 = 2;
                 public static final int CAST_SHIELD_BUFF_1 = 3;
                 public static final int CAST_SHIELD_BUFF_2 = 4;
                 public static final int CAST_SHIELD_BUFF_3 = 5;
@@ -236,7 +236,7 @@ public class Constant {
                             return 3;
                         case CAST_BUFF_2:
                             return 4;
-                        case CASS_BUFF_3:
+                        case CAST_BUFF_3:
                             return 14;
                         case CAST_SHIELD_BUFF_1:
                             return 3;
@@ -267,7 +267,7 @@ public class Constant {
                         case GREAT_HEAL_2:
                             return 8;
                         case GREAT_HEAL_3:
-                            return 17;
+                            return 16;
                         case GREAT_HEAL_4:
                             return 5;
                     }
