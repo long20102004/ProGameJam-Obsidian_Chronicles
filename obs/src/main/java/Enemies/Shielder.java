@@ -18,9 +18,9 @@ public class Shielder extends Enemy {
     }
     private void initClass() {
         setRawImage(LoadSave.getImg(LoadSave.SHIELDER));
-        setAniSpeed(40);
-        setAttackSight(Game.TILE_SIZE);
-        setSight(30 * attackSight);
+        setAniSpeed(20);
+        setAttackSight(Game.TILE_SIZE * 4);
+        setSight(10 * attackSight);
         setXDrawOffset((int) (25 * Game.MODE));
         setYDrawOffset((int) (10 * Game.MODE));
         setImageHeight(6);
@@ -38,7 +38,7 @@ public class Shielder extends Enemy {
         setSpeed(1f);
         setDrawWidth(Constant.SHIELDER.WIDTH);
         setDrawHeight(Constant.SHIELDER.HEIGHT);
-        setAttackBoxChange(hitbox.width / 2);
+        setAttackBoxChange(hitboxWidth / 2);
         setDeadState(Constant.SHIELDER.DEAD);
         setHitState(Constant.SHIELDER.HIT);
         setAttackState(Constant.SHIELDER.ATTACK);
@@ -62,6 +62,8 @@ public class Shielder extends Enemy {
 
 
     private void updatePos(Game game) {
+        if (isLeft) setAttackSight(Game.TILE_SIZE * 2);
+        else setAttackSight(Game.TILE_SIZE * 5);
         updateDir(game);
         switch (state) {
             case Constant.SHIELDER.IDLE -> handleIdleState();
@@ -91,9 +93,10 @@ public class Shielder extends Enemy {
 
     private void handleWalkState() {
         if (!ExtraMethods.ableToDo(hitbox, sight, isFly)) setState(Constant.SHIELDER.IDLE);
+        if (ExtraMethods.ableToDo(hitbox, attackSight, isFly)) setState(Constant.SHIELDER.ATTACK);
+
         move();
 //        if (ExtraMethods.ableToDo(hitbox, shotSight, isFly)) setState(SHOT);
-        if (ExtraMethods.ableToDo(hitbox, attackSight, isFly)) setState(Constant.SHIELDER.ATTACK);
     }
 
     private void handleHitState() {
@@ -124,12 +127,12 @@ public class Shielder extends Enemy {
             }
         }
     }
-
-    @Override
-    public void setState(int state) {
-        if (this.state == Constant.SHIELDER.DEAD) return;
-        if (state != this.state) drawIndex = 0;
-        this.state = state;
-    }
+//
+//    @Override
+//    public void setState(int state) {
+//        if (this.state == Constant.SHIELDER.DEAD) return;
+//        if (state != this.state) drawIndex = 0;
+//        this.state = state;
+//    }
 
 }

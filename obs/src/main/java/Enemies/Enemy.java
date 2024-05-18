@@ -96,6 +96,8 @@ public class Enemy {
         else
             g.drawImage(animation[state][drawIndex], (int) hitbox.x - xLevelOffset - xDrawOffset, (int) hitbox.y - yLevelOffset - yDrawOffset,drawWidth,drawHeight, null);
         g.setColor(Color.RED);
+//        g.drawRect((int) hitbox.x - xLevelOffset, (int) hitbox.y - yLevelOffset, (int) hitbox.width, (int) hitbox.height);
+//        g.drawRect((int) attackBox.x - xLevelOffset, (int) attackBox.y - yLevelOffset, (int) attackBox.width, (int) attackBox.height);
         healthBar.draw(g, xLevelOffset, yLevelOffset);
     }
 
