@@ -59,11 +59,11 @@ public class Dialogue {
 
     private void updateTalking(Game game, Rectangle2D.Float objectBorder, int length){
         if (game.getPlayer().getHitbox().intersects(objectBorder)) {
-            if (game.getPlayer().countTalking() > 0) {
+            if (game.getPlayer().getCountTalking() > 0) {
                 isTalking = true;
-                currentDialogue = game.getPlayer().countTalking() - 1;
+                currentDialogue = game.getPlayer().getCountTalking() - 1;
             }
-            if (game.getPlayer().countTalking() > length) {
+            if (game.getPlayer().getCountTalking() > length) {
                 isTalking = false;
                 game.getPlayer().setCountTalking(0);
             }

@@ -279,7 +279,7 @@ public class Playing implements StateMethods {
         g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
         game.getItemsManager().draw(g, xDrawOffset, yDrawOffset);
         game.getObjectManager().draw(g, xDrawOffset, yDrawOffset);
-        if (game.getPlayer().getActive()) game.getPlayer().draw(g, xDrawOffset, yDrawOffset);
+        if (game.getPlayer().isActive()) game.getPlayer().draw(g, xDrawOffset, yDrawOffset);
         game.getEnemyManager().draw(g, xDrawOffset, yDrawOffset);
         game.getNpcManager().draw(g, xDrawOffset, yDrawOffset);
         if (shop.isShopping()) shop.draw(g);
@@ -288,7 +288,7 @@ public class Playing implements StateMethods {
     @Override
     public void update() {
 //        if (!readyToUpdate) return;
-        if (game.getPlayer().getActive()) game.getPlayer().update(game);
+        if (game.getPlayer().isActive()) game.getPlayer().update(game);
         updateDrawOffset();
         game.getEnemyManager().update();
         game.getObjectManager().update();
@@ -391,19 +391,6 @@ public class Playing implements StateMethods {
         maxLevelOffsetX = maxTilesOffset * Game.TILE_SIZE;
         maxLevelOffsetY = maxTileOffsetY * Game.TILE_SIZE;
     }
-
-    public int getxDrawOffset() {
-        return xDrawOffset;
-    }
-
-    public int getyDrawOffset() {
-        return yDrawOffset;
-    }
-
-    public Shop getShop() {
-        return shop;
-    }
-
 
 //    public void readDataFromFile() {
 //        try {

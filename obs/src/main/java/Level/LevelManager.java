@@ -22,7 +22,7 @@ public class LevelManager {
     public int getIndexLevel() {
         return indexLevel;
     }
-    private int indexLevel = 1;
+    private int indexLevel = 0;
     private final int numberLevel = 2;
     public LevelManager(Game game){
         this.game = game;
@@ -69,7 +69,7 @@ public class LevelManager {
         levels.get(indexLevel).draw(g, xDrawOffset, yDrawOffset);
     }
     public void resetAll(){
-        indexLevel = 1;
+        indexLevel = 0;
         game.getObjectManager().loadObject(levels.get(indexLevel));
         game.getEnemyManager().loadEnemies(levels.get(indexLevel));
         game.getItemsManager().loadItems(levels.get(indexLevel));

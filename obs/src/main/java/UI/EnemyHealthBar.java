@@ -23,6 +23,7 @@ public class EnemyHealthBar {
         this.yPos = enemy.getHitbox().y - constHeight * 2;
         this.constWidth = constWidth;
         this.constHeight = constHeight;
+        width = constWidth;
         this.maxHealth = enemy.getMaxHealth();
         this.currentHealth = maxHealth;
 }

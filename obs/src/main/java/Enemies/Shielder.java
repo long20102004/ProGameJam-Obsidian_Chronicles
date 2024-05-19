@@ -106,7 +106,7 @@ public class Shielder extends Enemy {
     private void handleAttackState(Game game) {
         if (drawIndex == 0) isAttacked = false;
         if (!isAttacked && drawIndex == Constant.SHIELDER.getType(Constant.SHIELDER.ATTACK) / 2) {
-            enemyAttack(game, Shielder.damage * 2, Game.TILE_SIZE);
+            enemyAttack(game, Shielder.damage, Game.TILE_SIZE);
             isAttacked = true;
         }
         if (drawIndex >= Constant.SHIELDER.getType(state) - 1) setState(Constant.SHIELDER.IDLE);

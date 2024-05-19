@@ -17,7 +17,9 @@ public class Guardian extends Enemy {
     private boolean isEvil = true;
 
     public Guardian(int xPos, int yPos) {
+
         initClass(xPos, yPos);
+        initEnemy(xPos, yPos);
     }
 
     private void initClass(int xPos, int yPos) {
@@ -36,7 +38,8 @@ public class Guardian extends Enemy {
         setHitBoxHeight(Constant.GUARDIAN.DEFAULT_HEIGHT);
         setAttackBoxWidth((int) (Constant.GUARDIAN.DEFAULT_WIDTH * 1.2f));
         setAttackBoxHeight((int) (Constant.GUARDIAN.HEIGHT * 1.5f));
-        setFly(true);
+        setHealthBarWidth((int) (0.6 * Constant.SHIELDER.DEFAULT_WIDTH));
+        setHealthBarHeight(Constant.SHIELDER.DEFAULT_HEIGHT);
         setAttackBoxChange(50 * Game.MODE);
         setSpeed(1f);
         setDefaultState(Constant.GUARDIAN.IDLE);
@@ -54,12 +57,12 @@ public class Guardian extends Enemy {
         updateStatus();
         updatePos(game);
         updateAttackBox();
+        healthBar.update();
     }
 
 
     private void updatePos(Game game) {
         updateDir(game);
-        updateStatus();
         switch (state) {
             case Constant.GUARDIAN.IDLE -> handleIdleState();
             case Constant.GUARDIAN.LASER, Constant.GUARDIAN.AOE -> handleAttackState(game);
@@ -107,12 +110,6 @@ public class Guardian extends Enemy {
         }
     }
 
-    @Override
-    public void setState(int state) {
-        if (this.state == Constant.GUARDIAN.DEAD) return;
-        if ( state == Constant.GUARDIAN.LASER || state == Constant.GUARDIAN.AOE) drawIndex = 0;
-        this.state = state;
-    }
 
 
 }
