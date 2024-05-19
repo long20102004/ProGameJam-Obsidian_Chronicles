@@ -176,9 +176,15 @@ public class Constant {
             }
         }
         public static class SWORD_WOMAN{
+            public static final int DEFAULT_HEIGHT = 66;
+            public static final int DEFAULT_WIDTH = 98;
+            public static final int HEIGHT = (int) (DEFAULT_HEIGHT * MODE /1.5f);
+            public static final int WIDTH = (int) (DEFAULT_WIDTH * MODE / 1.5f);
             public static class ATTACKS{
                 public static final int DEFAULT_WIDTH = 144;
                 public static final int DEFAULT_HEIGHT = 80;
+                public static final int HEIGHT = (int) (DEFAULT_HEIGHT * MODE /1.5f);
+                public static final int WIDTH = (int) (DEFAULT_WIDTH * MODE / 1.5f);
                 public static final int FRONT_ATTACK = 0;
                 public static final int LIGHT_ATTACK = 1;
                 public static final int UP_LIGHT_ATTACK = 2;
@@ -203,9 +209,11 @@ public class Constant {
             public static class BUFFS{
                 public static final int DEFAULT_WIDTH = 286;
                 public static final int DEFAULT_HEIGHT = 114;
+                public static final int HEIGHT = (int) (DEFAULT_HEIGHT * MODE /1.5f);
+                public static final int WIDTH = (int) (DEFAULT_WIDTH * MODE / 1.5f);
                 public static final int CAST_BUFF_1 = 0;
                 public static final int CAST_BUFF_2 = 1;
-                public static final int CASS_BUFF_3 = 2;
+                public static final int CAST_BUFF_3 = 2;
                 public static final int CAST_SHIELD_BUFF_1 = 3;
                 public static final int CAST_SHIELD_BUFF_2 = 4;
                 public static final int CAST_SHIELD_BUFF_3 = 5;
@@ -228,7 +236,7 @@ public class Constant {
                             return 3;
                         case CAST_BUFF_2:
                             return 4;
-                        case CASS_BUFF_3:
+                        case CAST_BUFF_3:
                             return 14;
                         case CAST_SHIELD_BUFF_1:
                             return 3;
@@ -259,7 +267,7 @@ public class Constant {
                         case GREAT_HEAL_2:
                             return 8;
                         case GREAT_HEAL_3:
-                            return 17;
+                            return 16;
                         case GREAT_HEAL_4:
                             return 5;
                     }
@@ -267,7 +275,100 @@ public class Constant {
                 }
             }
             public static class DEFAULT_ACTIONS{
+                public static final int DEFAULT_WIDTH = 66;
+                public static final int DEFAULT_HEIGHT = 98;
+                public static final int HEIGHT = (int) (DEFAULT_HEIGHT * MODE /1.5f);
+                public static final int WIDTH = (int) (DEFAULT_WIDTH * MODE / 1.5f);
+                public static final int IDLE = 0;
+                public static final int WALK = 1;
+                public static final int RUN = 2;
+                public static final int JUMP_AND_FALL = 3;
+                public static final int SPRINT_JUMP = 4;
+                public static final int ROLL = 5;
+                public static final int DASH = 6;
+                public static final int BLOCK = 7;
+                public static final int SILDE = 8;
+                public static final int getType(int type){
+                    switch (type){
+                        case IDLE:
+                            return 6;
+                        case WALK:
+                            return 24;
+                        case RUN:
+                            return 11; // CHUA FUll
+                        case JUMP_AND_FALL:
+                            return 16;
+                        case SPRINT_JUMP:
+                            return 25;
+                        case ROLL:
+                            return 15;
+                        case DASH:
+                            return 12;
+                        case BLOCK:
+                            return 6;
+                        case SILDE:
+                            return 11;
+                    }
+                    return 1;
+                }
+            }
 
+            public static class HEALING_AND_GRAB{
+                public static final int DEFAULT_WIDTH = 79;
+                public static final int DEFAULT_HEIGHT = 96;
+                public static final int HEIGHT = (int) (DEFAULT_HEIGHT * MODE /1.5f);
+                public static final int WIDTH = (int) (DEFAULT_WIDTH * MODE / 1.5f);
+                public static final int HURT = 0;
+                public static final int DEATH = 1;
+                public static final int GRAB = 2;
+                public static final int LAND_HARD = 3;
+                public static final int REST = 4;
+                public static int getType(int type){
+                    switch (type){
+                        case HURT:
+                            return 6;
+                        case DEATH:
+                            return 25;
+                        case GRAB:
+                            return 14;
+                        case LAND_HARD:
+                            return 12;
+                        case REST:
+                            return 24;
+                    }
+                    return 1;
+                }
+            }
+
+            public static class EXTENSION_ACTIONS{
+                public static final int DEFAULT_WIDTH = 128;
+                public static final int DEFAULT_HEIGHT = 128;
+                public static final int HEIGHT = (int) (DEFAULT_HEIGHT * MODE /1.5f);
+                public static final int WIDTH = (int) (DEFAULT_WIDTH * MODE / 1.5f);
+                public static final int COUNTER = 0;
+                public static final int LADDER = 1;
+                public static final int SPRINT = 2;
+                public static final int BACK_DASH = 3;
+                public static final int KNOCK_BACK = 4;
+                public static final int CROUCH = 5;
+
+                public static int getType(int type){
+                    switch (type){
+                        case COUNTER:
+                            return 24;
+                        case LADDER:
+                            return 30;
+                        case SPRINT:
+                            return 15;
+                        case BACK_DASH:
+                            return 13;
+                        case KNOCK_BACK:
+                            return 25;
+                        case CROUCH:
+                            return 15;
+                    }
+                    return 1;
+                }
             }
         }
     }

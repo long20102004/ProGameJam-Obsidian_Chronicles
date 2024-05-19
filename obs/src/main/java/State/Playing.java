@@ -16,8 +16,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
+import Player.*;
 
 import static Main.Game.reward;
 
@@ -25,8 +24,9 @@ import static Main.Game.reward;
 public class Playing implements StateMethods {
     public static int countReceivedAction = 0;
     public static int maxActionCount = 50000;
-    public boolean readyToSend = false;
-    public boolean readyToUpdate = false;
+//    public boolean readyToSend = false;
+
+//    public boolean readyToUpdate = false;
     private Game game;
     public static boolean receivedAction;
     public static String action;
@@ -72,39 +72,66 @@ public class Playing implements StateMethods {
     @Override
     public void keyPressed(KeyEvent e) {
         pressedKeys.add(e.getKeyCode());
-        if (pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_W)) {
+        if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_I)){
+            game.getPlayer().setBuffs(true);
+            game.getPlayer().setLightCutBuff(true);
+            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        }
+        else if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_O)){
+            game.getPlayer().setBuffs(true);
+            game.getPlayer().setHolySlashBuff(true);
+            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        }
+        else if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_S)){
+            game.getPlayer().setBuffs(true);
+            game.getPlayer().setCastShieldBuff(true);
+            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        }
+        else if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_K)){
+            game.getPlayer().setBuffs(true);
+            game.getPlayer().setCastBuff(true);
+            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        }
+        else if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_X)){
+            game.getPlayer().setBuffs(true);
+            game.getPlayer().setGreatHealBuff(true);
+            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        }
+        else if (pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_W)) {
             game.getPlayer().setLedgeGrab(true);
             return;
         }
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_A:
-                game.getPlayer().setRight(false);
-                game.getPlayer().setLeft(true);
-                game.getPlayer().setMoving(true);
+        else{
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_A:
+                    game.getPlayer().setRight(false);
+                    game.getPlayer().setLeft(true);
+                    game.getPlayer().setMoving(true);
 
-                break;
-            case KeyEvent.VK_D:
-                game.getPlayer().setRight(true);
-                game.getPlayer().setLeft(false);
-                game.getPlayer().setMoving(true);
+                    break;
+                case KeyEvent.VK_D:
+                    game.getPlayer().setRight(true);
+                    game.getPlayer().setLeft(false);
+                    game.getPlayer().setMoving(true);
 
-                break;
-            case KeyEvent.VK_W:
-            case KeyEvent.VK_SPACE:
-                game.getPlayer().setJump(true);
-                break;
-            case KeyEvent.VK_J:
-                setAttackDueToTimeAndPressed();
-                break;
-            case KeyEvent.VK_ESCAPE:
-                GameState.gameState = GameState.PAUSE;
-                break;
-            case KeyEvent.VK_S:
-                game.getPlayer().setBlock(true);
-                break;
-            case KeyEvent.VK_F:
-                game.getPlayer().setDash(true);
-                break;
+                    break;
+                case KeyEvent.VK_W:
+                case KeyEvent.VK_SPACE:
+                    game.getPlayer().setJump(true);
+                    break;
+                case KeyEvent.VK_J:
+                    setAttackDueToTimeAndPressed();
+                    break;
+                case KeyEvent.VK_ESCAPE:
+                    GameState.gameState = GameState.PAUSE;
+                    break;
+                case KeyEvent.VK_S:
+                    game.getPlayer().setBlock(true);
+                    break;
+                case KeyEvent.VK_F:
+                    game.getPlayer().setDash(true);
+                    break;
+            }
         }
     }
 
@@ -142,6 +169,10 @@ public class Playing implements StateMethods {
                 playerTransform();
                 break;
             case KeyEvent.VK_G:
+                Player.currentHero = Player.SWORD_WOMAN;
+                playerTransform();
+                break;
+            case KeyEvent.VK_H:
                 Player.currentHero = Player.GUN_SLINGER;
                 playerTransform();
                 break;
@@ -177,6 +208,8 @@ public class Playing implements StateMethods {
                 };
                 timer.schedule(timerTask, 5000);
             }
+            case Player.SWORD_WOMAN -> game.setPlayer(new SwordWoman(currentPoint.x, currentPoint.y, game));
+
         }
         Player.currentHero = Player.NOT_CHANGE;
     }
@@ -207,7 +240,7 @@ public class Playing implements StateMethods {
                 game.getPlayer().setDash(false);
                 break;
             case MouseEvent.BUTTON1:
-                game.getPlayer().setAttacking(false);
+                //game.getPlayer().setAttacking(false);
         }
     }
 
@@ -232,21 +265,21 @@ public class Playing implements StateMethods {
     }
 
     private void resetAttack() {
-        game.getPlayer().setAttacking(false);
+        game.getPlayer().setAttacking(true);
         game.getPlayer().setDoubleAttack(false);
         game.getPlayer().setTripleAttack(false);
     }
 
     @Override
     public void draw(Graphics g) {
-        action();
+        //action();
         game.getLevelManager().draw(g, xDrawOffset, yDrawOffset);
         Color color = new Color(0, 0, 0, 80);
         g.setColor(color);
         g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
         game.getItemsManager().draw(g, xDrawOffset, yDrawOffset);
         game.getObjectManager().draw(g, xDrawOffset, yDrawOffset);
-        if (game.getPlayer().getActive()) game.getPlayer().draw(g, xDrawOffset, yDrawOffset);
+        if (game.getPlayer().isActive()) game.getPlayer().draw(g, xDrawOffset, yDrawOffset);
         game.getEnemyManager().draw(g, xDrawOffset, yDrawOffset);
         game.getNpcManager().draw(g, xDrawOffset, yDrawOffset);
         if (shop.isShopping()) shop.draw(g);
@@ -254,8 +287,8 @@ public class Playing implements StateMethods {
 
     @Override
     public void update() {
-        if (!readyToUpdate) return;
-        if (game.getPlayer().getActive()) game.getPlayer().update(game);
+//        if (!readyToUpdate) return;
+        if (game.getPlayer().isActive()) game.getPlayer().update(game);
         updateDrawOffset();
         game.getEnemyManager().update();
         game.getObjectManager().update();
@@ -292,51 +325,51 @@ public class Playing implements StateMethods {
         return game;
     }
 
-    public void action() {
-        readDataFromFile();
-        if (!readyToUpdate && readyToSend){
-            sendData();
-            readyToSend = false;
-        }
-        if (receivedAction) {
-            countReceivedAction++;
-            reward--;
-            if (countReceivedAction >= maxActionCount){
-                Game.state = 1;
-                ImageSender.sendGameState();
-                game.resetAll();
-            }
-            readyToUpdate = true;
-            readyToSend = true;
-            switch (action) {
-                case "0" -> {
-                    game.getPlayer().setLeft(true);
-                    game.getPlayer().setMoving(true);
-                }
-                case "1" -> {
-                    game.getPlayer().setJump(true);
-                }
-                case "2" -> {
-                    game.getPlayer().setRight(true);
-                    game.getPlayer().setMoving(true);
-                }
-                case "3" -> {
-                    game.getPlayer().setAttacking(true);
-                }
-            }
-
-            resetDataFile();
-        } else {
-            readyToUpdate = false;
-            game.getPlayer().setRight(false);
-            game.getPlayer().setMoving(false);
-            game.getPlayer().setLeft(false);
-            game.getPlayer().setDash(false);
-            game.getPlayer().setAttacking(false);
-            game.getPlayer().setJump(false);
-        }
-
-    }
+//    public void action() {
+////        readDataFromFile();
+//        if (!readyToUpdate && readyToSend){
+////            sendData();
+//            readyToSend = false;
+//        }
+//        if (receivedAction) {
+//            countReceivedAction++;
+//            reward--;
+//            if (countReceivedAction >= maxActionCount){
+//                Game.state = 1;
+//                ImageSender.sendGameState();
+//                game.resetAll();
+//            }
+//            readyToUpdate = true;
+//            readyToSend = true;
+//            switch (action) {
+//                case "0" -> {
+//                    game.getPlayer().setLeft(true);
+//                    game.getPlayer().setMoving(true);
+//                }
+//                case "1" -> {
+//                    game.getPlayer().setJump(true);
+//                }
+//                case "2" -> {
+//                    game.getPlayer().setRight(true);
+//                    game.getPlayer().setMoving(true);
+//                }
+//                case "3" -> {
+//                    game.getPlayer().setAttacking(true);
+//                }
+//            }
+//
+//            resetDataFile();
+//        } else {
+//            readyToUpdate = false;
+//            game.getPlayer().setRight(false);
+//            game.getPlayer().setMoving(false);
+//            game.getPlayer().setLeft(false);
+//            game.getPlayer().setDash(false);
+//            game.getPlayer().setAttacking(false);
+//            game.getPlayer().setJump(false);
+//        }
+//
+//    }
 
     private void resetDataFile() {
         try {
@@ -359,37 +392,24 @@ public class Playing implements StateMethods {
         maxLevelOffsetY = maxTileOffsetY * Game.TILE_SIZE;
     }
 
-    public int getxDrawOffset() {
-        return xDrawOffset;
-    }
-
-    public int getyDrawOffset() {
-        return yDrawOffset;
-    }
-
-    public Shop getShop() {
-        return shop;
-    }
-
-
-    public void readDataFromFile() {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("data"));
-            String line;
-            if ((line = reader.readLine()) != null) {
-                receivedAction = Boolean.parseBoolean(line.trim());
-                if ((line = reader.readLine()) != null) {
-                    action = line.trim();
-                }
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    public void sendData(){
-        ImageSender.sendImage(ExtraMethods.getScreenShot());
-        ImageSender.sendReward();
-        ImageSender.sendGameState();
-    }
+//    public void readDataFromFile() {
+//        try {
+//            BufferedReader reader = new BufferedReader(new FileReader("data"));
+//            String line;
+//            if ((line = reader.readLine()) != null) {
+//                receivedAction = Boolean.parseBoolean(line.trim());
+//                if ((line = reader.readLine()) != null) {
+//                    action = line.trim();
+//                }
+//            }
+//            reader.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//    public void sendData(){
+//        ImageSender.sendImage(ExtraMethods.getScreenShot());
+//        ImageSender.sendReward();
+//        ImageSender.sendGameState();
+//    }
 }

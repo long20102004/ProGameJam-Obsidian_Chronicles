@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import static java.util.Arrays.sort;
 
 public class LoadSave {
+    public static final String SWORD_WOMAN_ATTACK = "Character/JoannaP1.png";
+    public static final String SWORD_WOMAN_BUFFS = "Character/JoannaP2.png";
+    public static final String SWORD_WOMAN_DEFAULT = "Character/JoannaP3.png";
+    public static final String SWORD_WOMAN_HEALING = "Character/JoannaP4.png";
+    public static final String SWORD_WOMAN_EXTENSION = "Character/JoannaP5.png";
     public static final String SWORD_HERO = "Character/SwordHero.png";
     public static final String GUNSLINGER = "Character/Gunslinger.png";
     public static final String CURSOR = "UI/cursor.png";

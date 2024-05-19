@@ -20,62 +20,35 @@ public class Dagger extends Enemy {
 
     public Dagger(int xPos, int yPos) {
         initClass(xPos, yPos);
+        initEnemy(xPos, yPos);
     }
 
     private void initClass(int xPos, int yPos) {
-        aniSpeed = 30;
-        attackSight = (int) (3.5 * Game.TILE_SIZE);
-        sight = 15 * attackSight;
-        xDrawOffset = (int) (110 * Game.MODE);
-        yDrawOffset = (int) (42 * Game.MODE);
-
-        maxHealth = 400;
-        currentHealth = maxHealth;
-        animation = new BufferedImage[8][12];
-        revAnimation = new BufferedImage[8][12];
-        this.xPos = xPos;
-        this.yPos = yPos;
-        hitbox = new Rectangle2D.Float(xPos, yPos, Constant.DAGGER.DEFAULT_WIDTH / 2.5f, Constant.DAGGER.DEFAULT_HEIGHT);
-        attackBox = new Rectangle2D.Float(xPos, yPos, Constant.DAGGER.DEFAULT_WIDTH * 2, Constant.DAGGER.DEFAULT_HEIGHT);
-        BufferedImage tmp = LoadSave.getImg(LoadSave.DAGGER);
-        for (int i = 0; i < animation.length; i++) {
-            for (int j = 0; j < animation[0].length; j++) {
-                animation[i][j] = tmp.getSubimage(j * Constant.DAGGER.DEFAULT_WIDTH, i * Constant.DAGGER.DEFAULT_HEIGHT, Constant.DAGGER.DEFAULT_WIDTH, Constant.DAGGER.DEFAULT_HEIGHT);
-                revAnimation[i][j] = ExtraMethods.reverseImg(animation[i][j]);
-            }
-        }
-        speed = 1f;
-    }
-
-    public void draw(Graphics g, int xLevelOffset, int yLevelOffset) {
-        if (isRight)
-            g.drawImage(animation[state][drawIndex], (int) hitbox.x - xLevelOffset, (int) hitbox.y - yLevelOffset - yDrawOffset, Constant.DAGGER.WIDTH, Constant.DAGGER.HEIGHT, null);
-        else
-            g.drawImage(revAnimation[state][drawIndex], (int) hitbox.x - xLevelOffset - xDrawOffset, (int) hitbox.y - yLevelOffset - yDrawOffset, Constant.DAGGER.WIDTH, Constant.DAGGER.HEIGHT, null);
-        g.setColor(Color.RED);
-//        g.drawRect((int) ((int) hitbox.x - xLevelOffset), (int) ((int) hitbox.y - yLevelOffset), (int) hitbox.width, (int) hitbox.height);
+        setAniSpeed(30);
+        setAttackSight((int) (3.5 * Game.TILE_SIZE));
+        setSight(15 * attackSight);
+        setXDrawOffset((int) (110 * Game.MODE));
+        setYDrawOffset((int) (42 * Game.MODE));
+        setMaxHealth(400);
+        setCurrentHealth(maxHealth);
+        setSpeed(1f);
+        setImageHeight(8);
+        setImageWidth(12);
+        setRawImage(LoadSave.getImg(LoadSave.DAGGER));
+        setTileWidth(Constant.DAGGER.DEFAULT_WIDTH);
+        setTileHeight(Constant.DAGGER.DEFAULT_HEIGHT);
+        setAttackBoxChange(50 * Game.MODE);
     }
 
     public void update(Game game) {
         updateAniTick();
-        updateStatus();
         updatePos(game);
         updateAttackBox();
     }
 
-    private void updateAttackBox() {
-        if (isRight) {
-            attackBox.x = hitbox.x;
-            attackBox.y = hitbox.y;
-        } else {
-            attackBox.x = hitbox.x - hitbox.width - 50 * Game.MODE;
-            attackBox.y = hitbox.y;
-        }
-    }
 
     private void updatePos(Game game) {
         updateDir(game);
-        updateStatus();
         switch (state) {
             case Constant.DAGGER.IDLE -> handleIdleState();
             case Constant.DAGGER.RUN -> handleRunState();
@@ -115,24 +88,6 @@ public class Dagger extends Enemy {
             isActive = false;
 //            changeTeam(game);
         }
-    }
-
-
-    private void updateDir(Game game) {
-        if (hitbox.x > game.getPlayer().getHitbox().x) {
-            isLeft = true;
-            isRight = false;
-        } else {
-            isRight = true;
-            isLeft = false;
-        }
-    }
-
-    private void updateStatus() {
-        if (isAttacking) state = rnd.nextInt(Constant.DAGGER.AIR_ATTACK, Constant.DAGGER.ATTACK + 1);
-        if (isHit) state = Constant.DAGGER.HIT;
-        if (isMoving) state = Constant.DAGGER.RUN;
-        if (isDead) state = Constant.DAGGER.DEATH;
     }
 
     private void updateAniTick() {

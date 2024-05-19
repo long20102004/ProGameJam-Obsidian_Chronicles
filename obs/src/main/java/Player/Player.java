@@ -3,9 +3,10 @@ package Player;
 import AnimatedObjects.Light;
 import Main.Game;
 import OnlineData.ImageSender;
-import State.GameState;
 import UI.HealthBar;
 import Weapon.Gun;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
@@ -15,8 +16,9 @@ import java.util.Timer;
 
 import static Main.Game.reward;
 
-@Component
-public class Player implements PlayerMethods {
+@Getter
+@Setter
+public abstract class Player implements PlayerMethods {
     protected BufferedImage[][] animation;
     protected BufferedImage[][] revAnimation;
     protected HealthBar healthBar;
@@ -27,7 +29,7 @@ public class Player implements PlayerMethods {
     protected int xDrawOffset = (int) (20 * Game.MODE), yDrawOffset = (int) (-7 * Game.MODE);
     protected boolean readyToAttack = true;
     protected int xPos, yPos;
-    protected float speed = 3f;
+    protected float speed = 1.5f;
     protected float fallSpeed = 0, gravity = 0.04f;
     protected float wallFallSpeed = 0.5f;
     protected float constGravity = 0.03f;
@@ -63,6 +65,18 @@ public class Player implements PlayerMethods {
     protected boolean inAir;
     protected boolean isActive = true;
     protected boolean isAttacked;
+    // SWORD WOMAN
+    protected boolean isBuffs;
+    protected int countAniBuffs;
+    protected boolean castBuff;
+    protected boolean castShieldBuff;
+    protected boolean lightCutBuff;
+    protected boolean healBuff;
+    protected boolean holySlashBuff;
+    protected boolean greatHealBuff;
+
+    //
+
     protected boolean readyToDash = true;
     protected Game game;
     protected int state;
@@ -70,7 +84,7 @@ public class Player implements PlayerMethods {
     protected int maxPower = 100;
     protected int currentHealth = maxHealth;
     protected int currentPower = maxPower;
-    protected int countTalking = 0;
+    public int countTalking = 0;
     protected Gun gun;
 
     protected boolean isFly;
@@ -78,6 +92,7 @@ public class Player implements PlayerMethods {
     public static final int SWORD_HERO = 1;
     public static final int GUN_SLINGER = 2;
     public static final int HOARDER = 3;
+    public static final int SWORD_WOMAN = 4;
     public static int currentHero = NOT_CHANGE;
     public static int coins;
     protected boolean changeDir;
@@ -110,6 +125,8 @@ public class Player implements PlayerMethods {
 
     public void updateProperties() {
     }
+
+    public abstract void update();
 
     public void draw(Graphics g, float xLevelOffset, float yLevelOffset) {
     }
@@ -150,6 +167,15 @@ public class Player implements PlayerMethods {
         readyToDash = true;
         readyToAttack = true;
         aniSpeed = 20;
+        isBuffs = false;
+        countAniBuffs = 0;
+        castBuff = false;
+        castShieldBuff = false;
+        lightCutBuff = false;
+        healBuff = false;
+        holySlashBuff = false;
+        greatHealBuff = false;
+
     }
     public void update(Game game){
 
@@ -174,184 +200,11 @@ public class Player implements PlayerMethods {
         if (currentPower > maxPower) currentPower = maxPower;
     }
 
-    public Rectangle2D.Float getAttackBox() {
-        return attackBox;
-    }
-
-    public Rectangle2D.Float getHitbox() {
-        return hitbox;
-    }
-
-    public void setActive(boolean active) {
-        this.isActive = active;
-    }
-
-    public boolean getActive() {
-        return isActive;
-    }
-
-    public void setMoving(boolean moving) {
-        isMoving = moving;
-    }
-
-    public void setRight(boolean right) {
-        isRight = right;
-    }
-
-    public void setLeft(boolean left) {
-        isLeft = left;
-    }
-
-    public void setJump(boolean jump) {
-        isJump = jump;
-    }
-
-    public void setAttacking(boolean attacking) {
-        isAttacking = attacking;
-    }
-
-    public boolean isAttacked() {
-        return isAttacked;
-    }
-
-    public int getMaxHealth() {
-        return maxHealth;
-    }
-
-    public int getMaxPower() {
-        return maxPower;
-    }
-
-    public int getCurrentHealth() {
-        return currentHealth;
-    }
-
-    public int getCurrentPower() {
-        return currentPower;
-    }
-
-    public void setHit(boolean hit) {
-        isHit = hit;
-    }
-
-    public void setWalk(boolean walk) {
-        isWalk = walk;
-    }
-
-    public void setRunFast(boolean runFast) {
-        isRunFast = runFast;
-    }
-
-    public void setRun(boolean run) {
-        isRun = run;
-    }
-
-    public void setRoll(boolean roll) {
-        isRoll = roll;
-    }
-
-    public void setRollAttack(boolean rollAttack) {
-        isRollAttack = rollAttack;
-    }
-
-    public void setDoubleAttack(boolean doubleAttack) {
-        isDoubleAttack = doubleAttack;
-    }
-
-    public void setTripleAttack(boolean tripleAttack) {
-        isTripleAttack = tripleAttack;
-    }
-
-    public void setSpinAttack(boolean spinAttack) {
-        isSpinAttack = spinAttack;
-    }
-
-    public void setBlock(boolean block) {
-        isBlock = block;
-    }
-
-    public void setDash(boolean dash) {
-        isDash = dash;
-    }
-
-    public void setJumpTeleport(boolean jumpTeleport) {
-        isJumpTeleport = jumpTeleport;
-    }
-
-    public void setFallAttack(boolean fallAttack) {
-        isFallAttack = fallAttack;
-    }
-
-    public void setLedgeGrab(boolean ledgeGrab) {
-        isLedgeGrab = ledgeGrab;
-    }
-
-    public void setWallHold(boolean wallHold) {
-        isWallHold = wallHold;
-    }
-
-    public void setWallSlide(boolean wallSlide) {
-        isWallSlide = wallSlide;
-    }
-
-    public void setWallSlideStop(boolean wallSlideStop) {
-        isWallSlideStop = wallSlideStop;
-    }
-
-    public void setFall(boolean fall) {
-        isFall = fall;
-    }
-
-    public void setInAir(boolean inAir) {
-        this.inAir = inAir;
-    }
-
-    public void setAttacked(boolean attacked) {
-        isAttacked = attacked;
-    }
-
     //    public void setTransform(boolean transform) {
 //        isTransform = transform;
 //        if (isTransform) setState(TRANSFORM);
 //    }
-    public int countTalking() {
-        return countTalking;
-    }
-
-    public void increaseTalking() {
-        countTalking++;
-    }
-    public void setCountTalking(int countTalking){
-        this.countTalking = countTalking;
-    }
-
-    public Gun getGun() {
-        return gun;
-    }
-
-    public boolean isRight() {
-        return isRight;
-    }
-
-    public boolean isLeft() {
-        return isLeft;
-    }
-    public Game getGame(){
-        return game;
-    }
-
-    public boolean isFly() {
-        return isFly;
-    }
-    public void setFly(boolean fly) {
-        isFly = fly;
-    }
-
-    public boolean isChangeDir() {
-        return changeDir;
-    }
-
-    public void setChangeDir(boolean changeDir) {
-        this.changeDir = changeDir;
+    public void increaseTalking(){
+        this.countTalking++;
     }
 }

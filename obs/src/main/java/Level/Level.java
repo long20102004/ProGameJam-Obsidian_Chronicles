@@ -10,16 +10,19 @@ import NPCs.OldMan;
 import UI.NPC_Buttons;
 import Upgrade.Product;
 import Enemies.*;
+import lombok.Getter;
+import lombok.Setter;
 import utilz.ExtraMethods;
 import org.springframework.stereotype.Component;
 import utilz.Constant;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Random;
-
-@Component
+@Getter
+@Setter
 public class Level {
     private int[][] lvlData;
     private final BufferedImage tileSet;
@@ -30,6 +33,7 @@ public class Level {
     private final int numberCol;
     private float tileZoom = 1;
     private final Random random = new Random();
+    private int deltaValue = 0;
 
     private Point playerSpawn;
 
@@ -53,6 +57,7 @@ public class Level {
         lvlData = new int[tileMap.getHeight()][tileMap.getWidth()];
         tileType = new BufferedImage[numberRow * numberCol];
         this.indexLevel = indexLevel;
+        if (indexLevel == 0) deltaValue = 1;
         initClass();
     }
 
@@ -71,7 +76,7 @@ public class Level {
         for (int i = 0; i < tileMap.getHeight(); i++) {
             for (int j = 0; j < tileMap.getWidth(); j++) {
                 if (lvlData[i][j] > 0 && lvlData[i][j] < tileType.length)
-                    g.drawImage(tileType[lvlData[i][j] - 1], (int) (j * Game.TILE_SIZE - xLevelOffset), (int) (i * Game.TILE_SIZE - yLevelOffset), Game.TILE_SIZE, Game.TILE_SIZE, null);
+                    g.drawImage(tileType[lvlData[i][j] - deltaValue], (int) (j * Game.TILE_SIZE - xLevelOffset), (int) (i * Game.TILE_SIZE - yLevelOffset), Game.TILE_SIZE, Game.TILE_SIZE, null);
             }
         }
         for (NPC_Buttons buttons : npc_buttonsList){
@@ -99,15 +104,18 @@ public class Level {
         }
     }
     private void loadEnemies(int blueValue, int i, int j){
-        switch (blueValue){
-            case 1 -> enemies.add(new Ghoul(j * Game.TILE_SIZE, i * Game.TILE_SIZE));
-            case 2 -> enemies.add(new Summoner(j * Game.TILE_SIZE, i * Game.TILE_SIZE));
-            case 3 -> enemies.add(new Spitter(j * Game.TILE_SIZE, i * Game.TILE_SIZE));
-            case 4 -> enemies.add(new Shielder(j * Game.TILE_SIZE, i * Game.TILE_SIZE));
-            case 5 -> enemies.add(new Dagger(j * Game.TILE_SIZE, i * Game.TILE_SIZE));
-            case 6 -> enemies.add(new Hoarder(j * Game.TILE_SIZE, i * Game.TILE_SIZE));
-            case 7 -> enemies.add(new Guardian(j * Game.TILE_SIZE, i * Game.TILE_SIZE));
-            case 8 -> enemies.add(new Hive(j * Game.TILE_SIZE, i * Game.TILE_SIZE));
+        if (blueValue <= 0 || blueValue > EnemyType.values().length){
+            return;
+        }
+        try {
+            String className = "Enemies." + EnemyType.getEnemyType(blueValue);
+            if (className.equals("Enemies.NONE")) return;
+            Class<?> clazz = Class.forName(className);
+            Constructor<?> constructor = clazz.getConstructor(int.class, int.class);
+            Enemy enemy = (Enemy) constructor.newInstance(j * Game.TILE_SIZE, i * Game.TILE_SIZE);
+            enemies.add(enemy);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -145,30 +153,6 @@ public class Level {
     }
     public int getTileType(int x, int y) {
         return lvlData[x][y];
-    }
-
-    public int[][] getLvlData() {
-        return lvlData;
-    }
-
-    public void setLvlData(int[][] lvlData) {
-        this.lvlData = lvlData;
-    }
-
-    public void setTileData(int xTile, int yTile, int val) {
-        this.lvlData[xTile][yTile] = val;
-    }
-
-    public BufferedImage getTileMap() {
-        return tileMap;
-    }
-
-    public Point getPlayerSpawn() {
-        return playerSpawn;
-    }
-
-    public Point getPlayerTeleport() {
-        return playerTeleport;
     }
     public ArrayList<? extends Enemy> getBoss(){
 //        switch (indexLevel){

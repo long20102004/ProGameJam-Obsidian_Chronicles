@@ -65,7 +65,7 @@ public class SwordHero extends Player{
             g.drawImage(revAnimation[state][drawIndex], (int) ((int) hitbox.x - xDrawOffset - xLevelOffset - 80), (int) ((int) hitbox.y - yDrawOffset - yLevelOffset), Constant.PLAYER.SWORD_HERO.WIDTH, Constant.PLAYER.SWORD_HERO.HEIGHT, null);
         else
             g.drawImage(animation[state][drawIndex], (int) ((int) hitbox.x - xDrawOffset - xLevelOffset), (int) ((int) hitbox.y - yDrawOffset - yLevelOffset), Constant.PLAYER.SWORD_HERO.WIDTH, Constant.PLAYER.SWORD_HERO.HEIGHT, null);
-        g.setColor(Color.RED);
+//        g.setColor(Color.RED);
 //        g.drawRect((int) ((int) hitbox.x - xLevelOffset), (int) ((int) hitbox.y - yLevelOffset), (int) hitbox.width, (int) hitbox.height);
 //        g.drawRect((int) ((int) attackBox.x - xLevelOffset), (int) ((int) attackBox.y - yLevelOffset), (int) attackBox.width, (int) attackBox.height);
     }
@@ -165,6 +165,12 @@ public class SwordHero extends Player{
     public void updateProperties() {
         healthBar.update();
     }
+
+    @Override
+    public void update() {
+
+    }
+
     private void handleIdleState() {
         updateInAir();
         setAction();

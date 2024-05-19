@@ -16,41 +16,36 @@ public class Ghoul extends Enemy {
     public static int damage = 10;
     public Ghoul(int xPos, int yPos) {
         initClass(xPos, yPos);
+        initEnemy(xPos, yPos);
     }
 
     private void initClass(int xPos, int yPos) {
-        aniSpeed = 40;
-        attackSight = (int) (Game.TILE_SIZE * 1.5);
-        sight = 15 * attackSight;
-        xDrawOffset = (int) (25 * Game.MODE);
-        yDrawOffset = (int) (10 * Game.MODE);
-        animation = new BufferedImage[7][11];
-        revAnimation = new BufferedImage[7][11];
-        this.xPos = xPos;
-        this.yPos = yPos;
-        hitbox = new Rectangle2D.Float(xPos, yPos, Constant.GHOUL.DEFAULT_WIDTH - 5 * Game.MODE, Constant.GHOUL.DEFAULT_HEIGHT + 15 * Game.MODE);
-        attackBox = new Rectangle2D.Float(xPos, yPos, Constant.GHOUL.WIDTH / 1.5f, Constant.GHOUL.HEIGHT / 1.5f);
-        BufferedImage tmp = LoadSave.getImg(LoadSave.GHOUL);
-        for (int i = 0; i < animation.length; i++) {
-            for (int j = 0; j < animation[0].length; j++) {
-                animation[i][j] = tmp.getSubimage(j * Constant.GHOUL.DEFAULT_WIDTH, i * Constant.GHOUL.DEFAULT_HEIGHT, Constant.GHOUL.DEFAULT_WIDTH, Constant.GHOUL.DEFAULT_HEIGHT);
-                revAnimation[i][j] = ExtraMethods.reverseImg(animation[i][j]);
-            }
-        }
-        healthBar = new EnemyHealthBar(this, (int) (0.4 * Constant.GHOUL.WIDTH), Constant.GHOUL.WIDTH / 15);
-        speed = 1f;
+        setRawImage(LoadSave.getImg(LoadSave.GHOUL));
+        setAniSpeed(40);
+        setAttackSight((int) (Game.TILE_SIZE * 1.5));
+        setSight(15 * attackSight);
+        setXDrawOffset((int) (25 * Game.MODE));
+        setYDrawOffset((int) (10 * Game.MODE));
+        setImageHeight(7);
+        setImageWidth(11);
+        setHitboxWidth((int) (Constant.GHOUL.DEFAULT_WIDTH - 5 * Game.MODE));
+        setHitBoxHeight((int) (Constant.GHOUL.DEFAULT_HEIGHT + 15 * Game.MODE));
+        setAttackBoxWidth((int) (Constant.GHOUL.WIDTH / 1.5f));
+        setAttackBoxHeight((int) (Constant.GHOUL.HEIGHT / 1.5f));
+        setTileWidth(Constant.GHOUL.DEFAULT_WIDTH);
+        setTileHeight(Constant.GHOUL.DEFAULT_HEIGHT);
+        setHealthBarWidth((int) (0.4 * Constant.GHOUL.WIDTH));
+        setHealthBarHeight(Constant.GHOUL.WIDTH / 15);
+        setSpeed(1f);
+        setDrawWidth(Constant.GHOUL.WIDTH);
+        setDrawHeight(Constant.GHOUL.HEIGHT);
+        setAttackBoxChange(10 * Game.MODE);
+        setDeadState(Constant.GHOUL.DEAD);
+        setHitState(Constant.GHOUL.HIT);
+        setAttackState(Constant.GHOUL.ATTACK);
+        setDefaultState(Constant.GHOUL.WAKE);
     }
 
-    public void draw(Graphics g, int xLevelOffset, int yLevelOffset) {
-        if (isLeft)
-            g.drawImage(revAnimation[state][drawIndex], (int) hitbox.x - xLevelOffset - xDrawOffset, (int) hitbox.y - yLevelOffset - yDrawOffset, Constant.GHOUL.WIDTH, Constant.GHOUL.HEIGHT, null);
-        else
-            g.drawImage(animation[state][drawIndex], (int) hitbox.x - xLevelOffset - xDrawOffset, (int) hitbox.y - yLevelOffset - yDrawOffset, Constant.GHOUL.WIDTH, Constant.GHOUL.HEIGHT, null);
-        g.setColor(Color.RED);
-        healthBar.draw(g, xLevelOffset, yLevelOffset);
-//        g.drawRect((int) ((int) attackBox.x - xLevelOffset), (int) ((int) attackBox.y - yLevelOffset), (int) attackBox.width, (int) attackBox.height);
-//        g.drawRect((int) ((int) hitbox.x - xLevelOffset), (int) ((int) hitbox.y - yLevelOffset), (int) hitbox.width, (int) hitbox.height);
-    }
 
     public void update(Game game) {
         updateAniTick();
@@ -59,24 +54,7 @@ public class Ghoul extends Enemy {
         healthBar.update();
     }
 
-    public void updateHealth(int damage) {
-        currentHealth += damage;
-        if (currentHealth <= 0) {
-            currentHealth = 0;
-            setState(Constant.GHOUL.DEAD);
-            reward += 100;
-        }
-    }
 
-    private void updateAttackBox() {
-        if (isRight) {
-            attackBox.x = hitbox.x;
-            attackBox.y = hitbox.y;
-        } else {
-            attackBox.x = hitbox.x - hitbox.width - 10 * Game.MODE;
-            attackBox.y = hitbox.y;
-        }
-    }
 
     private void updatePos(Game game) {
         updateDir(game);
@@ -124,15 +102,6 @@ public class Ghoul extends Enemy {
         if (drawIndex == Constant.GHOUL.getType(Constant.GHOUL.REVIVE) - 1) setState(Constant.GHOUL.WAKE);
     }
 
-    private void updateDir(Game game) {
-        if (game.getPlayer().getHitbox().x < hitbox.x) {
-            isLeft = true;
-            isRight = false;
-        } else {
-            isRight = true;
-            isLeft = false;
-        }
-    }
 
     private void updateAniTick() {
         aniTick++;
@@ -145,30 +114,6 @@ public class Ghoul extends Enemy {
         }
     }
 
-    @Override
-    public void setState(int state) {
-        if (this.state == Constant.GHOUL.DEAD) return;
-        drawIndex = 0;
-        this.state = state;
-    }
-
-    @Override
-    public void resetAll() {
-        super.resetAll();
-        isActive = true;
-        state = Constant.GHOUL.WAKE;
-        currentHealth = maxHealth = 100;
-        drawIndex = 0;
-        hitbox = new Rectangle2D.Float(xPos, yPos, Constant.GHOUL.DEFAULT_WIDTH - 5 * Game.MODE, Constant.GHOUL.DEFAULT_HEIGHT + 15 * Game.MODE);
-        attackBox = new Rectangle2D.Float(xPos, yPos, Constant.GHOUL.WIDTH / 1.5f, Constant.GHOUL.HEIGHT / 1.5f);
-    }
-
-    @Override
-    public void hurt(int damage) {
-        reward += damage;
-        setState(Constant.GHOUL.HIT);
-        updateHealth(-damage);
-    }
 
     public void revive() {
         resetAll();

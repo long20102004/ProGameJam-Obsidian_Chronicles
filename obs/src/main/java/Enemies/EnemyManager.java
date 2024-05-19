@@ -7,6 +7,7 @@ import Player.Player;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 @Component
@@ -24,7 +25,7 @@ public class EnemyManager {
         while (!extraSpitter.isEmpty()){
             currentLevel.enemies.add(extraSpitter.poll());
         }
-        for (Enemy enemy : currentLevel.enemies){
+        for (Enemy enemy : new ArrayList<>(currentLevel.enemies)){
             if (enemy.isActive){
                 enemy.update(game);
                 playerAttack(enemy, game.getPlayer());
@@ -36,7 +37,7 @@ public class EnemyManager {
         while (!extraSpitter.isEmpty()){
             currentLevel.enemies.add(extraSpitter.poll());
         }
-        for (Enemy enemy : currentLevel.enemies){
+        for (Enemy enemy :new ArrayList<>(currentLevel.enemies)){
             if (enemy.isActive) enemy.draw(g, xLevelOffset, yLevelOffset);
         }
     }
@@ -54,21 +55,21 @@ public class EnemyManager {
         }
     }
     public boolean checkWon(int indexLevel){
-        if (indexLevel >= 1) return false;
-//        if (!currentLevel.getBoss().getFirst().isActive) return true;
-//        boolean readyForBoss = true;
-//        for (Enemy enemy : currentLevel.getMustKillEnemies()){
-//            if (enemy.isActive) {
-//                readyForBoss = false;
-//                break;
-//            }
-//        }
-//        if (readyForBoss){
-//            loadBossPosition();
-//        }
-        Game.state = 1;
-        ImageSender.sendGameState();
-        game.resetAll();
+//        if (indexLevel >= 1) return false;
+////        if (!currentLevel.getBoss().getFirst().isActive) return true;
+////        boolean readyForBoss = true;
+////        for (Enemy enemy : currentLevel.getMustKillEnemies()){
+////            if (enemy.isActive) {
+////                readyForBoss = false;
+////                break;
+////            }
+////        }
+////        if (readyForBoss){
+////            loadBossPosition();
+////        }
+//        Game.state = 1;
+//        ImageSender.sendGameState();
+//        game.resetAll();
         return true;
     }
 

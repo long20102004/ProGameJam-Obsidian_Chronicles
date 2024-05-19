@@ -15,61 +15,35 @@ public class Hive extends Enemy{
     }
 
     private void initClass(int xPos, int yPos) {
-        aniSpeed = 800;
-        attackSight = Game.TILE_SIZE * 50;
-        xDrawOffset = (int) (25 * Game.MODE);
-        yDrawOffset = (int) (20 * Game.MODE);
-        currentHealth = maxHealth = 400;
-        animation = new BufferedImage[4][9];
-        revAnimation = new BufferedImage[4][9];
-        this.xPos = xPos;
-        this.yPos = yPos;
-        isFly = true;
-        hitbox = new Rectangle2D.Float(xPos, yPos, Constant.HIVE.DEFAULT_WIDTH - 5 * Game.MODE, Constant.HIVE.DEFAULT_HEIGHT + 15 * Game.MODE);
-        attackBox = new Rectangle2D.Float(xPos, yPos, Constant.HIVE.WIDTH / 1.5f, Constant.HIVE.HEIGHT / 1.5f);
-        BufferedImage tmp = LoadSave.getImg(LoadSave.HIVE);
-        for (int i = 0; i < animation.length; i++) {
-            for (int j = 0; j < animation[0].length; j++) {
-                animation[i][j] = tmp.getSubimage(j * Constant.HIVE.DEFAULT_WIDTH, i * Constant.HIVE.DEFAULT_HEIGHT, Constant.HIVE.DEFAULT_WIDTH, Constant.HIVE.DEFAULT_HEIGHT);
-                revAnimation[i][j] = ExtraMethods.reverseImg(animation[i][j]);
-            }
-        }
-        speed = 1f;
+        setRawImage(LoadSave.getImg(LoadSave.HIVE));
+        setAniSpeed(800);
+        setAttackSight(Game.TILE_SIZE * 50);
+        setXDrawOffset((int) (25 * Game.MODE));
+        setYDrawOffset((int) (20 * Game.MODE));
+        setMaxHealth(400);
+        setCurrentHealth(maxHealth);
+        setImageHeight(4);
+        setImageWidth(9);
+        setFly(true);
+        setHitboxWidth((int) (Constant.HIVE.DEFAULT_WIDTH - 5 * Game.MODE));
+        setHitBoxHeight((int) (Constant.HIVE.DEFAULT_HEIGHT + 15 * Game.MODE));
+        setAttackBoxWidth((int) (Constant.HIVE.WIDTH / 1.5f));
+        setAttackBoxHeight((int) (Constant.HIVE.HEIGHT / 1.5f));
+        setAttackBoxChange(10 * Game.MODE);
+        setDrawWidth(Constant.HIVE.WIDTH);
+        setDrawHeight(Constant.HIVE.HEIGHT);
+        setTileWidth(Constant.HIVE.DEFAULT_WIDTH);
+        setTileHeight(Constant.HIVE.DEFAULT_HEIGHT);
+        setSpeed(1f);
     }
 
-    public void draw(Graphics g, int xLevelOffset, int yLevelOffset) {
-        if (isLeft)
-            g.drawImage(revAnimation[state][drawIndex], (int) hitbox.x - xLevelOffset - xDrawOffset, (int) hitbox.y - yLevelOffset - yDrawOffset, Constant.HIVE.WIDTH, Constant.HIVE.HEIGHT, null);
-        else
-            g.drawImage(animation[state][drawIndex], (int) hitbox.x - xLevelOffset - xDrawOffset, (int) hitbox.y - yLevelOffset - yDrawOffset, Constant.HIVE.WIDTH, Constant.HIVE.HEIGHT, null);
-        g.setColor(Color.RED);
-//        g.drawRect((int) ((int) attackBox.x - xLevelOffset), (int) ((int) attackBox.y - yLevelOffset), (int) attackBox.width, (int) attackBox.height);
-//        g.drawRect((int) ((int) hitbox.x - xLevelOffset), (int) ((int) hitbox.y - yLevelOffset), (int) hitbox.width, (int) hitbox.height);
-    }
 
     public void update(Game game) {
         updateAniTick();
         updatePos(game);
         updateAttackBox();
     }
-    public void updateHealth(int damage) {
-        currentHealth += damage;
-        if (currentHealth <= 0) {
-            currentHealth = 0;
-            setState(Constant.HIVE.DEAD);
-            Game.reward += 100;
-        }
-    }
-    private void updateAttackBox() {
-        if (isRight){
-            attackBox.x = hitbox.x;
-            attackBox.y = hitbox.y;
-        }
-        else{
-            attackBox.x = hitbox.x - hitbox.width - 10 * Game.MODE;
-            attackBox.y = hitbox.y;
-        }
-    }
+
     private void updatePos(Game game) {
         switch (state) {
             case Constant.HIVE.IDLE -> handleIdleState();
@@ -102,15 +76,6 @@ public class Hive extends Enemy{
             isActive = false;
         }
     }
-    private void updateDir(Game game) {
-        if (game.getPlayer().getHitbox().x < hitbox.x) {
-            isLeft = true;
-            isRight = false;
-        } else {
-            isRight = true;
-            isLeft = false;
-        }
-    }
 
     private void updateAniTick() {
         aniTick++;
@@ -133,21 +98,4 @@ public class Hive extends Enemy{
         this.state = state;
     }
 
-    @Override
-    public void resetAll(){
-        super.resetAll();
-        isActive = true;
-        state = Constant.HIVE.IDLE;
-        currentHealth = maxHealth = 400;
-        drawIndex = 0;
-        aniSpeed = 400;
-        hitbox = new Rectangle2D.Float(xPos, yPos, Constant.HIVE.DEFAULT_WIDTH - 5 * Game.MODE, Constant.HIVE.DEFAULT_HEIGHT + 15 * Game.MODE);
-        attackBox = new Rectangle2D.Float(xPos, yPos, Constant.HIVE.WIDTH / 1.5f, Constant.HIVE.HEIGHT / 1.5f);
-    }
-    @Override
-    public void hurt(int damage){
-        Game.reward += damage;
-        setState(Constant.HIVE.HIT);
-        updateHealth(-damage);
-    }
 }
