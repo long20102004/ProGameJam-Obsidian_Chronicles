@@ -94,9 +94,8 @@ public class Enemy {
     }
 
     public void enemyAttack(Game game, int damage, int knockBack) {
-        if (!canShoot && !attackBox.intersects(game.getPlayer().getHitbox())) return;
-        if (!canShoot && !isAttacked) return;
-        game.getPlayer().updateHealthAndPower(-damage, 0,knockBack);
+        if (canShoot) return;
+        if (attackBox.intersects(game.getPlayer().getHitbox()))game.getPlayer().updateHealthAndPower(-damage, 0,knockBack);
     }
 
     public void hurt(int damage) {

@@ -18,7 +18,9 @@ import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
+
 import Player.*;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -299,16 +301,22 @@ public class Playing implements StateMethods {
 
     public void action() {
         readDataFromFile();
-        if (!readyToUpdate && readyToSend){
+        if (!readyToUpdate && readyToSend) {
             sendData();
             readyToSend = false;
         }
         if (receivedAction) {
+            if (checkTrap()){
+//            System.out.println(game.getPlayer().getHitbox().x + "here: ");
+//            System.out.println(game.getLevelManager().getLevel().getTrapStartPoint().x + " " + game.getLevelManager().getLevel().getTrapEndPoint().x );
+                game.getPlayer().setHitboxX((float) game.getLevelManager().getLevel().getTeleportTrapPoint().x);
+                game.getPlayer().setHitboxY((float) game.getLevelManager().getLevel().getTeleportTrapPoint().y);
+            }
             countReceivedAction++;
             reward--;
-            if (countReceivedAction >= maxActionCount || checkLevelEndPoint()){
+            if (countReceivedAction >= maxActionCount || checkLevelEndPoint()) {
                 Game.state = 1;
-                if(checkLevelEndPoint()) reward += 1000;
+                if (checkLevelEndPoint()) reward += 1000;
                 sendData();
                 readyToSend = true;
                 readyToUpdate = false;
@@ -332,7 +340,6 @@ public class Playing implements StateMethods {
                     game.getPlayer().setAttacking(true);
                 }
             }
-
             resetDataFile();
         } else {
             readyToUpdate = false;
@@ -348,7 +355,7 @@ public class Playing implements StateMethods {
 
     private boolean checkLevelEndPoint() {
         if (game.getPlayer() == null) return false;
-        if (game.getPlayer().getHitbox().getY() > game.getLevelManager().getLevel().getPlayerEndPoint().getY()){
+        if (game.getPlayer().getHitbox().getY() > game.getLevelManager().getLevel().getPlayerEndPoint().getY()) {
             return true;
         }
         return false;
@@ -403,7 +410,8 @@ public class Playing implements StateMethods {
             e.printStackTrace();
         }
     }
-    public static void sendData(){
+
+    public static void sendData() {
         ImageSender.sendImage(ExtraMethods.getScreenShot());
         ImageSender.sendReward();
         ImageSender.sendGameState();
@@ -426,5 +434,12 @@ public class Playing implements StateMethods {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean checkTrap() {
+        reward -= 5;
+        if (game.getPlayer().getHitbox().x <= game.getLevelManager().getLevel().getTrapStartPoint().x &&
+        game.getPlayer().getHitbox().x >= game.getLevelManager().getLevel().getTrapEndPoint().x) return true;
+        return false;
     }
 }

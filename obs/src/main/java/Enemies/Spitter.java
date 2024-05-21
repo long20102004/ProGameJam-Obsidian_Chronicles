@@ -62,7 +62,7 @@ public class Spitter extends Enemy {
         for (ProjectTile projectTile : projectTileList) {
             if (projectTile.isActive()) {
                 if (projectTile.border.intersects(game.getPlayer().getHitbox())) {
-                    enemyAttack(game, damage, 0);
+                    game.getPlayer().updateHealthAndPower(-damage, 0,0);
                     projectTile.setActive(false);
                     continue;
                 }

@@ -33,6 +33,9 @@ public class Level {
 
     private Point playerSpawn;
     private Point playerEndPoint;
+    private Point trapStartPoint;
+    private Point trapEndPoint;
+    private Point teleportTrapPoint;
 
     private Point playerTeleport;
     private final int indexLevel;
@@ -98,6 +101,9 @@ public class Level {
             case 255 -> playerSpawn = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
             case 250 -> playerTeleport = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
             case 254 -> playerEndPoint = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
+            case 253 -> trapStartPoint = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
+            case 252 -> trapEndPoint = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
+            case 251 -> teleportTrapPoint = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
         }
     }
     private void loadEnemies(int blueValue, int i, int j){
@@ -197,5 +203,25 @@ public class Level {
 
     public Point getPlayerEndPoint() {
         return playerEndPoint;
+    }
+
+    public Point getTrapStartPoint() {
+        return trapStartPoint;
+    }
+
+    public void setTrapStartPoint(Point trapStartPoint) {
+        this.trapStartPoint = trapStartPoint;
+    }
+
+    public Point getTrapEndPoint() {
+        return trapEndPoint;
+    }
+
+    public void setTrapEndPoint(Point trapEndPoint) {
+        this.trapEndPoint = trapEndPoint;
+    }
+
+    public Point getTeleportTrapPoint() {
+        return teleportTrapPoint;
     }
 }

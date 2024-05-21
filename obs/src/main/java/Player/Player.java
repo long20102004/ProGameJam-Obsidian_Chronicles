@@ -358,4 +358,11 @@ public abstract class Player implements PlayerMethods {
     public void setChangeDir(boolean changeDir) {
         this.changeDir = changeDir;
     }
+
+    public void setHitboxX(Float x) {
+        this.hitbox.x = x;
+    }
+    public void setHitboxY(Float y) {
+        this.hitbox.y = y;
+    }
 }
