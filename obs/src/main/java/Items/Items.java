@@ -51,6 +51,7 @@ public class Items {
             switch (type){
                 case Constant.ITEMS.COINS1:
                     Player.coins++;
+                    Game.reward += 10;
                     break;
                 case Constant.ITEMS.BANDAGE:
                     game.getPlayer().updateHealthAndPower(30, 0, 0);

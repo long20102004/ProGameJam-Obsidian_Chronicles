@@ -108,7 +108,10 @@ public class Game implements Runnable{
         }
     }
     public void resetAll(){
+        Playing.countReceivedAction = 0;
         state = 0;
+        reward = 0;
+        Player.coins = 0;
         enemyManager.resetAll();
         itemsManager.resetAll();
         levelManager.resetAll();

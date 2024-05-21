@@ -4,6 +4,7 @@ import AnimatedObjects.Light;
 import Main.Game;
 import OnlineData.ImageSender;
 import State.GameState;
+import State.Playing;
 import UI.HealthBar;
 import Weapon.Gun;
 import org.springframework.stereotype.Component;
@@ -169,7 +170,7 @@ public abstract class Player implements PlayerMethods {
             reward -= 100;
 //            GameState.gameState = GameState.MENU;
             Game.state = 1;
-            ImageSender.sendGameState();
+            Playing.sendData();
             game.resetAll();
         }
         if (currentHealth > maxHealth) currentHealth = maxHealth;
