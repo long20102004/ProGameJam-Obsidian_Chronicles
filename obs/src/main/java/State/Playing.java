@@ -355,7 +355,8 @@ public class Playing implements StateMethods {
 
     private boolean checkLevelEndPoint() {
         if (game.getPlayer() == null) return false;
-        if (game.getPlayer().getHitbox().getY() > game.getLevelManager().getLevel().getPlayerEndPoint().getY()) {
+        if (game.getPlayer().getHitbox().getY() > game.getLevelManager().getLevel().getPlayerEndPoint().getY()
+        || game.getPlayer().getHitbox().getY() > game.getLevelManager().getLevel().getPlayerEndPoint2().getY()) {
             return true;
         }
         return false;
