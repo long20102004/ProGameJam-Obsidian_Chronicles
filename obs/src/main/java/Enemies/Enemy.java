@@ -2,18 +2,24 @@ package Enemies;
 
 import Main.Game;
 import UI.EnemyHealthBar;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import utilz.Constant;
 import utilz.ExtraMethods;
 import org.springframework.stereotype.Component;
+import utilz.LoadSave;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import static Main.Game.reward;
-
-@Component
+@Getter
+@Setter
+@NoArgsConstructor
 public class Enemy {
-
+    protected BufferedImage rawImage;
     protected BufferedImage[][] animation;
     protected BufferedImage[][] revAnimation;
     protected int drawIndex = 0;
@@ -49,12 +55,53 @@ public class Enemy {
     protected boolean isFly;
     protected EnemyHealthBar healthBar;
     protected boolean canShoot = false;
+    protected int hitboxWidth;
+    protected int hitBoxHeight;
+    protected int attackBoxWidth;
+    protected int attackBoxHeight;
+    protected int tileWidth;
+    protected int tileHeight;
+    protected int imageWidth;
+    protected int imageHeight;
+    protected int healthBarWidth;
+    protected int healthBarHeight;
+    protected int drawWidth;
+    protected int drawHeight;
+    protected float attackBoxChange;
+    protected int hitState;
+    protected int attackState;
+    protected int deadState;
+    protected int defaultState;
+    protected void initEnemy(int xPos, int yPos){
+        this.xPos = xPos;
+        this.yPos = yPos;
+        animation = new BufferedImage[imageHeight][imageWidth];
+        revAnimation = new BufferedImage[imageHeight][imageWidth];
+        hitbox = new Rectangle2D.Float(xPos, yPos, hitboxWidth, hitBoxHeight);
+        attackBox = new Rectangle2D.Float(xPos, yPos, attackBoxWidth, attackBoxHeight);
+        for (int i = 0; i < animation.length; i++) {
+            for (int j = 0; j < animation[0].length; j++) {
+                animation[i][j] = rawImage.getSubimage(j * tileWidth, i * tileHeight, tileWidth, tileHeight);
+                revAnimation[i][j] = ExtraMethods.reverseImg(animation[i][j]);
+            }
+        }
+        setHealthBar(new EnemyHealthBar(this, healthBarWidth, healthBarHeight));
+    }
     protected void update(Game game){
 
     }
     protected void draw(Graphics g, int xLevelOffset, int yLevelOffset){
-
+        if (isLeft)
+            g.drawImage(revAnimation[state][drawIndex], (int) hitbox.x - xLevelOffset - xDrawOffset, (int) hitbox.y - yLevelOffset - yDrawOffset, drawWidth, drawHeight, null);
+        else
+            g.drawImage(animation[state][drawIndex], (int) hitbox.x - xLevelOffset - xDrawOffset, (int) hitbox.y - yLevelOffset - yDrawOffset,drawWidth,drawHeight, null);
+        g.setColor(Color.RED);
+//        g.drawRect((int) hitbox.x - xLevelOffset, (int) hitbox.y - yLevelOffset, (int) hitbox.width, (int) hitbox.height);
+//        g.drawRect((int) attackBox.x - xLevelOffset, (int) attackBox.y - yLevelOffset, (int) attackBox.width, (int) attackBox.height);
+        healthBar.draw(g, xLevelOffset, yLevelOffset);
     }
+
+
     public void move() {
         updateInAir();
         float xspeed = speed;
@@ -99,19 +146,38 @@ public class Enemy {
     }
 
     public void hurt(int damage) {
-
+        reward += damage;
+        setState(hitState);
+        updateHealth(-damage);
     }
 
-    public Rectangle2D.Float getAttackBox() {
-        return attackBox;
+    public void updateHealth(int damage) {
+        currentHealth += damage;
+        if (currentHealth <= 0) {
+            currentHealth = 0;
+            setState(deadState);
+            reward += 100;
+        }
     }
 
-    public void setActive(boolean active) {
-        this.isActive = active;
+    public void updateAttackBox(){
+        if (isRight) {
+            attackBox.x = hitbox.x;
+            attackBox.y = hitbox.y;
+        } else {
+            attackBox.x = hitbox.x - hitbox.width - attackBoxChange;
+            attackBox.y = hitbox.y;
+        }
     }
 
-    public void setState(int state) {
-        this.state = state;
+    public void updateDir(Game game) {
+        if (game.getPlayer().getHitbox().x < hitbox.x) {
+            isLeft = true;
+            isRight = false;
+        } else {
+            isRight = true;
+            isLeft = false;
+        }
     }
 
     public void resetAll() {
@@ -125,21 +191,14 @@ public class Enemy {
         fallSpeed = 0.5f;
         gravity = 0.04f;
         jumpSpeed = -5f;
+        hitbox = new Rectangle2D.Float(xPos, yPos, hitboxWidth, hitBoxHeight);
+        attackBox = new Rectangle2D.Float(xPos, yPos, attackBoxWidth, attackBoxHeight);
+        drawIndex = 0;
+        currentHealth = maxHealth;
+    }
+    protected void setState(int state){
+        drawIndex = 0;
+        this.state = state;
     }
 
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public int getCurrentHealth() {
-        return currentHealth;
-    }
-
-    public int getMaxHealth() {
-        return maxHealth;
-    }
-
-    public Rectangle2D.Float getHitbox() {
-        return hitbox;
-    }
 }

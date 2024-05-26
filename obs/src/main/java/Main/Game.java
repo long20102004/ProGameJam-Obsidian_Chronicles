@@ -12,12 +12,15 @@ import Player.SwordHero;
 import State.*;
 import State.Menu;
 import State.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 import utilz.ExtraMethods;
 import Player.*;
 
 import java.awt.*;
-@Component
+@Getter
+@Setter
 public class Game implements Runnable{
     public static int reward;
     private GameWindow gameWindow;
@@ -116,39 +119,7 @@ public class Game implements Runnable{
         enemyManager.resetAll();
         itemsManager.resetAll();
         levelManager.resetAll();
-    }
-    public Player getPlayer() {
-        return player;
-    }
-    public LevelManager getLevelManager() {
-        return levelManager;
-    }
-    public EnemyManager getEnemyManager() {
-        return enemyManager;
-    }
-    public ObjectManager getObjectManager() {
-        return objectManager;
-    }
-    public ItemsManager getItemsManager() {
-        return itemsManager;
-    }
-    public AudioPlayer getAudioPlayer() {
-        return audioPlayer;
-    }
-    public Menu getMenu() {
-        return menu;
-    }
-    public Playing getPlaying() {
-        return playing;
-    }
-    public Pause getPause() {
-        return pause;
-    }
-    public GameWindow getGameWindow() {
-        return gameWindow;
-    }
-    public void setPlayer(Player player){
-        this.player = player;
+        Player.coins = 0;
     }
     public void setPreviousPlayer(Player player, Point point){
         this.player = player;
@@ -156,12 +127,5 @@ public class Game implements Runnable{
         this.player.getHitbox().y = point.y;
     }
 
-    public NPC_Manager getNpcManager() {
-        return npcManager;
-    }
-
-    public Setting getSetting() {
-        return setting;
-    }
 }
 

@@ -54,7 +54,7 @@ public class Pause implements StateMethods{
     public void draw(Graphics g) {
         game.getLevelManager().draw(g, xDrawOffset, yDrawOffset);
         game.getObjectManager().draw(g,xDrawOffset, yDrawOffset);
-        if (game.getPlayer().getActive()) game.getPlayer().draw(g, xDrawOffset, yDrawOffset);
+        if (game.getPlayer().isActive()) game.getPlayer().draw(g, xDrawOffset, yDrawOffset);
         game.getEnemyManager().draw(g, xDrawOffset, yDrawOffset);
         game.getItemsManager().draw(g, xDrawOffset, yDrawOffset);
         game.getNpcManager().draw(g, xDrawOffset, yDrawOffset);

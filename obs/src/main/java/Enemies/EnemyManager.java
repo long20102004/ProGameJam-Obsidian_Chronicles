@@ -38,7 +38,7 @@ public class EnemyManager {
         while (!extraSpitter.isEmpty()){
             currentLevel.enemies.add(extraSpitter.poll());
         }
-        for (Enemy enemy : new ArrayList<>(currentLevel.enemies)){
+        for (Enemy enemy :new ArrayList<>(currentLevel.enemies)){
             if (enemy.isActive) enemy.draw(g, xLevelOffset, yLevelOffset);
         }
     }
@@ -56,21 +56,21 @@ public class EnemyManager {
         }
     }
     public boolean checkWon(int indexLevel){
-        if (indexLevel >= 1) return false;
-//        if (!currentLevel.getBoss().getFirst().isActive) return true;
-//        boolean readyForBoss = true;
-//        for (Enemy enemy : currentLevel.getMustKillEnemies()){
-//            if (enemy.isActive) {
-//                readyForBoss = false;
-//                break;
-//            }
-//        }
-//        if (readyForBoss){
-//            loadBossPosition();
-//        }
-        Game.state = 1;
-        ImageSender.sendGameState();
-        game.resetAll();
+//        if (indexLevel >= 1) return false;
+////        if (!currentLevel.getBoss().getFirst().isActive) return true;
+////        boolean readyForBoss = true;
+////        for (Enemy enemy : currentLevel.getMustKillEnemies()){
+////            if (enemy.isActive) {
+////                readyForBoss = false;
+////                break;
+////            }
+////        }
+////        if (readyForBoss){
+////            loadBossPosition();
+////        }
+//        Game.state = 1;
+//        ImageSender.sendGameState();
+//        game.resetAll();
         return true;
     }
 
