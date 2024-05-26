@@ -36,6 +36,12 @@ public class Level {
     private int deltaValue = 0;
 
     private Point playerSpawn;
+    private Point line2Spawn;
+    private Point playerEndPoint;
+    private Point playerEndPoint2;
+    private Point trapStartPoint;
+    private Point trapEndPoint;
+    private Point teleportTrapPoint;
 
     private Point playerTeleport;
     private final int indexLevel;
@@ -101,6 +107,12 @@ public class Level {
         switch (redValue){
             case 255 -> playerSpawn = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
             case 250 -> playerTeleport = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
+            case 254 -> playerEndPoint = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
+            case 253 -> trapStartPoint = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
+            case 252 -> trapEndPoint = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
+            case 251 -> teleportTrapPoint = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
+            case 249 -> playerEndPoint2 = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
+            case 248 -> line2Spawn = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
         }
     }
     private void loadEnemies(int blueValue, int i, int j){
@@ -175,5 +187,41 @@ public class Level {
 //            }
 //        }
         return new ArrayList<>();
+    }
+
+    public Point getPlayerEndPoint() {
+        return playerEndPoint;
+    }
+
+    public Point getTrapStartPoint() {
+        return trapStartPoint;
+    }
+
+    public void setTrapStartPoint(Point trapStartPoint) {
+        this.trapStartPoint = trapStartPoint;
+    }
+
+    public Point getTrapEndPoint() {
+        return trapEndPoint;
+    }
+
+    public void setTrapEndPoint(Point trapEndPoint) {
+        this.trapEndPoint = trapEndPoint;
+    }
+
+    public Point getTeleportTrapPoint() {
+        return teleportTrapPoint;
+    }
+
+    public Point getPlayerEndPoint2() {
+        return playerEndPoint2;
+    }
+
+    public Point getLine2Spawn() {
+        return line2Spawn;
+    }
+
+    public void setLine2Spawn(Point line2Spawn) {
+        this.line2Spawn = line2Spawn;
     }
 }

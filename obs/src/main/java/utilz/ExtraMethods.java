@@ -41,7 +41,7 @@ public class ExtraMethods {
         int x = (int) (yPos / TILE_SIZE);
         int y = (int) (xPos / TILE_SIZE);
         if (!isIndexValid(x,y)) return true;
-        return (lvlData[x][y] > 0 && lvlData[x][y] != 1 && lvlData[x][y] < 250);
+        return (lvlData[x][y] > 0 && lvlData[x][y] != 1 && lvlData[x][y] < 230);
     }
     public static boolean isMovingPossible(Rectangle2D.Float border, float xPos, float yPos){
         for (int i = (int) xPos; i<= xPos + border.width; i++) {

@@ -3,6 +3,8 @@ package Player;
 import AnimatedObjects.Light;
 import Main.Game;
 import OnlineData.ImageSender;
+import State.GameState;
+import State.Playing;
 import UI.HealthBar;
 import Weapon.Gun;
 import lombok.Getter;
@@ -80,7 +82,7 @@ public abstract class Player implements PlayerMethods {
     protected boolean readyToDash = true;
     protected Game game;
     protected int state;
-    protected int maxHealth = 100;
+    protected int maxHealth = 1000;
     protected int maxPower = 100;
     protected int currentHealth = maxHealth;
     protected int currentPower = maxPower;
@@ -192,7 +194,7 @@ public abstract class Player implements PlayerMethods {
             reward -= 100;
 //            GameState.gameState = GameState.MENU;
             Game.state = 1;
-            ImageSender.sendGameState();
+            Playing.sendData();
             game.resetAll();
         }
         if (currentHealth > maxHealth) currentHealth = maxHealth;
@@ -206,5 +208,12 @@ public abstract class Player implements PlayerMethods {
 //    }
     public void increaseTalking(){
         this.countTalking++;
+    }
+
+    public void setHitboxX(Float x) {
+        this.hitbox.x = x;
+    }
+    public void setHitboxY(Float y) {
+        this.hitbox.y = y;
     }
 }
