@@ -3,6 +3,7 @@ package Player;
 import AnimatedObjects.Light;
 import Audio.AudioPlayer;
 import Main.Game;
+import State.Playing;
 import UI.HealthBar;
 import utilz.ExtraMethods;
 import utilz.LoadSave;
@@ -13,6 +14,8 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class SwordHero extends Player{
+    private int countAction = 0;
+    private int maxAction = 1;
     public SwordHero(int x, int y, Game game) {
         super(x, y, game);
         initPlayer();
@@ -39,10 +42,20 @@ public class SwordHero extends Player{
 //        }, 0, 3000);
     }
     private void updateAniTick() {
+        if (isMoving) maxAction = 2;
+        else maxAction = 1;
         aniTick++;
         if (aniTick > aniSpeed) {
             aniTick = 0;
             drawIndex++;
+            if (drawIndex >= Constant.PLAYER.SWORD_HERO.getType(state) - 1){
+                countAction++;
+                if (Playing.isAiMode && countAction >= maxAction){
+                    Playing.index++;
+                    System.out.println(Playing.index);
+                    countAction = 0;
+                }
+            }
             if (drawIndex >= Constant.PLAYER.SWORD_HERO.getType(state)) {
                 drawIndex = 0;
                 resetStatus();
@@ -70,7 +83,10 @@ public class SwordHero extends Player{
 //        g.drawRect((int) ((int) attackBox.x - xLevelOffset), (int) ((int) attackBox.y - yLevelOffset), (int) attackBox.width, (int) attackBox.height);
     }
     public void updateInAir() {
-        if (ExtraMethods.isEntityOnFloor(hitbox))  resetInAir();
+        if (ExtraMethods.isEntityOnFloor(hitbox)) {
+            if (inAir) Playing.index++;
+            resetInAir();
+        }
         else  {
             if (ExtraMethods.isEntityOnWall(hitbox, isRight)) setState(Constant.PLAYER.SWORD_HERO.WALL_SLIDE);
             else inAir = true;

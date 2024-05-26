@@ -15,15 +15,24 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.*;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
+
 import Player.*;
+import java.util.List;
 
 import static Main.Game.reward;
 
 @Component
 public class Playing implements StateMethods {
+    public static boolean isAiMode = false;
+    public static int index = 0;
     public static int countReceivedAction = 0;
-    public static int maxActionCount = 50000;
+    public static int maxActionCount = 300;
+    public boolean readyToSend = true;
+    public boolean readyToUpdate = false; 
+  public static int maxActionCount = 50000;
 //    public boolean readyToSend = false;
 
 //    public boolean readyToUpdate = false;
@@ -48,10 +57,31 @@ public class Playing implements StateMethods {
     private Player currentPlayer;
     private final Set<Integer> pressedKeys = new HashSet<>();
     private TimerTask timerTask;
+    private String[] aiAction1, aiAction2;
+    Random random = new Random();
+    private int currentLine = 1;
+    private boolean jumpedLine = false;
+    private boolean readyForAI = true;
 
     public Playing(Game game) {
         this.game = game;
         initClass();
+        initAiAction();
+    }
+
+    private void initAiAction() {
+        try {
+            List<String> lines1 = Files.readAllLines(Paths.get("Action.txt"));
+            List<String> lines2 = Files.readAllLines(Paths.get("Action2.txt"));
+//            int rand = random.nextInt(0, 22);
+//            System.out.println(rand);
+            String actions1 = lines1.get(12);
+            String actions2 = lines2.get(4);
+            aiAction1 = actions1.split(" ");
+            aiAction2 = actions2.split(" ");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initClass() {
@@ -138,7 +168,7 @@ public class Playing implements StateMethods {
     @Override
     public void keyReleased(KeyEvent e) {
         pressedKeys.remove(e.getKeyCode());
-        Game.reward = reward - 1;
+        Game.reward -= 1;
         switch (e.getKeyCode()) {
             case KeyEvent.VK_A:
             case KeyEvent.VK_D:
@@ -172,16 +202,12 @@ public class Playing implements StateMethods {
                 Player.currentHero = Player.SWORD_WOMAN;
                 playerTransform();
                 break;
-            case KeyEvent.VK_H:
-                Player.currentHero = Player.GUN_SLINGER;
-                playerTransform();
-                break;
             case KeyEvent.VK_F:
                 game.getPlayer().setDash(false);
                 break;
             case KeyEvent.VK_ENTER:
-                ImageSender.sendImage(ExtraMethods.getScreenShot());
-                ImageSender.sendReward();
+                readyForAI = true;
+                isAiMode = true;
         }
     }
 
@@ -272,7 +298,6 @@ public class Playing implements StateMethods {
 
     @Override
     public void draw(Graphics g) {
-        //action();
         game.getLevelManager().draw(g, xDrawOffset, yDrawOffset);
         Color color = new Color(0, 0, 0, 80);
         g.setColor(color);
@@ -287,8 +312,18 @@ public class Playing implements StateMethods {
 
     @Override
     public void update() {
+        if (isAiMode){
+            autoAction();
+            if (checkTrap()) {
+//            System.out.println(game.getPlayer().getHitbox().x + "here: ");
+//            System.out.println(game.getLevelManager().getLevel().getTrapStartPoint().x + " " + game.getLevelManager().getLevel().getTrapEndPoint().x );
+                game.getPlayer().setHitboxX((float) game.getLevelManager().getLevel().getTeleportTrapPoint().x);
+                game.getPlayer().setHitboxY((float) game.getLevelManager().getLevel().getTeleportTrapPoint().y);
+            }
+        }
+//        else resetStatus();
 //        if (!readyToUpdate) return;
-        if (game.getPlayer().isActive()) game.getPlayer().update(game);
+        if (game.getPlayer().getActive()) game.getPlayer().update(game);
         updateDrawOffset();
         game.getEnemyManager().update();
         game.getObjectManager().update();
@@ -297,6 +332,53 @@ public class Playing implements StateMethods {
         game.getNpcManager().update(game);
         game.getAudioPlayer().update();
         if (shop.isShopping()) shop.update();
+    }
+
+    private void autoAction() {
+        if (!readyForAI) return;
+        if (!ExtraMethods.isEntityOnWall(game.getPlayer().getHitbox(), game.getPlayer().isRight())) {
+            if (currentLine == 1) performAction(aiAction1[index]);
+            else performAction(aiAction2[index]);
+        }
+        if (checkLevelEndPoint() && !jumpedLine){
+            readyForAI = true;
+            jumpedLine = true;
+            index = 0;
+            currentLine++;
+            game.getPlayer().setHitboxX((float) game.getLevelManager().getLevel().getLine2Spawn().getX());
+            game.getPlayer().setHitboxY((float) game.getLevelManager().getLevel().getLine2Spawn().getY());
+        }
+    }
+
+    private void performAction(String s) {
+        resetStatus();
+        switch (s) {
+            case "0" -> {
+                game.getPlayer().setLeft(true);
+                game.getPlayer().setMoving(true);
+                game.getPlayer().setRight(false);
+            }
+            case "1" -> {
+                game.getPlayer().setJump(true);
+            }
+            case "2" -> {
+                game.getPlayer().setRight(true);
+                game.getPlayer().setMoving(true);
+                game.getPlayer().setLeft(false);
+            }
+            case "3" -> {
+                game.getPlayer().setAttacking(true);
+            }
+        }
+    }
+
+    private void resetStatus() {
+        game.getPlayer().setRight(false);
+        game.getPlayer().setMoving(false);
+        game.getPlayer().setLeft(false);
+        game.getPlayer().setDash(false);
+        game.getPlayer().setAttacking(false);
+        game.getPlayer().setJump(false);
     }
 
 
@@ -325,6 +407,60 @@ public class Playing implements StateMethods {
         return game;
     }
 
+    public void action() {
+        readDataFromFile();
+        if (!readyToUpdate && readyToSend) {
+            sendData();
+            readyToSend = false;
+        }
+        if (receivedAction) {
+            if (checkTrap()) {
+//            System.out.println(game.getPlayer().getHitbox().x + "here: ");
+//            System.out.println(game.getLevelManager().getLevel().getTrapStartPoint().x + " " + game.getLevelManager().getLevel().getTrapEndPoint().x );
+                game.getPlayer().setHitboxX((float) game.getLevelManager().getLevel().getTeleportTrapPoint().x);
+                game.getPlayer().setHitboxY((float) game.getLevelManager().getLevel().getTeleportTrapPoint().y);
+            }
+            countReceivedAction++;
+            reward--;
+            if (countReceivedAction >= maxActionCount || checkLevelEndPoint()) {
+                Game.state = 1;
+                if (checkLevelEndPoint()) reward += 1000;
+                sendData();
+                readyToSend = true;
+                readyToUpdate = false;
+                game.resetAll();
+            }
+            readyToUpdate = true;
+            readyToSend = true;
+            switch (action) {
+                case "0" -> {
+                    game.getPlayer().setLeft(true);
+                    game.getPlayer().setMoving(true);
+                }
+                case "1" -> {
+                    game.getPlayer().setJump(true);
+                }
+                case "2" -> {
+                    game.getPlayer().setRight(true);
+                    game.getPlayer().setMoving(true);
+                }
+                case "3" -> {
+                    game.getPlayer().setAttacking(true);
+                }
+            }
+            resetDataFile();
+        } else {
+            readyToUpdate = false;
+            game.getPlayer().setRight(false);
+            game.getPlayer().setMoving(false);
+            game.getPlayer().setLeft(false);
+            game.getPlayer().setDash(false);
+            game.getPlayer().setAttacking(false);
+            game.getPlayer().setJump(false);
+        }
+
+    }
+=======
 //    public void action() {
 ////        readDataFromFile();
 //        if (!readyToUpdate && readyToSend){
@@ -371,6 +507,14 @@ public class Playing implements StateMethods {
 //
 //    }
 
+    private boolean checkLevelEndPoint() {
+        if (game.getPlayer() == null) return false;
+        if (game.getPlayer().getHitbox().getY() > game.getLevelManager().getLevel().getPlayerEndPoint().getY()){
+            return true;
+        }
+        return false;
+    }
+
     private void resetDataFile() {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("data", false));
@@ -392,6 +536,67 @@ public class Playing implements StateMethods {
         maxLevelOffsetY = maxTileOffsetY * Game.TILE_SIZE;
     }
 
+    public int getxDrawOffset() {
+        return xDrawOffset;
+    }
+
+    public int getyDrawOffset() {
+        return yDrawOffset;
+    }
+
+    public Shop getShop() {
+        return shop;
+    }
+
+
+    public void readDataFromFile() {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("data"));
+            String line;
+            if ((line = reader.readLine()) != null) {
+                receivedAction = Boolean.parseBoolean(line.trim());
+                if ((line = reader.readLine()) != null) {
+                    action = line.trim();
+                }
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void sendData() {
+        ImageSender.sendImage(ExtraMethods.getScreenShot());
+        ImageSender.sendReward();
+        ImageSender.sendGameState();
+        deleteAllCurrentImage();
+        Game.reward = 0;
+    }
+
+    private static void deleteAllCurrentImage() {
+        String directoryPath = System.getProperty("user.dir");
+        try {
+            Files.walkFileTree(Paths.get(directoryPath), new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    if (file.getFileName().toString().startsWith("screenshot")) {
+                        Files.delete(file);
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean checkTrap() {
+        if (currentLine == 1) return false;
+        reward -= 5;
+        if (game.getPlayer().getHitbox().x <= game.getLevelManager().getLevel().getTrapStartPoint().x &&
+                game.getPlayer().getHitbox().x >= game.getLevelManager().getLevel().getTrapEndPoint().x) return true;
+        return false;
+    }
 //    public void readDataFromFile() {
 //        try {
 //            BufferedReader reader = new BufferedReader(new FileReader("data"));
