@@ -32,7 +32,6 @@ public class Playing implements StateMethods {
     public static int maxActionCount = 300;
     public boolean readyToSend = true;
     public boolean readyToUpdate = false; 
-  public static int maxActionCount = 50000;
 //    public boolean readyToSend = false;
 
 //    public boolean readyToUpdate = false;
@@ -323,7 +322,7 @@ public class Playing implements StateMethods {
         }
 //        else resetStatus();
 //        if (!readyToUpdate) return;
-        if (game.getPlayer().getActive()) game.getPlayer().update(game);
+        if (game.getPlayer().isActive()) game.getPlayer().update(game);
         updateDrawOffset();
         game.getEnemyManager().update();
         game.getObjectManager().update();
@@ -460,7 +459,6 @@ public class Playing implements StateMethods {
         }
 
     }
-=======
 //    public void action() {
 ////        readDataFromFile();
 //        if (!readyToUpdate && readyToSend){
