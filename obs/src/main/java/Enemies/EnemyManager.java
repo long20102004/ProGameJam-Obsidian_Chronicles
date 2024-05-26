@@ -26,6 +26,7 @@ public class EnemyManager {
             currentLevel.enemies.add(extraSpitter.poll());
         }
         for (Enemy enemy : new ArrayList<>(currentLevel.enemies)){
+            if (enemy == null) continue;
             if (enemy.isActive){
                 enemy.update(game);
                 playerAttack(enemy, game.getPlayer());
@@ -37,7 +38,7 @@ public class EnemyManager {
         while (!extraSpitter.isEmpty()){
             currentLevel.enemies.add(extraSpitter.poll());
         }
-        for (Enemy enemy : currentLevel.enemies){
+        for (Enemy enemy : new ArrayList<>(currentLevel.enemies)){
             if (enemy.isActive) enemy.draw(g, xLevelOffset, yLevelOffset);
         }
     }

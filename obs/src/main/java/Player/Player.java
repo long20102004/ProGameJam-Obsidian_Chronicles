@@ -28,7 +28,7 @@ public abstract class Player implements PlayerMethods {
     protected int xDrawOffset = (int) (20 * Game.MODE), yDrawOffset = (int) (-7 * Game.MODE);
     protected boolean readyToAttack = true;
     protected int xPos, yPos;
-    protected float speed = 3f;
+    protected float speed = 1.5f;
     protected float fallSpeed = 0, gravity = 0.04f;
     protected float wallFallSpeed = 0.5f;
     protected float constGravity = 0.03f;
@@ -67,7 +67,7 @@ public abstract class Player implements PlayerMethods {
     protected boolean readyToDash = true;
     protected Game game;
     protected int state;
-    protected int maxHealth = 100;
+    protected int maxHealth = 1000;
     protected int maxPower = 100;
     protected int currentHealth = maxHealth;
     protected int currentPower = maxPower;
