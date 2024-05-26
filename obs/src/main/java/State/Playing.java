@@ -22,15 +22,13 @@ import java.util.*;
 import Player.*;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static Main.Game.reward;
 
 @Component
 public class Playing implements StateMethods {
     public static boolean isAiMode = false;
-    public static int index;
+    public static int index = 0;
     public static int countReceivedAction = 0;
     public static int maxActionCount = 300;
     public boolean readyToSend = true;
@@ -56,10 +54,31 @@ public class Playing implements StateMethods {
     private Player currentPlayer;
     private final Set<Integer> pressedKeys = new HashSet<>();
     private TimerTask timerTask;
+    private String[] aiAction1, aiAction2;
+    Random random = new Random();
+    private int currentLine = 1;
+    private boolean jumpedLine = false;
+    private boolean readyForAI = true;
 
     public Playing(Game game) {
         this.game = game;
         initClass();
+        initAiAction();
+    }
+
+    private void initAiAction() {
+        try {
+            List<String> lines1 = Files.readAllLines(Paths.get("Action.txt"));
+            List<String> lines2 = Files.readAllLines(Paths.get("Action2.txt"));
+//            int rand = random.nextInt(0, 22);
+//            System.out.println(rand);
+            String actions1 = lines1.get(12);
+            String actions2 = lines2.get(4);
+            aiAction1 = actions1.split(" ");
+            aiAction2 = actions2.split(" ");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initClass() {
@@ -157,6 +176,7 @@ public class Playing implements StateMethods {
                 game.getPlayer().setDash(false);
                 break;
             case KeyEvent.VK_ENTER:
+                readyForAI = true;
                 isAiMode = true;
         }
     }
@@ -272,6 +292,7 @@ public class Playing implements StateMethods {
                 game.getPlayer().setHitboxY((float) game.getLevelManager().getLevel().getTeleportTrapPoint().y);
             }
         }
+//        else resetStatus();
 //        if (!readyToUpdate) return;
         if (game.getPlayer().getActive()) game.getPlayer().update(game);
         updateDrawOffset();
@@ -285,14 +306,18 @@ public class Playing implements StateMethods {
     }
 
     private void autoAction() {
-        try {
-            List<String> lines = Files.readAllLines(Paths.get("Action2.txt"));
-            String actions = lines.get(10);
-            String[] action = actions.split(" ");
-//            System.out.println(action.length);
-            if (index < action.length) performAction(action[index]);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!readyForAI) return;
+        if (!ExtraMethods.isEntityOnWall(game.getPlayer().getHitbox(), game.getPlayer().isRight())) {
+            if (currentLine == 1) performAction(aiAction1[index]);
+            else performAction(aiAction2[index]);
+        }
+        if (checkLevelEndPoint() && !jumpedLine){
+            readyForAI = true;
+            jumpedLine = true;
+            index = 0;
+            currentLine++;
+            game.getPlayer().setHitboxX((float) game.getLevelManager().getLevel().getLine2Spawn().getX());
+            game.getPlayer().setHitboxY((float) game.getLevelManager().getLevel().getLine2Spawn().getY());
         }
     }
 
@@ -409,8 +434,7 @@ public class Playing implements StateMethods {
 
     private boolean checkLevelEndPoint() {
         if (game.getPlayer() == null) return false;
-        if (game.getPlayer().getHitbox().getY() > game.getLevelManager().getLevel().getPlayerEndPoint().getY()
-                || game.getPlayer().getHitbox().getY() > game.getLevelManager().getLevel().getPlayerEndPoint2().getY()) {
+        if (game.getPlayer().getHitbox().getY() > game.getLevelManager().getLevel().getPlayerEndPoint().getY()){
             return true;
         }
         return false;
@@ -475,7 +499,7 @@ public class Playing implements StateMethods {
     }
 
     private static void deleteAllCurrentImage() {
-        String directoryPath = System.getProperty("user.dir"); // Get the current working directory
+        String directoryPath = System.getProperty("user.dir");
         try {
             Files.walkFileTree(Paths.get(directoryPath), new SimpleFileVisitor<Path>() {
                 @Override
@@ -492,6 +516,7 @@ public class Playing implements StateMethods {
     }
 
     private boolean checkTrap() {
+        if (currentLine == 1) return false;
         reward -= 5;
         if (game.getPlayer().getHitbox().x <= game.getLevelManager().getLevel().getTrapStartPoint().x &&
                 game.getPlayer().getHitbox().x >= game.getLevelManager().getLevel().getTrapEndPoint().x) return true;

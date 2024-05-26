@@ -32,6 +32,7 @@ public class Level {
     private final Random random = new Random();
 
     private Point playerSpawn;
+    private Point line2Spawn;
     private Point playerEndPoint;
     private Point playerEndPoint2;
     private Point trapStartPoint;
@@ -106,6 +107,7 @@ public class Level {
             case 252 -> trapEndPoint = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
             case 251 -> teleportTrapPoint = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
             case 249 -> playerEndPoint2 = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
+            case 248 -> line2Spawn = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
         }
     }
     private void loadEnemies(int blueValue, int i, int j){
@@ -229,5 +231,13 @@ public class Level {
 
     public Point getPlayerEndPoint2() {
         return playerEndPoint2;
+    }
+
+    public Point getLine2Spawn() {
+        return line2Spawn;
+    }
+
+    public void setLine2Spawn(Point line2Spawn) {
+        this.line2Spawn = line2Spawn;
     }
 }
