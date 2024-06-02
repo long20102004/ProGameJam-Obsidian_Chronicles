@@ -52,7 +52,7 @@ public class Product {
         g.drawString(price, (int) (frameBorder.x + frameBorder.width / 3), (int) (frameBorder.y + frameBorder.height + 5));
         g.setFont(wordFont);
         if (isPicking) {
-            g.drawImage(highlighter, frameBorder.x - 38, frameBorder.y - 35, frameBorder.width + 77, frameBorder.height + 70, null);
+            g.drawImage(highlighter, frameBorder.x - 36, frameBorder.y - 35, frameBorder.width + 70, frameBorder.height + 70, null);
             g.drawString(description, xDescription, yDescription);
         }
     }

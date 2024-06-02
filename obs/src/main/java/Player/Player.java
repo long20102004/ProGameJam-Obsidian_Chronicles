@@ -21,6 +21,7 @@ import static Main.Game.reward;
 @Getter
 @Setter
 public abstract class Player implements PlayerMethods {
+    public static boolean isLocked = false;
     protected BufferedImage[][] animation;
     protected BufferedImage[][] revAnimation;
     protected HealthBar healthBar;

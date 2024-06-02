@@ -13,6 +13,11 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
+import static Main.Game.MODE;
+import static Main.Game.zoom;
+import static utilz.Constant.PLAYER.SWORD_HERO.DEFAULT_HEIGHT;
+import static utilz.Constant.PLAYER.SWORD_HERO.DEFAULT_WIDTH;
+
 public class SwordHero extends Player{
     private int countAction = 0;
     private int maxAction = 1;
@@ -21,15 +26,16 @@ public class SwordHero extends Player{
         initPlayer();
     }
     public void initPlayer() {
+        isLocked = true;
         animation = new BufferedImage[27][10];
         revAnimation = new BufferedImage[27][10];
-        hitbox = new Rectangle2D.Float(xPos, yPos, 15 * Game.MODE, 40 * Game.MODE);
-        attackBox = new Rectangle2D.Float(xPos, yPos, 60 * Game.MODE, 40 * Game.MODE);
+        hitbox = new Rectangle2D.Float(xPos, yPos, 15 * MODE, 40 * MODE);
+        attackBox = new Rectangle2D.Float(xPos, yPos, 60 * MODE, 40 * MODE);
         healthBar = new HealthBar(this, maxHealth, maxPower);
         BufferedImage tmp = LoadSave.getImg(LoadSave.SWORD_HERO);
         for (int i = 0; i < animation.length; i++) {
             for (int j = 0; j < animation[0].length; j++) {
-                animation[i][j] = tmp.getSubimage(Constant.PLAYER.SWORD_HERO.DEFAULT_WIDTH * j, Constant.PLAYER.SWORD_HERO.DEFAULT_HEIGHT * i, Constant.PLAYER.SWORD_HERO.DEFAULT_WIDTH, Constant.PLAYER.SWORD_HERO.DEFAULT_HEIGHT);
+                animation[i][j] = tmp.getSubimage(DEFAULT_WIDTH * j, Constant.PLAYER.SWORD_HERO.DEFAULT_HEIGHT * i, DEFAULT_WIDTH, Constant.PLAYER.SWORD_HERO.DEFAULT_HEIGHT);
                 revAnimation[i][j] = ExtraMethods.reverseImg(animation[i][j]);
             }
         }
@@ -75,9 +81,9 @@ public class SwordHero extends Player{
         healthBar.draw(g);
         light.draw(g, xLevelOffset, yLevelOffset);
         if (isLeft)
-            g.drawImage(revAnimation[state][drawIndex], (int) ((int) hitbox.x - xDrawOffset - xLevelOffset - 80), (int) ((int) hitbox.y - yDrawOffset - yLevelOffset), Constant.PLAYER.SWORD_HERO.WIDTH, Constant.PLAYER.SWORD_HERO.HEIGHT, null);
+            g.drawImage(revAnimation[state][drawIndex], (int) ((int) hitbox.x - xDrawOffset - xLevelOffset - 80), (int) ((int) hitbox.y - yDrawOffset - yLevelOffset), (int) (DEFAULT_WIDTH * MODE), (int) (DEFAULT_HEIGHT * MODE), null);
         else
-            g.drawImage(animation[state][drawIndex], (int) ((int) hitbox.x - xDrawOffset - xLevelOffset), (int) ((int) hitbox.y - yDrawOffset - yLevelOffset), Constant.PLAYER.SWORD_HERO.WIDTH, Constant.PLAYER.SWORD_HERO.HEIGHT, null);
+            g.drawImage(animation[state][drawIndex], (int) ((int) hitbox.x - xDrawOffset - xLevelOffset), (int) ((int) hitbox.y - yDrawOffset - yLevelOffset), (int) (DEFAULT_WIDTH * MODE), (int) (DEFAULT_HEIGHT * MODE), null);
 //        g.setColor(Color.RED);
 //        g.drawRect((int) ((int) hitbox.x - xLevelOffset), (int) ((int) hitbox.y - yLevelOffset), (int) hitbox.width, (int) hitbox.height);
 //        g.drawRect((int) ((int) attackBox.x - xLevelOffset), (int) ((int) attackBox.y - yLevelOffset), (int) attackBox.width, (int) attackBox.height);

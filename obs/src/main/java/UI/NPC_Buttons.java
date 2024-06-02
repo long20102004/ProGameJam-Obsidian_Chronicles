@@ -1,5 +1,6 @@
 package UI;
 
+import Main.Game;
 import utilz.LoadSave;
 
 import java.awt.*;
@@ -41,7 +42,7 @@ public class NPC_Buttons {
         }
     }
     public void draw(Graphics g, float xLevelOffset, float yLevelOffset){
-        g.drawImage(buttons[type][index], (int) (xPos - xLevelOffset), (int) (yPos - yLevelOffset), 40, 40, null);
+        g.drawImage((Image) buttons[type][index], (int) (xPos - xLevelOffset), (int) (yPos - yLevelOffset), (int) (20 * Game.zoom), (int) (20 * Game.zoom), null);
         aniTick++;
         if (aniTick >= aniSpeed){
             index = 1 - index;
