@@ -3,6 +3,7 @@ package UI;
 import Main.Game;
 import Player.Player;
 import utilz.Constant;
+import utilz.ExtraMethods;
 import utilz.LoadSave;
 
 import java.awt.*;
@@ -18,9 +19,9 @@ public class HealthBar {
     private int maxPower;
     private int currentPower;
     private int powerIndex = 9;
-    private final int healthXPos = 50;
+    private final int healthXPos = (int) (Game.SCREEN_WIDTH / 2) - Constant.HEALTH_BAR.WIDTH;
     private final int healthYPos = 50;
-    private final int powerXPos = 60;
+    private final int powerXPos = healthXPos + 10;
     private final int powerYPos = 70;
     private int previousPower;
     private int healthWidth, healthHeight, powerWidth, powerHeight;

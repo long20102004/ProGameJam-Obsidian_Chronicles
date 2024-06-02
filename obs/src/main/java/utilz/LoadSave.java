@@ -60,6 +60,8 @@ public class LoadSave {
     public static final String SKILLS = "Shop/skills.png";
     public static final String OLD_MAN = "NPCs/OldMan.png";
     public static final String COIN = "Objects/coin.png";
+    public static final String SWORD_HERO_ICON = "Character/SwordHeroIcon.png";
+    public static final String SWORD_WOMAN_ICON = "Character/JoannaIcon.png";
 
     public static BufferedImage getImg(String fileName) {
         BufferedImage img = null;

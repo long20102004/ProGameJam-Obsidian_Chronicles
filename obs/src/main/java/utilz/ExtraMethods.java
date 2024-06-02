@@ -21,7 +21,7 @@ public class ExtraMethods {
     private static Game game;
     private static int[][] lvlData;
     public static Level level;
-    private static int maxRow, maxCol;
+    public static int maxRow, maxCol;
     public static int indexPicture = 0;
     public static Random random = new Random();
 
@@ -38,8 +38,8 @@ public class ExtraMethods {
     }
     public static boolean isTileSolid(float xPos, float yPos){
 //        if (xPos <= 0 || xPos + game.getPlayer().getHitbox().width >= maxX || yPos <= 0 || yPos + game.getPlayer().getHitbox().height>= maxY) return true;
-        int x = (int) (yPos / TILE_SIZE);
-        int y = (int) (xPos / TILE_SIZE);
+        int x = (int) (yPos / CONST_TILE_SIZE);
+        int y = (int) (xPos / CONST_TILE_SIZE);
         if (!isIndexValid(x,y)) return true;
         return (lvlData[x][y] > 0 && lvlData[x][y] != 1 && lvlData[x][y] < 230);
     }
@@ -58,16 +58,16 @@ public class ExtraMethods {
         return true;
     }
     public static float updateSpaceBetweenXAndWall(Rectangle2D.Float border, float xSpeed){
-        int currentRow = (int) (border.x + border.width) / TILE_SIZE;
+        int currentRow = (int) (border.x + border.width) / CONST_TILE_SIZE;
         if (xSpeed > 0){
-            return (currentRow + 1) * TILE_SIZE - border.width - 1;
+            return (currentRow + 1) * CONST_TILE_SIZE - border.width - 1;
         }
         else return border.x;
     }
     public static float updateSpaceBetweenYAndWall(Rectangle2D.Float border, float airSpeed){
-        int currentTile = (int) ((border.y + border.height) / TILE_SIZE);
+        int currentTile = (int) ((border.y + border.height) / CONST_TILE_SIZE);
         if (airSpeed > 0){
-            return (currentTile + 1) * TILE_SIZE - border.height - 1;
+            return (currentTile + 1) * CONST_TILE_SIZE - border.height - 1;
         }
         else return border.y;
     }
@@ -114,21 +114,21 @@ public class ExtraMethods {
         int startTile;
         int endTile;
         if (isRight) {
-            startTile = (int) ((1.0 * hitbox.x + hitbox.width) / TILE_SIZE);
-            endTile = (int) Math.floor((hitbox.x + speed + hitbox.width) / TILE_SIZE);
+            startTile = (int) ((1.0 * hitbox.x + hitbox.width) / CONST_TILE_SIZE);
+            endTile = (int) Math.floor((hitbox.x + speed + hitbox.width) / CONST_TILE_SIZE);
             for (int i = startTile; i <= endTile; i++) {
-                if (isTileSolid(i * TILE_SIZE, hitbox.y) || isTileSolid(i * TILE_SIZE, hitbox.y + hitbox.height)) {
-                    hitbox.x = i * TILE_SIZE - hitbox.width - 1;
+                if (isTileSolid(i * CONST_TILE_SIZE, hitbox.y) || isTileSolid(i * CONST_TILE_SIZE, hitbox.y + hitbox.height)) {
+                    hitbox.x = i * CONST_TILE_SIZE - hitbox.width - 1;
                     return;
                 }
             }
             hitbox.x = hitbox.x + speed;
         } else {
-            endTile = (int) (hitbox.x / TILE_SIZE);
-            startTile = (int) ((1.0 * hitbox.x - speed) / TILE_SIZE);
+            endTile = (int) (hitbox.x / CONST_TILE_SIZE);
+            startTile = (int) ((1.0 * hitbox.x - speed) / CONST_TILE_SIZE);
             for (int i = endTile; i >= startTile; i--) {
-                if (isTileSolid(i * TILE_SIZE, hitbox.y) || isTileSolid(i * TILE_SIZE, hitbox.y + hitbox.height)) {
-                    hitbox.x =(i + 1) * TILE_SIZE;
+                if (isTileSolid(i * CONST_TILE_SIZE, hitbox.y) || isTileSolid(i * CONST_TILE_SIZE, hitbox.y + hitbox.height)) {
+                    hitbox.x =(i + 1) * CONST_TILE_SIZE;
                     return;
                 }
             }

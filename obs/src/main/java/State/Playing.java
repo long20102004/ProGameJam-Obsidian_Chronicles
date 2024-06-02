@@ -8,21 +8,27 @@ import Player.HoarderTransform;
 import Player.Player;
 import Player.SwordHero;
 import Upgrade.Shop;
+import utilz.Constant;
 import utilz.ExtraMethods;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 
 import Player.*;
+import utilz.LoadSave;
+
 import java.util.List;
 
-import static Main.Game.reward;
+import static Main.Game.*;
+import static Player.Player.SWORD_HERO;
+import static Player.Player.SWORD_WOMAN;
 
 @Component
 public class Playing implements StateMethods {
@@ -32,14 +38,15 @@ public class Playing implements StateMethods {
     public static int maxActionCount = 300;
     public boolean readyToSend = true;
     public boolean readyToUpdate = false; 
-//    public boolean readyToSend = false;
 
-//    public boolean readyToUpdate = false;
     private Game game;
     public static boolean receivedAction;
     public static String action;
     private int xDrawOffset;
     private int yDrawOffset;
+    private BufferedImage currentIcon;
+    private BufferedImage swordHeroIcon;
+    private BufferedImage swordWomanIcon;
     private final float rightBorder = 0.5f * Game.GAME_WIDTH;
     private final float leftBorder = 0.5f * Game.GAME_WIDTH;
     private final float underBorder = 0.6f * Game.GAME_HEIGHT;
@@ -63,6 +70,7 @@ public class Playing implements StateMethods {
     private boolean readyForAI = true;
 
     public Playing(Game game) {
+
         this.game = game;
         initClass();
         initAiAction();
@@ -85,6 +93,9 @@ public class Playing implements StateMethods {
 
     private void initClass() {
         shop = new Shop(this);
+        swordHeroIcon = LoadSave.getImg(LoadSave.SWORD_HERO_ICON);
+        swordWomanIcon = LoadSave.getImg(LoadSave.SWORD_WOMAN_ICON);
+        currentIcon = swordHeroIcon;
         levelTilesWide = game.getLevelManager().getLevel().getLvlData()[0].length + 5;
         levelTilesHeight = game.getLevelManager().getLevel().getLvlData().length + 5;
         maxTilesOffset = levelTilesWide - Game.NUMBER_TILES_IN_WIDTH;
@@ -194,12 +205,16 @@ public class Playing implements StateMethods {
                 game.getPlayer().increaseTalking();
                 break;
             case KeyEvent.VK_U:
-                Player.currentHero = Player.HOARDER;
-                playerTransform();
+                if (!HoarderTransform.isLocked) {
+                    Player.currentHero = Player.HOARDER;
+                    playerTransform();
+                }
                 break;
             case KeyEvent.VK_G:
-                Player.currentHero = Player.SWORD_WOMAN;
-                playerTransform();
+                if (!SwordWoman.isLocked) {
+                    Player.currentHero = Player.SWORD_WOMAN;
+                    playerTransform();
+                }
                 break;
             case KeyEvent.VK_F:
                 game.getPlayer().setDash(false);
@@ -219,7 +234,10 @@ public class Playing implements StateMethods {
         currentPlayer = game.getPlayer();
         if (Player.currentHero != Player.NOT_CHANGE) game.getAudioPlayer().playEffectSound(AudioPlayer.TRANSFORM);
         switch (Player.currentHero) {
-            case Player.SWORD_HERO -> game.setPlayer(new SwordHero(currentPoint.x, currentPoint.y, game));
+            case SWORD_HERO -> {
+                game.setPlayer(new SwordHero(currentPoint.x, currentPoint.y, game));
+                currentIcon = swordHeroIcon;
+            }
             case Player.GUN_SLINGER -> game.setPlayer(new Gunslinger(currentPoint.x, currentPoint.y, game));
             case Player.HOARDER -> {
                 game.setPlayer(new HoarderTransform(currentPoint.x, currentPoint.y - 3 * Game.TILE_SIZE, game));
@@ -233,7 +251,10 @@ public class Playing implements StateMethods {
                 };
                 timer.schedule(timerTask, 5000);
             }
-            case Player.SWORD_WOMAN -> game.setPlayer(new SwordWoman(currentPoint.x, currentPoint.y, game));
+            case Player.SWORD_WOMAN -> {
+                game.setPlayer(new SwordWoman(currentPoint.x, currentPoint.y, game));
+                currentIcon = swordWomanIcon;
+            }
 
         }
         Player.currentHero = Player.NOT_CHANGE;
@@ -307,6 +328,42 @@ public class Playing implements StateMethods {
         game.getEnemyManager().draw(g, xDrawOffset, yDrawOffset);
         game.getNpcManager().draw(g, xDrawOffset, yDrawOffset);
         if (shop.isShopping()) shop.draw(g);
+
+        zoom = 0.18f;
+        MODE = MODE * zoom / 2.3f;
+        TILE_SIZE = (int) (TILE_DEFAULT_SIZE * MODE);
+        GAME_HEIGHT = 100 * TILE_SIZE;
+        GAME_WIDTH = 120 * TILE_SIZE;
+        int deltaX = 40 * CONST_TILE_SIZE - GAME_WIDTH;
+        game.getLevelManager().draw(g, 0, 0);
+        drawPlayerIcon(g);
+        resetSize();
+    }
+
+    private void drawPlayerIcon(Graphics g) {
+        float currentPosX = game.getPlayer().getHitbox().x;
+        float currentPosY = game.getPlayer().getHitbox().y;
+
+        float currentRateInHeight = currentPosY / CONST_TILE_SIZE;
+        float currentRateInWidth = currentPosX / CONST_TILE_SIZE;
+        float currentXPosInMiniMap = currentRateInWidth * TILE_SIZE;
+        float currentYPosInMiniMap = currentRateInHeight * TILE_SIZE;
+        g.setColor(Color.RED);
+        switch (Player.currentHero){
+            case SWORD_HERO -> currentIcon = swordHeroIcon;
+            case SWORD_WOMAN -> currentIcon = swordWomanIcon;
+        }
+        g.setColor(new Color(171, 194, 232, 80));
+        g.fillOval((int) (currentXPosInMiniMap - 5), (int) (currentYPosInMiniMap - 5) - 12, 30, 30);
+        g.drawImage(currentIcon, (int) currentXPosInMiniMap, (int) currentYPosInMiniMap - 16, 20, 20, null);
+    }
+
+    private void resetSize(){
+        MODE = MODE / zoom * 2.3f;
+        zoom = 2.3f;
+        TILE_SIZE = (int) (TILE_DEFAULT_SIZE * MODE);
+        GAME_HEIGHT = 30 * TILE_SIZE;
+        GAME_WIDTH = 50 * TILE_SIZE;
     }
 
     @Override
