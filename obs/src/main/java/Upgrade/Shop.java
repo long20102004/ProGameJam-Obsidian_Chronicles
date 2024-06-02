@@ -1,6 +1,7 @@
 package Upgrade;
 
 import Level.Level;
+import Main.Game;
 import State.Playing;
 import utilz.ExtraMethods;
 import utilz.LoadSave;
@@ -96,11 +97,6 @@ public class Shop {
         g.setFont(g.getFont().deriveFont(Font.PLAIN, 15));
         g.drawString(instruction, xPos + width - 200, yPos + height - 30);
     }
-
-    public void setCurrentDialogue(int dialogue) {
-        currentDialogue = dialogue;
-    }
-
     public void mouseMoved(MouseEvent e){
         for (Product product : currentLevel.products){
             if (ExtraMethods.isIn(e, product.productBorder)){
@@ -125,9 +121,9 @@ public class Shop {
             else product.setReleased(false);
         }
     }
-    public void update(){
+    public void update(Game game){
         for (Product product : currentLevel.products){
-            product.update();
+            product.update(game);
         }
     }
     public void setShopping(boolean shopping){

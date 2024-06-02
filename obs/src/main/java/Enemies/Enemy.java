@@ -13,6 +13,8 @@ import utilz.LoadSave;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.time.Instant;
+import java.util.Random;
 
 import static Main.Game.reward;
 @Getter
@@ -72,6 +74,10 @@ public class Enemy {
     protected int attackState;
     protected int deadState;
     protected int defaultState;
+    private Instant lastDamageTime;
+    private int damageTaken;
+    protected int xDeltaRandom, yDeltaRandom;
+    Random rand = new Random();
     protected void initEnemy(int xPos, int yPos){
         this.xPos = xPos;
         this.yPos = yPos;
@@ -96,8 +102,13 @@ public class Enemy {
         else
             g.drawImage(animation[state][drawIndex], (int) hitbox.x - xLevelOffset - xDrawOffset, (int) hitbox.y - yLevelOffset - yDrawOffset,drawWidth,drawHeight, null);
         g.setColor(Color.RED);
-//        g.drawRect((int) hitbox.x - xLevelOffset, (int) hitbox.y - yLevelOffset, (int) hitbox.width, (int) hitbox.height);
-//        g.drawRect((int) attackBox.x - xLevelOffset, (int) attackBox.y - yLevelOffset, (int) attackBox.width, (int) attackBox.height);
+        if (lastDamageTime != null && Instant.now().minusMillis(1000).isBefore(lastDamageTime) && damageTaken != 0){
+            long elapsedTime = Instant.now().toEpochMilli() - lastDamageTime.toEpochMilli();
+            int alpha = 255 - (int) ((elapsedTime / 500.0) * 255);
+            if (alpha < 0) alpha = 0;
+            g.setColor(new Color(255, 0, 0, alpha));
+            g.drawString(String.valueOf(damageTaken), (int) hitbox.x - xLevelOffset + xDeltaRandom, (int) hitbox.y - yLevelOffset + yDeltaRandom);
+        }
         healthBar.draw(g, xLevelOffset, yLevelOffset);
     }
 
@@ -149,6 +160,10 @@ public class Enemy {
         reward += damage;
         setState(hitState);
         updateHealth(-damage);
+        damageTaken = damage;
+        lastDamageTime = Instant.now();
+        xDeltaRandom = rand.nextInt(-50,100);
+        yDeltaRandom = rand.nextInt(0, 50);
     }
 
     public void updateHealth(int damage) {

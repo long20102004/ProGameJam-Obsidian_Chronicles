@@ -1,5 +1,6 @@
 package AnimatedObjects;
 
+import Audio.AudioPlayer;
 import Main.Game;
 import utilz.LoadSave;
 import utilz.Constant;
@@ -47,9 +48,10 @@ public class Portal extends AnimatedObject{
                     setType = true;
                 }
                 if (drawIndex >= Constant.PORTAL.getType(Constant.PORTAL.TELEPORT) - 2) {
-                    game.getLevelManager().loadNextLevel();
-//                    game.getPlayer().getHitbox().x = game.getLevelManager().getLevel().getPlayerTeleport().x;
-//                    game.getPlayer().getHitbox().y = game.getLevelManager().getLevel().getPlayerTeleport().y;
+//                    game.getLevelManager().loadNextLevel();
+                    game.getPlayer().getHitbox().x = game.getLevelManager().getLevel().getPlayerTeleport().x;
+                    game.getPlayer().getHitbox().y = game.getLevelManager().getLevel().getPlayerTeleport().y;
+                    game.getAudioPlayer().setMusic(AudioPlayer.FINAL_BATTLE);
                 }
             }
         }

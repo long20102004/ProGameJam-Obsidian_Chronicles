@@ -1,5 +1,6 @@
 package Items;
 
+import Audio.AudioPlayer;
 import Main.Game;
 import Player.Player;
 import utilz.LoadSave;
@@ -51,6 +52,7 @@ public class Items {
             switch (type){
                 case Constant.ITEMS.COINS1:
                     Player.coins++;
+                    game.getAudioPlayer().playEffectSound(AudioPlayer.COIN);
                     Game.reward += 10;
                     break;
                 case Constant.ITEMS.BANDAGE:

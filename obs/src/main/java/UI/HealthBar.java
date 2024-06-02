@@ -3,6 +3,7 @@ package UI;
 import Main.Game;
 import Player.Player;
 import utilz.Constant;
+import utilz.ExtraMethods;
 import utilz.LoadSave;
 
 import java.awt.*;
@@ -18,9 +19,9 @@ public class HealthBar {
     private int maxPower;
     private int currentPower;
     private int powerIndex = 9;
-    private final int healthXPos = 50;
+    private final int healthXPos = (int) (Game.SCREEN_WIDTH / 2) - Constant.HEALTH_BAR.WIDTH;
     private final int healthYPos = 50;
-    private final int powerXPos = 60;
+    private final int powerXPos = healthXPos + 10;
     private final int powerYPos = 70;
     private int previousPower;
     private int healthWidth, healthHeight, powerWidth, powerHeight;
@@ -44,10 +45,14 @@ public class HealthBar {
         powerHeight = Constant.POWER_BAR.HEIGHT;
     }
     public void draw(Graphics g){
+        g.setFont(LoadSave.numberFont(17));
         g.drawImage(healthBar, healthXPos, healthYPos, Constant.HEALTH_BAR.WIDTH, Constant.HEALTH_BAR.HEIGHT, null);
         g.setColor(Color.RED);
+        g.drawString(currentHealth + "/" + maxHealth, healthXPos + Constant.HEALTH_BAR.WIDTH + 20, healthYPos + 20);
         g.fillRect(healthXPos + 10, healthYPos + 5, healthWidth, healthHeight);
         g.drawImage(powerBar[powerIndex], powerXPos, powerYPos, powerWidth, powerHeight, null);
+        g.setColor(Color.WHITE);
+        g.drawString(currentPower + "/" + maxPower, powerXPos + Constant.POWER_BAR.WIDTH + 20, powerYPos + 30);
     }
 
 

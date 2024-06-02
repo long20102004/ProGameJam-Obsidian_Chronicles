@@ -1,12 +1,15 @@
 package Audio;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
-@Component
+@Getter
+@Setter
 public class AudioPlayer{
     public static int MENU = 0;
     public static int LEVEL_1 = 1;
@@ -29,9 +32,13 @@ public class AudioPlayer{
     public static int CLICKED = 12;
     public static int TRANSFORM = 13;
     public static int SHOT = 14;
+    public static int VICTORY = 15;
+    public static int HURT = 16;
+    public static int DEAD = 17;
+    public static int COIN = 18;
     private boolean isMuted;
-    private final float musicVolume = 0.6f;
-    private final float effectVolume = 0.7f;
+    public float musicVolume = 0.6f;
+    public float effectVolume = 0.8f;
     private Clip[] songs,effects;
     public static Random rand = new Random();
     private int currentSong;
@@ -63,7 +70,7 @@ public class AudioPlayer{
     }
 
     private void setEffect() {
-        String[] name = new String[]{"Teleport", "attack1", "attack2", "attack3", "Slide", "Jump", "Climb", "Dash", "WallSlide", "Land", "Falling", "Running", "ClickSound", "transform", "shot"};
+        String[] name = new String[]{"Teleport", "attack1", "attack2", "attack3", "Slide", "Jump", "Climb", "Dash", "WallSlide", "Land", "Falling", "Running", "ClickSound", "transform", "shot", "victory", "hurt", "dead", "coin"};
         effects = new Clip[name.length];
         for (int i=0; i<effects.length; i++){
             effects[i] = getClip(name[i]);
@@ -87,7 +94,9 @@ public class AudioPlayer{
         gainControl.setValue(changeVolume);
     }
     public void playEffectSound(int type){
-        if (effects[type].getMicrosecondPosition() > 200000)
+        long playTime = 200000;
+//        if (type == COIN) playTime /= 5;
+        if (effects[type].getMicrosecondPosition() > playTime)
             effects[type].setMicrosecondPosition(0);
         effects[type].start();
     }
@@ -98,4 +107,5 @@ public class AudioPlayer{
     public void update(){
         playSong(songs[currentSong]);
     }
+
 }

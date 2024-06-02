@@ -22,6 +22,8 @@ import java.awt.*;
 @Getter
 @Setter
 public class Game implements Runnable{
+    public static final float SCREEN_WIDTH = (float) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+    public static final float SCREEN_HEIGHT = (float) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
     public static int reward;
     private GameWindow gameWindow;
     private GamePanel gamePanel;
@@ -41,12 +43,14 @@ public class Game implements Runnable{
     private Player player;
     private final int FPS = 120, UPS = 200;
     public static final int TILE_DEFAULT_SIZE = 16;
-    public static final float MODE = (float) (2.3f * (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 1536));
-    public static final int TILE_SIZE = (int) (TILE_DEFAULT_SIZE * MODE);
+    public static float zoom = 2.3f;
+    public static float MODE = (float) (zoom * (SCREEN_WIDTH / 1536));
+    public static int TILE_SIZE = (int) (TILE_DEFAULT_SIZE * MODE);
+    public static final int CONST_TILE_SIZE = TILE_SIZE;
     public static final int NUMBER_TILES_IN_HEIGHT = 30;
     public static final int NUMBER_TILES_IN_WIDTH = 50;
-    public static final int GAME_HEIGHT = NUMBER_TILES_IN_HEIGHT * TILE_SIZE;
-    public static final int GAME_WIDTH = NUMBER_TILES_IN_WIDTH * TILE_SIZE;
+    public static int GAME_HEIGHT = NUMBER_TILES_IN_HEIGHT * TILE_SIZE;
+    public static int GAME_WIDTH = NUMBER_TILES_IN_WIDTH * TILE_SIZE;
     public static int state = 0;
     public Game() {
         initClass();
@@ -117,6 +121,7 @@ public class Game implements Runnable{
         state = 0;
         reward = 0;
         Player.coins = 0;
+        Player.currentHero = Player.SWORD_HERO;
         enemyManager.resetAll();
         itemsManager.resetAll();
         levelManager.resetAll();

@@ -156,6 +156,7 @@ public class Level {
                 npcList.add(new OldMan(j * Game.TILE_SIZE, i * Game.TILE_SIZE));
                 npc_buttonsList.add(new NPC_Buttons(NPC_Buttons.E, j * Game.TILE_SIZE, (int) ((i - 0.5) * Game.TILE_SIZE)));
             }
+            case 16 -> objects.add(new Trap(j * Game.TILE_SIZE, i * Game.TILE_SIZE));
             case 230 -> npc_buttonsList.add(new NPC_Buttons(NPC_Buttons.A, j * Game.TILE_SIZE, i * Game.TILE_SIZE));
             case 231 -> npc_buttonsList.add(new NPC_Buttons(NPC_Buttons.D, j * Game.TILE_SIZE, i * Game.TILE_SIZE));
             case 232 -> npc_buttonsList.add(new NPC_Buttons(NPC_Buttons.W, j * Game.TILE_SIZE, i * Game.TILE_SIZE));

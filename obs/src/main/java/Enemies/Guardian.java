@@ -29,7 +29,6 @@ public class Guardian extends Enemy {
         setSight(15 * attackSight);
         setXDrawOffset(180);
         setYDrawOffset((int) (42 * Game.MODE));
-
         setMaxHealth(400);
         setCurrentHealth(maxHealth);
         setImageWidth(24);

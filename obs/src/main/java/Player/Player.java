@@ -1,6 +1,7 @@
 package Player;
 
 import AnimatedObjects.Light;
+import Audio.AudioPlayer;
 import Main.Game;
 import OnlineData.ImageSender;
 import State.GameState;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Component;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.time.Instant;
+import java.util.Random;
 import java.util.Timer;
 
 import static Main.Game.reward;
@@ -21,13 +24,14 @@ import static Main.Game.reward;
 @Getter
 @Setter
 public abstract class Player implements PlayerMethods {
+    public static boolean isLocked = false;
     protected BufferedImage[][] animation;
     protected BufferedImage[][] revAnimation;
     protected HealthBar healthBar;
     protected int aniTick, aniSpeed = 10;
     protected int drawIndex;
     protected Light light;
-    public static final int damage = 40;
+    public static int damage = 40;
     protected int xDrawOffset = (int) (20 * Game.MODE), yDrawOffset = (int) (-7 * Game.MODE);
     protected boolean readyToAttack = true;
     protected int xPos, yPos;
@@ -82,11 +86,11 @@ public abstract class Player implements PlayerMethods {
     protected boolean readyToDash = true;
     protected Game game;
     protected int state;
-    protected int maxHealth = 1000;
+    protected int maxHealth = 500;
     protected int maxPower = 100;
     protected int currentHealth = maxHealth;
     protected int currentPower = maxPower;
-    public int countTalking = 0;
+    public int countTalking = -1;
     protected Gun gun;
 
     protected boolean isFly;
@@ -98,6 +102,10 @@ public abstract class Player implements PlayerMethods {
     public static int currentHero = NOT_CHANGE;
     public static int coins;
     protected boolean changeDir;
+    Instant lastDamageTime;
+    int damageTaken;
+    Random random = new Random();
+    int xDeltaRandom, yDeltaRandom;
     protected Timer timer = new Timer();
     public Player(int x, int y, Game game) {
         this.game = game;
@@ -131,6 +139,14 @@ public abstract class Player implements PlayerMethods {
     public abstract void update();
 
     public void draw(Graphics g, float xLevelOffset, float yLevelOffset) {
+        if (lastDamageTime != null && Instant.now().minusMillis(1000).isBefore(lastDamageTime) && damageTaken != 0){
+            long elapsedTime = Instant.now().toEpochMilli() - lastDamageTime.toEpochMilli();
+            int alpha = 255 - (int) ((elapsedTime / 500.0) * 255);
+            if (alpha < 0) alpha = 0;
+            if (damageTaken < 0) g.setColor(new Color(255, 255, 255, alpha));
+            else g.setColor(new Color(0, 255, 0, alpha));
+            g.drawString(String.valueOf(damageTaken), (int) (hitbox.x - xLevelOffset + xDeltaRandom), (int) (hitbox.y - yLevelOffset + yDeltaRandom));
+        }
     }
 
 
@@ -183,19 +199,19 @@ public abstract class Player implements PlayerMethods {
 
     }
     public void updateHealthAndPower(int healthChange, int powerChange, int knockBack){
-        if (healthChange < 0){
-            reward += (healthChange / maxHealth);
-        }
+        lastDamageTime = Instant.now();
+        damageTaken = healthChange;
         isHit = true;
         currentHealth += healthChange;
+        xDeltaRandom = random.nextInt(-50, 50);
+        yDeltaRandom = random.nextInt(0, 50);
         currentPower += powerChange;
-        if (currentHealth < 0) {
+        if (currentHealth <= 0) {
+            game.getAudioPlayer().playEffectSound(AudioPlayer.DEAD);
             currentHealth = 0;
             reward -= 100;
-//            GameState.gameState = GameState.MENU;
             Game.state = 1;
-            Playing.sendData();
-            game.resetAll();
+            GameState.gameState = GameState.MENU;
         }
         if (currentHealth > maxHealth) currentHealth = maxHealth;
         if (currentPower < 0) currentPower = 0;

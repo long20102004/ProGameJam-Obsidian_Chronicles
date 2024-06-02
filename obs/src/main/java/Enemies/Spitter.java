@@ -1,6 +1,7 @@
 package Enemies;
 
 import Main.Game;
+import Player.Player;
 import UI.EnemyHealthBar;
 import utilz.ExtraMethods;
 import utilz.LoadSave;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 
 public class Spitter extends Enemy {
     private final ArrayList<ProjectTile> projectTileList = new ArrayList<>();
-    public static int damage = 2;
+    public static int damage = 10;
 
     public Spitter(int xPos, int yPos) {
         initClass(xPos, yPos);
@@ -111,7 +112,11 @@ public class Spitter extends Enemy {
     }
 
     private void handleDeadState() {
-        if (drawIndex == Constant.SPITTER.getType(Constant.SPITTER.DEAD) - 1) isActive = false;
+        if (drawIndex == Constant.SPITTER.getType(Constant.SPITTER.DEAD) - 1) {
+            isActive = false;
+            Player.coins++;
+        }
+
     }
 
 
