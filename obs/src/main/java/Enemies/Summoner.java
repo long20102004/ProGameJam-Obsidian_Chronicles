@@ -43,6 +43,7 @@ public class Summoner extends Enemy{
         setDefaultState(Constant.SUMMONER.IDLE);
         setAttackState(Constant.SUMMONER.SUMMON);
         setAttackBoxChange(10 * Game.MODE);
+        setFly(true);
     }
 
 
@@ -51,6 +52,7 @@ public class Summoner extends Enemy{
         updateAniTick();
         updatePos(game);
         updateAttackBox();
+        healthBar.update();
     }
     private void updatePos(Game game) {
         updateDir(game);

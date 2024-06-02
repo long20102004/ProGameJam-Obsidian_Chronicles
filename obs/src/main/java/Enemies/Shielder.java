@@ -11,12 +11,14 @@ import java.awt.image.BufferedImage;
 
 public class Shielder extends Enemy {
     public static int damage = 20;
+    private int attackState;
 
     public Shielder(int xPos, int yPos) {
         initClass();
         initEnemy(xPos, yPos);
     }
     private void initClass() {
+
         setRawImage(LoadSave.getImg(LoadSave.SHIELDER));
         setAniSpeed(20);
         setAttackSight(Game.TILE_SIZE * 4);
@@ -41,15 +43,18 @@ public class Shielder extends Enemy {
         setAttackBoxChange(hitboxWidth / 2);
         setDeadState(Constant.SHIELDER.DEAD);
         setHitState(Constant.SHIELDER.HIT);
-        setAttackState(Constant.SHIELDER.ATTACK);
+        setAttackState(attackState);
         setDefaultState(Constant.SHIELDER.IDLE);
         setSpeed(1f);
+        attackState = rand.nextInt(Constant.SHIELDER.ATTACK, Constant.SHIELDER.SHOT + 1);
+        if (attackState == Constant.SHIELDER.SHOT) attackSight *= 2;
     }
 
     public void update(Game game) {
         updateAniTick();
         updatePos(game);
         updateAttackBox();
+        healthBar.update();
     }
 
     public void updateHealth(int damage) {
@@ -71,7 +76,7 @@ public class Shielder extends Enemy {
             case Constant.SHIELDER.HIT -> handleHitState();
             case Constant.SHIELDER.ATTACK -> handleAttackState(game);
             case Constant.SHIELDER.SHOT -> handleShotState(game);
-            case Constant.SHIELDER.DEAD -> handleDeadState();
+            case Constant.SHIELDER.DEAD -> handleDeadState(game);
         }
     }
 
@@ -87,16 +92,14 @@ public class Shielder extends Enemy {
     private void handleIdleState() {
         updateInAir();
         if (ExtraMethods.ableToDo(hitbox, sight, isFly)) setState(Constant.SHIELDER.WALK);
-//        if (ExtraMethods.ableToDo(hitbox, shotSight, isFly)) setState(SHOT);
-        if (ExtraMethods.ableToDo(hitbox, attackSight, isFly)) setState(Constant.SHIELDER.ATTACK);
+        if (ExtraMethods.ableToDo(hitbox, attackSight, isFly)) setState(attackState);
     }
 
     private void handleWalkState() {
         if (!ExtraMethods.ableToDo(hitbox, sight, isFly)) setState(Constant.SHIELDER.IDLE);
-        if (ExtraMethods.ableToDo(hitbox, attackSight, isFly)) setState(Constant.SHIELDER.ATTACK);
+        if (ExtraMethods.ableToDo(hitbox, attackSight, isFly)) setState(attackState);
 
         move();
-//        if (ExtraMethods.ableToDo(hitbox, shotSight, isFly)) setState(SHOT);
     }
 
     private void handleHitState() {
@@ -105,15 +108,18 @@ public class Shielder extends Enemy {
 
     private void handleAttackState(Game game) {
         if (drawIndex == 0) isAttacked = false;
-        if (!isAttacked && drawIndex == Constant.SHIELDER.getType(Constant.SHIELDER.ATTACK) / 2) {
+        if (!isAttacked && drawIndex == Constant.SHIELDER.getType(attackState) / 2) {
             enemyAttack(game, Shielder.damage, Game.TILE_SIZE);
             isAttacked = true;
         }
-        if (drawIndex >= Constant.SHIELDER.getType(state) - 1) setState(Constant.SHIELDER.IDLE);
+        if (drawIndex >= Constant.SHIELDER.getType(attackState) - 1) setState(Constant.SHIELDER.IDLE);
     }
 
-    private void handleDeadState() {
-        if (drawIndex == Constant.SHIELDER.getType(Constant.SHIELDER.DEAD) - 1) isActive = false;
+    private void handleDeadState(Game game) {
+        if (drawIndex == Constant.SHIELDER.getType(Constant.SHIELDER.DEAD) - 1) {
+            isActive = false;
+            game.getPlayer().updateHealthAndPower(30, 10, 10);
+        }
     }
 
 

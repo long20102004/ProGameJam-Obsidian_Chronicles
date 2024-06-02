@@ -504,7 +504,12 @@ public class Constant {
         public static final int WIDTH = (int) (DEFAULT_WIDTH * MODE);
         public static final int TURN = 9;
     }
-
+    public static class TRAP{
+        public static final int DEFAULT_HEIGHT = 64;
+        public static final int DEFAULT_WIDTH = 16;
+        public static final int HEIGHT = (int) (DEFAULT_HEIGHT * MODE);
+        public static final int WIDTH = (int) (DEFAULT_WIDTH * MODE);
+    }
     public static class JUMP_BASE {
         public static final int DEFAULT_HEIGHT = 41;
         public static final int DEFAULT_WIDTH = 28;
@@ -802,7 +807,7 @@ public class Constant {
                 case READY_TO_MOVE:
                     return 2;
                 case MOVE:
-                    return 8;
+                    return 7;
                 case PREPARE_ATTACK:
                     return 8;
                 case MOVE_ATTACK:

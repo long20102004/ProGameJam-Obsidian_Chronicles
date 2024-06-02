@@ -3,6 +3,7 @@ package UI;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
+import Audio.AudioPlayer;
 import Main.Game;
 import OnlineData.ImageSender;
 import State.GameState;
@@ -32,6 +33,7 @@ public class GameOverLay {
     }
 
     public void mousePressed(MouseEvent e) {
+
 //        playing.getGame().getAudioPlayer().playEffectSound(AudioPlayer.CLICKED);
         newGameButtons.setPressed(ExtraMethods.isIn(e, newGameButtons.getBound()));
         settingButtons.setPressed(ExtraMethods.isIn(e, settingButtons.getBound()));
@@ -40,6 +42,7 @@ public class GameOverLay {
     }
 
     public void mouseReleased(MouseEvent e, Game game){
+        game.getAudioPlayer().playEffectSound(AudioPlayer.CLICKED);
         newGameButtons.setReleased(true);
         settingButtons.setReleased(true);
         continueButtons.setReleased(true);
