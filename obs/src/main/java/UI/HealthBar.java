@@ -45,10 +45,14 @@ public class HealthBar {
         powerHeight = Constant.POWER_BAR.HEIGHT;
     }
     public void draw(Graphics g){
+        g.setFont(LoadSave.numberFont(17));
         g.drawImage(healthBar, healthXPos, healthYPos, Constant.HEALTH_BAR.WIDTH, Constant.HEALTH_BAR.HEIGHT, null);
         g.setColor(Color.RED);
+        g.drawString(currentHealth + "/" + maxHealth, healthXPos + Constant.HEALTH_BAR.WIDTH + 20, healthYPos + 20);
         g.fillRect(healthXPos + 10, healthYPos + 5, healthWidth, healthHeight);
         g.drawImage(powerBar[powerIndex], powerXPos, powerYPos, powerWidth, powerHeight, null);
+        g.setColor(Color.WHITE);
+        g.drawString(currentPower + "/" + maxPower, powerXPos + Constant.POWER_BAR.WIDTH + 20, powerYPos + 30);
     }
 
 

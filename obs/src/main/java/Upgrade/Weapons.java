@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 public class Weapons extends Product{
     public Weapons(int typePotionsX, int typePotionsY, int number){
         super(typePotionsX, typePotionsY, number);
+        this.type = Product.WEAPONS;
         productBorder = new Rectangle(900, 350 + 100 * number, Constant.PRODUCT.WIDTH, Constant.PRODUCT.HEIGHT);
         frameBorder = productBorder;
         importSkills();
@@ -22,5 +23,8 @@ public class Weapons extends Product{
                 product[i][j] = tmp.getSubimage(j * Constant.PRODUCT.DEFAULT_WIDTH, Constant.PRODUCT.DEFAULT_HEIGHT * i, Constant.PRODUCT.DEFAULT_WIDTH, Constant.PRODUCT.DEFAULT_HEIGHT);
             }
         }
+    }
+    public void update(){
+
     }
 }

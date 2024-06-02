@@ -36,7 +36,7 @@ public class LoadSave {
     public static final String URM_BUTTONS = "UI/Buttons.png";
     public static final String KEYBOARD_BUTTON1 = "UI/Keyboard1.png";
     public static final String KEYBOARD_BUTTON2 = "UI/Keyboard2.png";
-    public static final String MENU_SCREEN = "Objects/MenuBack.png";
+    public static final String MENU_SCREEN = "background/MenuBack.png";
     public static final String YELLOW_LIGHT = "Objects/light.png";
     public static final String WHITE_LIGHT = "Objects/whiteLight.png";
     public static final String HEALTH_BAR = "UI/HealthBar.png";
