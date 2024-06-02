@@ -387,7 +387,7 @@ public class Playing implements StateMethods {
         game.getLevelManager().update();
         game.getNpcManager().update(game);
         game.getAudioPlayer().update();
-        if (shop.isShopping()) shop.update();
+        if (shop.isShopping()) shop.update(game);
     }
 
     private void autoAction() {

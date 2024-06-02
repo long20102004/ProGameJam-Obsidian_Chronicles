@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 public class Potions extends Product{
     public Potions(int typePotionsX, int typePotionsY, int number){
         super(typePotionsX, typePotionsY, number);
+        this.type = Product.POTIONS;
         productBorder = new Rectangle(600, 350 + 100 * number, Constant.PRODUCT.WIDTH, Constant.PRODUCT.HEIGHT);
         frameBorder = productBorder;
         importPotion();

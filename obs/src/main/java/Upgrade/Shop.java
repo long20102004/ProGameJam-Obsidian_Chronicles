@@ -1,6 +1,7 @@
 package Upgrade;
 
 import Level.Level;
+import Main.Game;
 import State.Playing;
 import utilz.ExtraMethods;
 import utilz.LoadSave;
@@ -120,9 +121,9 @@ public class Shop {
             else product.setReleased(false);
         }
     }
-    public void update(){
+    public void update(Game game){
         for (Product product : currentLevel.products){
-            product.update();
+            product.update(game);
         }
     }
     public void setShopping(boolean shopping){

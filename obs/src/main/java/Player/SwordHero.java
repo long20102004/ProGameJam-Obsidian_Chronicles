@@ -78,6 +78,7 @@ public class SwordHero extends Player{
         updateProperties();
     }
     public void draw(Graphics g, float xLevelOffset, float yLevelOffset){
+        super.draw(g, xLevelOffset, yLevelOffset);
         healthBar.draw(g);
         light.draw(g, xLevelOffset, yLevelOffset);
         if (isLeft)

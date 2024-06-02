@@ -105,8 +105,8 @@ public class Level {
     private void loadLevelData(int redValue, int x, int y){
         lvlData[x][y] = redValue;
         switch (redValue){
-            case 250 -> playerSpawn = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
-            case 255 -> playerTeleport = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
+            case 255 -> playerSpawn = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
+            case 250 -> playerTeleport = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
             case 254 -> playerEndPoint = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
             case 253 -> trapStartPoint = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
             case 252 -> trapEndPoint = new Point(y * Game.TILE_SIZE, x * Game.TILE_SIZE);
