@@ -1,6 +1,7 @@
 package Enemies;
 
 import Main.Game;
+import Player.Player;
 import utilz.ExtraMethods;
 import utilz.LoadSave;
 import utilz.Constant;
@@ -30,11 +31,17 @@ public class Hoarder extends Enemy {
         setHitBoxHeight((int) (Constant.HOARDER.DEFAULT_HEIGHT + 15 * Game.MODE));
         setAttackBoxWidth((int) (Constant.HOARDER.WIDTH / 1.5f));
         setAttackBoxHeight((int) (Constant.HOARDER.HEIGHT / 1.5f));
+        setHealthBarWidth((int) (Constant.HOARDER.WIDTH / 2.5));
+        setHealthBarHeight(Constant.HOARDER.HEIGHT / 12);
+        setMaxHealth(1000);
+        setCurrentHealth(maxHealth);
         setDrawWidth(Constant.HOARDER.WIDTH);
         setDrawHeight(Constant.HOARDER.HEIGHT);
         setTileWidth(Constant.HOARDER.DEFAULT_WIDTH);
         setTileHeight(Constant.HOARDER.DEFAULT_HEIGHT);
         setSpeed(1f);
+        setDeadState(Constant.HOARDER.DEAD);
+        damage = 40;
         setAttackBoxChange(-50 * Game.MODE);
     }
 
@@ -42,6 +49,7 @@ public class Hoarder extends Enemy {
         updateAniTick();
         updatePos(game);
         updateAttackBox();
+        healthBar.update();
     }
 
 
@@ -52,21 +60,32 @@ public class Hoarder extends Enemy {
             case Constant.HOARDER.IDLE_LOW -> handleWakeState();
             case Constant.HOARDER.MOVE -> handleMovingState();
             case Constant.HOARDER.HIT -> handleHitState();
-            case Constant.HOARDER.STATIONARY_ATTACK, Constant.HOARDER.MOVE_ATTACK -> handleAttackState(game);
-            case Constant.HOARDER.DEAD -> handleDeadState();
+            case Constant.HOARDER.MOVE_ATTACK -> handleMovingAttack(game);
+            case Constant.HOARDER.STATIONARY_ATTACK -> handleAttackState(game);
+            case Constant.HOARDER.DEAD -> handleDeadState(game);
         }
+    }
+
+    private void handleMovingAttack(Game game) {
+        if (drawIndex == 0) isAttacked = false;
+        if (!isAttacked && drawIndex == Constant.HOARDER.getType(Constant.HOARDER.MOVE_ATTACK) / 2) {
+            enemyAttack(game, damage, Game.TILE_SIZE);
+            isAttacked = true;
+        }
+        if (drawIndex >= Constant.HOARDER.getType(Constant.HOARDER.MOVE_ATTACK) - 1) setState(Constant.HOARDER.IDLE_LOW);
     }
 
     private void handleWakeState() {
         updateInAir();
         if (ExtraMethods.ableToDo(hitbox, sight, isFly)) setState(Constant.HOARDER.MOVE);
-        if (ExtraMethods.ableToDo(hitbox, attackSight, isFly)) setState(Constant.HOARDER.STATIONARY_ATTACK);
+        if (ExtraMethods.ableToDo(hitbox, attackSight / 2, isFly)) setState(Constant.HOARDER.MOVE_ATTACK);
+        else if (ExtraMethods.ableToDo(hitbox, attackSight, isFly)) setState(Constant.HOARDER.STATIONARY_ATTACK);
     }
 
     private void handleMovingState() {
         if (!ExtraMethods.ableToDo(hitbox, sight, isFly)) setState(Constant.HOARDER.IDLE_LOW);
         move();
-        if (ExtraMethods.ableToDo(hitbox, attackSight, isFly)) setState(Constant.HOARDER.STATIONARY_ATTACK);
+        if (ExtraMethods.ableToDo(hitbox, attackSight, isFly)) setState(Constant.HOARDER.MOVE_ATTACK);
     }
 
     private void handleHitState() {
@@ -76,14 +95,18 @@ public class Hoarder extends Enemy {
     private void handleAttackState(Game game) {
         if (drawIndex == 0) isAttacked = false;
         if (!isAttacked && drawIndex == Constant.HOARDER.getType(Constant.HOARDER.STATIONARY_ATTACK) / 2) {
-            enemyAttack(game, Ghoul.damage, Game.TILE_SIZE);
+            enemyAttack(game, damage, Game.TILE_SIZE);
             isAttacked = true;
         }
         if (drawIndex >= Constant.HOARDER.getType(Constant.HOARDER.STATIONARY_ATTACK) - 1) setState(Constant.HOARDER.IDLE_LOW);
     }
 
-    private void handleDeadState() {
-        if (drawIndex == Constant.HOARDER.getType(Constant.HOARDER.DEAD) - 1) isActive = false;
+    private void handleDeadState(Game game) {
+        if (drawIndex == Constant.HOARDER.getType(Constant.HOARDER.DEAD) - 1) {
+            isActive = false;
+            Player.coins += 500;
+            game.getLevelManager().loadNextLevel();
+        }
     }
 
 

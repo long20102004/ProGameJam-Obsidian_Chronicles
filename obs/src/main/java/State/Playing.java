@@ -1,5 +1,6 @@
 package State;
 
+import AnimatedObjects.Merchant;
 import Audio.AudioPlayer;
 import Main.Game;
 import OnlineData.ImageSender;
@@ -203,6 +204,7 @@ public class Playing implements StateMethods {
                 break;
             case KeyEvent.VK_E:
                 game.getPlayer().increaseTalking();
+                if (!Merchant.isLocked) game.getPlaying().getShop().setShopping(!game.getPlaying().getShop().isShopping());
                 break;
             case KeyEvent.VK_U:
                 if (!HoarderTransform.isLocked) {
@@ -343,7 +345,6 @@ public class Playing implements StateMethods {
     private void drawPlayerIcon(Graphics g) {
         float currentPosX = game.getPlayer().getHitbox().x;
         float currentPosY = game.getPlayer().getHitbox().y;
-
         float currentRateInHeight = currentPosY / CONST_TILE_SIZE;
         float currentRateInWidth = currentPosX / CONST_TILE_SIZE;
         float currentXPosInMiniMap = currentRateInWidth * TILE_SIZE;

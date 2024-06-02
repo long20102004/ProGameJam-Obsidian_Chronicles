@@ -18,13 +18,15 @@ import static Main.Game.zoom;
 import static utilz.Constant.PLAYER.SWORD_HERO.DEFAULT_HEIGHT;
 import static utilz.Constant.PLAYER.SWORD_HERO.DEFAULT_WIDTH;
 
-public class SwordHero extends Player{
+public class SwordHero extends Player {
     private int countAction = 0;
     private int maxAction = 1;
+
     public SwordHero(int x, int y, Game game) {
         super(x, y, game);
         initPlayer();
     }
+
     public void initPlayer() {
         isLocked = true;
         animation = new BufferedImage[27][10];
@@ -47,6 +49,7 @@ public class SwordHero extends Player{
 //            }
 //        }, 0, 3000);
     }
+
     private void updateAniTick() {
         if (isMoving) maxAction = 2;
         else maxAction = 1;
@@ -54,9 +57,9 @@ public class SwordHero extends Player{
         if (aniTick > aniSpeed) {
             aniTick = 0;
             drawIndex++;
-            if (drawIndex >= Constant.PLAYER.SWORD_HERO.getType(state) - 1){
+            if (drawIndex >= Constant.PLAYER.SWORD_HERO.getType(state) - 1) {
                 countAction++;
-                if (Playing.isAiMode && countAction >= maxAction){
+                if (Playing.isAiMode && countAction >= maxAction) {
                     Playing.index++;
                     System.out.println(Playing.index);
                     countAction = 0;
@@ -69,6 +72,7 @@ public class SwordHero extends Player{
             }
         }
     }
+
     @Override
     public void update(Game game) {
         updateAniTick();
@@ -77,7 +81,8 @@ public class SwordHero extends Player{
         updateAttackBox();
         updateProperties();
     }
-    public void draw(Graphics g, float xLevelOffset, float yLevelOffset){
+
+    public void draw(Graphics g, float xLevelOffset, float yLevelOffset) {
         super.draw(g, xLevelOffset, yLevelOffset);
         healthBar.draw(g);
         light.draw(g, xLevelOffset, yLevelOffset);
@@ -89,16 +94,17 @@ public class SwordHero extends Player{
 //        g.drawRect((int) ((int) hitbox.x - xLevelOffset), (int) ((int) hitbox.y - yLevelOffset), (int) hitbox.width, (int) hitbox.height);
 //        g.drawRect((int) ((int) attackBox.x - xLevelOffset), (int) ((int) attackBox.y - yLevelOffset), (int) attackBox.width, (int) attackBox.height);
     }
+
     public void updateInAir() {
         if (ExtraMethods.isEntityOnFloor(hitbox)) {
             if (inAir) Playing.index++;
             resetInAir();
-        }
-        else  {
+        } else {
             if (ExtraMethods.isEntityOnWall(hitbox, isRight)) setState(Constant.PLAYER.SWORD_HERO.WALL_SLIDE);
             else inAir = true;
         }
         if (isJump) {
+            game.getAudioPlayer().playEffectSound(AudioPlayer.JUMP);
             if (ExtraMethods.isMovingPossible(hitbox, hitbox.x, hitbox.y + jumpSpeed)) {
                 hitbox.y += jumpSpeed;
                 jumpSpeed += gravity;
@@ -117,15 +123,17 @@ public class SwordHero extends Player{
                 resetInAir();
             }
         }
-        if (isMoving){
+        if (isMoving) {
             updateXPos(speed);
         }
     }
+
     @Override
-    public void resetAll(){
+    public void resetAll() {
         super.resetAll();
         setState(Constant.PLAYER.SWORD_HERO.IDLE);
     }
+
     @Override
     public void setAction() {
         if (isBlock) setState(Constant.PLAYER.SWORD_HERO.BLOCK);
@@ -147,6 +155,7 @@ public class SwordHero extends Player{
         if (isMoving) setState(Constant.PLAYER.SWORD_HERO.RUN_FAST);
         if (isJump) setState(Constant.PLAYER.SWORD_HERO.JUMP);
     }
+
     public void updateWallSlide() {
         if (ExtraMethods.isMovingPossible(hitbox, hitbox.x, hitbox.y + fallSpeedConst)) {
             hitbox.y += fallSpeedConst;
@@ -156,6 +165,7 @@ public class SwordHero extends Player{
             jumpSpeed = -3f;
         }
     }
+
     public void updateAttackBox() {
         attackBox.x = hitbox.x;
         attackBox.y = hitbox.y;
@@ -163,19 +173,24 @@ public class SwordHero extends Player{
             attackBox.x = hitbox.x - attackBox.width;
         }
     }
+
     public void updateXPos(float speed) {
         float xspeed = speed;
         if (isLeft) xspeed *= -1;
         if (ExtraMethods.isMovingPossible(hitbox, hitbox.x + xspeed, hitbox.y)) {
             hitbox.x += xspeed;
+            game.getAudioPlayer().playEffectSound(AudioPlayer.RUNNING);
         } else hitbox.x = ExtraMethods.updateSpaceBetweenXAndWall(hitbox, xspeed);
     }
+
     public void updatePosition() {
         switch (state) {
             case Constant.PLAYER.SWORD_HERO.IDLE -> handleIdleState();
             case Constant.PLAYER.SWORD_HERO.JUMP -> handleJumpState();
-            case Constant.PLAYER.SWORD_HERO.WALK, Constant.PLAYER.SWORD_HERO.RUN, Constant.PLAYER.SWORD_HERO.RUN_FAST -> handleMovementState();
-            case Constant.PLAYER.SWORD_HERO.SLASH_1, Constant.PLAYER.SWORD_HERO.SLASH_2, Constant.PLAYER.SWORD_HERO.SLAM_ATTACK -> handleAttackState();
+            case Constant.PLAYER.SWORD_HERO.WALK, Constant.PLAYER.SWORD_HERO.RUN, Constant.PLAYER.SWORD_HERO.RUN_FAST ->
+                    handleMovementState();
+            case Constant.PLAYER.SWORD_HERO.SLASH_1, Constant.PLAYER.SWORD_HERO.SLASH_2, Constant.PLAYER.SWORD_HERO.SLAM_ATTACK ->
+                    handleAttackState();
             case Constant.PLAYER.SWORD_HERO.ROLL -> handleRollState();
             case Constant.PLAYER.SWORD_HERO.DASH -> handleDashState();
             case Constant.PLAYER.SWORD_HERO.BLOCK -> handleBlockState();
@@ -185,6 +200,7 @@ public class SwordHero extends Player{
             case Constant.PLAYER.SWORD_HERO.HIT -> handleHitState();
         }
     }
+
     public void updateProperties() {
         healthBar.update();
     }
@@ -208,6 +224,7 @@ public class SwordHero extends Player{
         }
         setAction();
     }
+
     public void setState(int state) {
         if (state != Constant.PLAYER.SWORD_HERO.RUN_FAST && state != this.state) drawIndex = 0;
         if (state == Constant.PLAYER.SWORD_HERO.DASH && currentPower <= 30) return;
@@ -224,7 +241,7 @@ public class SwordHero extends Player{
         if (readyToAttack) {
             readyToAttack = false;
             isAttacked = true;
-            game.getAudioPlayer().playEffectSound(AudioPlayer.rand.nextInt(1,4));
+            game.getAudioPlayer().playEffectSound(AudioPlayer.rand.nextInt(1, 4));
         }
     }
 
@@ -260,8 +277,9 @@ public class SwordHero extends Player{
     private void handleFallState() {
         updateInAir();
         if (isDash) setState(Constant.PLAYER.SWORD_HERO.DASH);
-        if (isAttacking || isDoubleAttack || isTripleAttack) setState(AudioPlayer.rand.nextInt(7,10));
+        if (isAttacking || isDoubleAttack || isTripleAttack) setState(AudioPlayer.rand.nextInt(7, 10));
     }
+
     public void updateWallJump() {
         if (ExtraMethods.isEntityOnWall(hitbox, isRight)) {
             fallSpeed = 0f;
@@ -273,6 +291,9 @@ public class SwordHero extends Player{
     }
 
     private void handleHitState() {
-        if (drawIndex >= Constant.PLAYER.SWORD_HERO.getType(Constant.PLAYER.SWORD_HERO.HIT)) setState(Constant.PLAYER.SWORD_HERO.IDLE);
+        game.getAudioPlayer().playEffectSound(AudioPlayer.HURT);
+        if (drawIndex >= Constant.PLAYER.SWORD_HERO.getType(Constant.PLAYER.SWORD_HERO.HIT)) {
+            setState(Constant.PLAYER.SWORD_HERO.IDLE);
+        }
     }
 }

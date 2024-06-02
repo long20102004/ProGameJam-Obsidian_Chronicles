@@ -92,7 +92,7 @@ public class Product {
 
     public void updateFunc(Game game) {
         System.out.println("buying");
-        if (Player.coins < Integer.parseInt(this.price)) {
+        if (Player.coins >= Integer.parseInt(this.price)) {
             Player.coins -= Integer.parseInt(this.price);
             System.out.println("Damage: " + Player.damage);
             System.out.println("Health: " + game.getPlayer().getMaxHealth());

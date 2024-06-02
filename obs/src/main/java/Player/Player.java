@@ -1,6 +1,7 @@
 package Player;
 
 import AnimatedObjects.Light;
+import Audio.AudioPlayer;
 import Main.Game;
 import OnlineData.ImageSender;
 import State.GameState;
@@ -85,7 +86,7 @@ public abstract class Player implements PlayerMethods {
     protected boolean readyToDash = true;
     protected Game game;
     protected int state;
-    protected int maxHealth = 200;
+    protected int maxHealth = 500;
     protected int maxPower = 100;
     protected int currentHealth = maxHealth;
     protected int currentPower = maxPower;
@@ -205,12 +206,12 @@ public abstract class Player implements PlayerMethods {
         xDeltaRandom = random.nextInt(-50, 50);
         yDeltaRandom = random.nextInt(0, 50);
         currentPower += powerChange;
-        if (currentHealth < 0) {
+        if (currentHealth <= 0) {
+            game.getAudioPlayer().playEffectSound(AudioPlayer.DEAD);
             currentHealth = 0;
             reward -= 100;
             Game.state = 1;
-            Playing.sendData();
-            game.resetAll();
+            GameState.gameState = GameState.MENU;
         }
         if (currentHealth > maxHealth) currentHealth = maxHealth;
         if (currentPower < 0) currentPower = 0;

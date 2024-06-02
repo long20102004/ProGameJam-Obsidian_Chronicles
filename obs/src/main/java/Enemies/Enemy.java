@@ -107,7 +107,6 @@ public class Enemy {
             int alpha = 255 - (int) ((elapsedTime / 500.0) * 255);
             if (alpha < 0) alpha = 0;
             g.setColor(new Color(255, 0, 0, alpha));
-
             g.drawString(String.valueOf(damageTaken), (int) hitbox.x - xLevelOffset + xDeltaRandom, (int) hitbox.y - yLevelOffset + yDeltaRandom);
         }
         healthBar.draw(g, xLevelOffset, yLevelOffset);

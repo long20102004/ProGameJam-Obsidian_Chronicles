@@ -1,6 +1,7 @@
 package Enemies;
 
 import Main.Game;
+import Player.Player;
 import UI.EnemyHealthBar;
 import utilz.ExtraMethods;
 import utilz.LoadSave;
@@ -13,7 +14,7 @@ import java.awt.image.BufferedImage;
 import static Main.Game.reward;
 
 public class Ghoul extends Enemy {
-    public static int damage = 10;
+    public static int damage = 20;
     public Ghoul(int xPos, int yPos) {
         initClass(xPos, yPos);
         initEnemy(xPos, yPos);
@@ -94,7 +95,11 @@ public class Ghoul extends Enemy {
     }
 
     private void handleDeadState() {
-        if (drawIndex == Constant.GHOUL.getType(Constant.GHOUL.DEAD) - 1) isActive = false;
+        if (drawIndex == Constant.GHOUL.getType(Constant.GHOUL.DEAD) - 1) {
+            isActive = false;
+            Player.coins += 2;
+        }
+
     }
 
     private void handleReviveState() {

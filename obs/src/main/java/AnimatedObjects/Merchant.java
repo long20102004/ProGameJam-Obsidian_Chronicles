@@ -11,6 +11,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class Merchant extends AnimatedObject {
+    public static boolean isLocked = true;
     private final int xDrawOffset = (int) (0 * Game.MODE);
     private final int yDrawOffset = (int) (-3 * Game.MODE);
     private Rectangle2D.Float border;
@@ -48,6 +49,7 @@ public class Merchant extends AnimatedObject {
             game.getPlaying().getShop().setShopping(false);
         else {
             dialogue.setTalking(false);
+            Merchant.isLocked = false;
             game.getPlaying().getShop().setShopping(true);
         }
     }

@@ -42,6 +42,7 @@ public class Hive extends Enemy{
         updateAniTick();
         updatePos(game);
         updateAttackBox();
+        healthBar.update();
     }
 
     private void updatePos(Game game) {
