@@ -96,14 +96,14 @@ Diễn giải:
 - Do sử dụng Swing load chậm.
 
 #### Hành Động Giải Quyết 
-**Giải pháp:** Chuyển sang dùng LibGDX
+**Giải pháp:** Chuyển sang 
 
 #### Kết Quả
-- Chạy nhanh hơn, ổn định hơn.
+-
 
 ## 7. Kết Luận
 
-**Kết quả đạt được:** Game ổn định, chơi được ở hai phiên bản đổ hoạ dùng LibGDX và Swing.
+**Kết quả đạt được:**
 
-**Hướng phát triển tiếp theo:** Tiếp tục phát triển game theo Lib-GDX và thêm nhiều tính năng.
+**Hướng phát triển tiếp theo:**
 
