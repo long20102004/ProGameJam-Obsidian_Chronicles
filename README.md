@@ -48,10 +48,17 @@ Sau mỗi tuần, team sẽ merge `develop` vào `master` để release phiên b
     + Ezran sẽ phải đánh bại liên minh 6 gia tộc để thành lập thế lực riêng, quyết định số phận gia tộc Obsidian và thế giới.
  - **Gameplay:** 
     + Điều khiển Ezran qua nhiều thế giới, thu thập vật phẩm, nâng cấp kỹ năng, chiến đấu với kẻ thù. Đồng đội Unknown và Titan hỗ trợ giải đố và chiến đấu. Đồ họa tuyệt đẹp tạo ra bằng LibGDX mang đến trải nghiệm thị giác ấn tượng.
+    
+**Hướng dẫn mở game:** Clone repo vể sau đó mở file lib-gdx là chạy được game. Còn muốn chơi bằng java Swing thì chơi ở file obs.
 ## 3. Các Chức Năng Chính
 
+- **Chức năng 1:** Di chuyển, đánh quái.
+- **Chức năng 2:** Sử dụng kỹ năng, cường hoá.
 ## 4. Công Nghệ
 #### 4.1. Công Nghệ Sử Dụng
+- Java 21
+- LibGDX 
+- Swing
 #### 4.2. Cấu Trúc Dự Án
 ```
 - assets 
@@ -77,16 +84,19 @@ Diễn giải:
 ## 5. Ảnh Và Video Demo
 
 **Ảnh Demo:**
+![alt text](image-1.png)
+![alt text](image-2.png)
+![alt text](image-3.png)
 
-**Video Demo:**
+**Video Demo:** https://youtu.be/4ycCJ5WKvKY
 
 ## 6. Các Vấn Đề Gặp Phải
 
-#### Vấn Đề 1: 
--
+#### Vấn Đề 1: Game bị lag
+- Do sử dụng Swing load chậm.
 
 #### Hành Động Giải Quyết 
-**Giải pháp:**
+**Giải pháp:** Chuyển sang 
 
 #### Kết Quả
 -
