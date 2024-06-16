@@ -14,6 +14,7 @@
 - Bùi Quang Đạt
 
 **Mô hình làm việc**
+
 Team hoạt động theo mô hình Scrum, sử dụng Linear để quản lý công việc. Các công việc được keep track đầy đủ trên Linear.
 
 - Link linear: https://linear.app/bdtproptit/team/NHOM2/all
