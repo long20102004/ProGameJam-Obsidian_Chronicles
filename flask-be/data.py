@@ -28,7 +28,7 @@ def receive_game_state():
 
 
 def send_data():
-    data = "MOVE"
+    data = "0"
     response = requests.post("http://localhost:8000/data", data=data)
 
 if __name__ == '__main__':
