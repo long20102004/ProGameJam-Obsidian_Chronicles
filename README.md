@@ -39,7 +39,7 @@ Sau mỗi tuần, team sẽ merge `develop` vào `master` để release phiên b
 - **Thể loại game:** Platformer
 - **Lối chơi:** Di chuyển xuyên qua nhiều thế giới, khám phá cốt truyện, nâng cấp kỹ năng, mua đồ,....
 - **Điểm chính:** Hiệu ứng, đồ hoạ
-- **Framework:** LibGDX
+- **Đồ hoạ:** LibGDX, Swing.
 - **Cốt truyện:** 
     + 300 năm trước, một thí nghiệm thất bại biến một nhóm thành viên gia tộc Vampire thành Obsidian, có khả năng biến đổi thành bất kỳ sinh vật nào họ từng tiếp xúc. Sức mạnh này gây e sợ, dẫn đến cuộc chiến tàn khốc giữa Obsidian và liên minh 6 gia tộc khác, khiến Obsidian tan rã.
 
