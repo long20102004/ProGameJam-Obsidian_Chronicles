@@ -1,6 +1,7 @@
 # BÁO CÁO KẾT QUẢ BÀI TẬP CODE GAME
 ## 1. Thông tin nhóm
 **Tên Dự Án:** Obsidian Chronicles
+
 **Link Dự Án:** https://github.com/long20102004/ProGameJam-Obsidian_Chronicles/tree/main
 
 **Mentor:**
