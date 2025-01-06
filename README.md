@@ -49,7 +49,7 @@ Sau mỗi tuần, team sẽ merge `develop` vào `master` để release phiên b
  - **Gameplay:** 
     + Điều khiển Ezran qua nhiều thế giới, thu thập vật phẩm, nâng cấp kỹ năng, chiến đấu với kẻ thù. Đồng đội Unknown và Titan hỗ trợ giải đố và chiến đấu. Đồ họa tuyệt đẹp tạo ra bằng LibGDX mang đến trải nghiệm thị giác ấn tượng.
     
-**Hướng dẫn mở game:** Clone repo vể sau đó mở file lib-gdx là chạy được game. Còn muốn chơi bằng java Swing thì chơi ở file obs.
+**Hướng dẫn mở game:** Clone repo vể sau đó mở file obs là chạy được game.
 ## 3. Các Chức Năng Chính
 
 - **Chức năng 1:** Di chuyển, đánh quái.
