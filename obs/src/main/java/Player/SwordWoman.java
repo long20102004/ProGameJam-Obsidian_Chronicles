@@ -27,6 +27,7 @@ public class SwordWoman extends Player{
         initPlayer();
     }
     public void initPlayer() {
+        speed = 1.3f;
         animation = new BufferedImage[9][37];
         revAnimation = new BufferedImage[9][37];
         animationAttack = new BufferedImage[5][24];
@@ -136,6 +137,7 @@ public class SwordWoman extends Player{
     }
     @Override
     public void update(Game game) {
+        super.update(game);
         updateAniTick();
         light.update();
         updatePosition();
@@ -373,7 +375,8 @@ public class SwordWoman extends Player{
     }
 
     private void handleDashState() {
-        if (drawIndex >= 2 && readyToDash) {
+        if (drawIndex >= 2 && readyToDash && currentPower >= 20) {
+            currentPower -= 20;
             ExtraMethods.updateLongMove(hitbox, 200, isRight);
             readyToDash = false;
             game.getAudioPlayer().playEffectSound(AudioPlayer.DASH);

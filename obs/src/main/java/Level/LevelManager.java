@@ -2,6 +2,7 @@ package Level;
 
 import Main.Game;
 import Audio.AudioPlayer;
+import Player.HoarderTransform;
 import Player.SwordHero;
 import utilz.ExtraMethods;
 import utilz.LoadSave;
@@ -45,14 +46,21 @@ public class LevelManager {
 
     public void update(){
         switch (indexLevel){
-            case 0 -> game.getAudioPlayer().setMusic(AudioPlayer.LEVEL_1);
-            case 1 -> game.getAudioPlayer().setMusic(AudioPlayer.LEVEL_2);
+            case 0 -> {
+                if (game.getAudioPlayer().getCurrentSong() != AudioPlayer.FINAL_BATTLE) {
+                    game.getAudioPlayer().setMusic(AudioPlayer.LEVEL_1);
+                }
+            }
+            case 1 -> {
+                game.getAudioPlayer().setMusic(AudioPlayer.LEVEL_2);
+            }
         }
     }
 
     public void loadNextLevel() {
         if (game.getEnemyManager().checkWon(indexLevel)){
             indexLevel++;
+            HoarderTransform.isLocked = false;
             game.getObjectManager().loadObject(levels.get(indexLevel));
             game.getEnemyManager().loadEnemies(levels.get(indexLevel));
             game.getItemsManager().loadItems(levels.get(indexLevel));

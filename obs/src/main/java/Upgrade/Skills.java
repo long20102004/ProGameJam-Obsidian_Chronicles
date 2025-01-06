@@ -26,9 +26,9 @@ public class Skills extends Product{
         }
     }
     private void initFunction(){
-        if (xPos == 1 && yPos == 1) description += "Unlock Hoarder transform - last 10s";
-        if (xPos == 3 && yPos == 6) description += "Increase damage by 10";
-        if (xPos == 1 && yPos == 7) description += "Increase max health by 100";
+        if (xPos == 1 && yPos == 1) description = "Unlock Hoarder transform";
+        if (xPos == 3 && yPos == 6) description = "Increase damage by 10";
+        if (xPos == 1 && yPos == 7) description = "Increase max health by 100";
     }
 
 }

@@ -28,8 +28,8 @@ import utilz.LoadSave;
 import java.util.List;
 
 import static Main.Game.*;
-import static Player.Player.SWORD_HERO;
-import static Player.Player.SWORD_WOMAN;
+import static Player.Player.*;
+import static java.lang.Math.random;
 
 @Component
 public class Playing implements StateMethods {
@@ -38,7 +38,7 @@ public class Playing implements StateMethods {
     public static int countReceivedAction = 0;
     public static int maxActionCount = 300;
     public boolean readyToSend = true;
-    public boolean readyToUpdate = false; 
+    public boolean readyToUpdate = false;
 
     private Game game;
     public static boolean receivedAction;
@@ -113,36 +113,31 @@ public class Playing implements StateMethods {
     @Override
     public void keyPressed(KeyEvent e) {
         pressedKeys.add(e.getKeyCode());
-        if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_I)){
+        if (pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_I)) {
             game.getPlayer().setBuffs(true);
             game.getPlayer().setLightCutBuff(true);
-            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
-        }
-        else if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_O)){
+            if (game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        } else if (pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_O)) {
             game.getPlayer().setBuffs(true);
             game.getPlayer().setHolySlashBuff(true);
-            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
-        }
-        else if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_S)){
+            if (game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        } else if (pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_S)) {
             game.getPlayer().setBuffs(true);
             game.getPlayer().setCastShieldBuff(true);
-            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
-        }
-        else if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_K)){
+            game.getPlayer().updateHealthAndPower(20,-5,0);
+            if (game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        } else if (pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_K)) {
             game.getPlayer().setBuffs(true);
             game.getPlayer().setCastBuff(true);
-            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
-        }
-        else if(pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_X)){
+            if (game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        } else if (pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_X)) {
             game.getPlayer().setBuffs(true);
             game.getPlayer().setGreatHealBuff(true);
-            if(game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
-        }
-        else if (pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_W)) {
+            if (game.getPlayer().getCountAniBuffs() == 0) game.getPlayer().setCountAniBuffs(1);
+        } else if (pressedKeys.contains(KeyEvent.VK_SHIFT) && pressedKeys.contains(KeyEvent.VK_W)) {
             game.getPlayer().setLedgeGrab(true);
             return;
-        }
-        else{
+        } else {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_A:
                     game.getPlayer().setRight(false);
@@ -204,8 +199,10 @@ public class Playing implements StateMethods {
                 break;
             case KeyEvent.VK_E:
                 game.getPlayer().increaseTalking();
-                if (!Merchant.isLocked) game.getPlaying().getShop().setShopping(!game.getPlaying().getShop().isShopping());
+                if (!Merchant.isLocked)
+                    game.getPlaying().getShop().setShopping(!game.getPlaying().getShop().isShopping());
                 break;
+
             case KeyEvent.VK_U:
                 if (!HoarderTransform.isLocked) {
                     Player.currentHero = Player.HOARDER;
@@ -213,21 +210,30 @@ public class Playing implements StateMethods {
                 }
                 break;
             case KeyEvent.VK_G:
-                if (!SwordWoman.isLocked) {
-                    Player.currentHero = Player.SWORD_WOMAN;
-                    playerTransform();
-                }
+                currentHero = SWORD_WOMAN;
+                playerTransform();
+                break;
+            case KeyEvent.VK_K:
+                currentHero = GUN_SLINGER;
+                playerTransform();
+                break;
+            case KeyEvent.VK_H:
+                currentHero = SWORD_HERO;
+                playerTransform();
                 break;
             case KeyEvent.VK_F:
                 game.getPlayer().setDash(false);
                 break;
-            case KeyEvent.VK_ENTER:
-                readyForAI = true;
-                isAiMode = true;
+//            case KeyEvent.VK_ENTER:
+//                readyForAI = true;
+//                isAiMode = true;
         }
     }
 
     private void playerTransform() {
+        if (game.getPlayer().getCurrentPower() < 30) return;
+        int powerLeft = game.getPlayer().getCurrentPower();
+        int hpLeft = game.getPlayer().getCurrentHealth();
         if (timerTask != null) {
             timerTask.cancel();
             timerTask = null;
@@ -258,7 +264,8 @@ public class Playing implements StateMethods {
                 currentIcon = swordWomanIcon;
             }
 
-        }
+        }game.getPlayer().setCurrentPower(powerLeft - 30);
+        game.getPlayer().setCurrentHealth(hpLeft);
         Player.currentHero = Player.NOT_CHANGE;
     }
 
@@ -350,7 +357,7 @@ public class Playing implements StateMethods {
         float currentXPosInMiniMap = currentRateInWidth * TILE_SIZE;
         float currentYPosInMiniMap = currentRateInHeight * TILE_SIZE;
         g.setColor(Color.RED);
-        switch (Player.currentHero){
+        switch (Player.currentHero) {
             case SWORD_HERO -> currentIcon = swordHeroIcon;
             case SWORD_WOMAN -> currentIcon = swordWomanIcon;
         }
@@ -359,7 +366,7 @@ public class Playing implements StateMethods {
         g.drawImage(currentIcon, (int) currentXPosInMiniMap, (int) currentYPosInMiniMap - 16, 20, 20, null);
     }
 
-    private void resetSize(){
+    private void resetSize() {
         MODE = MODE / zoom * 2.3f;
         zoom = 2.3f;
         TILE_SIZE = (int) (TILE_DEFAULT_SIZE * MODE);
@@ -369,7 +376,7 @@ public class Playing implements StateMethods {
 
     @Override
     public void update() {
-        if (isAiMode){
+        if (isAiMode) {
             autoAction();
             if (checkTrap()) {
 //            System.out.println(game.getPlayer().getHitbox().x + "here: ");
@@ -397,7 +404,7 @@ public class Playing implements StateMethods {
             if (currentLine == 1) performAction(aiAction1[index]);
             else performAction(aiAction2[index]);
         }
-        if (checkLevelEndPoint() && !jumpedLine){
+        if (checkLevelEndPoint() && !jumpedLine) {
             readyForAI = true;
             jumpedLine = true;
             index = 0;
@@ -565,7 +572,7 @@ public class Playing implements StateMethods {
 
     private boolean checkLevelEndPoint() {
         if (game.getPlayer() == null) return false;
-        if (game.getPlayer().getHitbox().getY() > game.getLevelManager().getLevel().getPlayerEndPoint().getY()){
+        if (game.getPlayer().getHitbox().getY() > game.getLevelManager().getLevel().getPlayerEndPoint().getY()) {
             return true;
         }
         return false;

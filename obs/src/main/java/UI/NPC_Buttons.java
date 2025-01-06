@@ -15,8 +15,11 @@ public class NPC_Buttons {
     public static final int D = 19;
     public static final int E = 20;
     public static final int F = 21;
+    public static final int G = 22;
     public static final int H = 23;
     public static final int J = 25;
+    public static final int K = 26;
+
     public static final int U = 36;
     public static final int W = 38;
     private int type;

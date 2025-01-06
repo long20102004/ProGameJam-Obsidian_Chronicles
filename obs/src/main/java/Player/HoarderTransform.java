@@ -61,13 +61,13 @@ public class HoarderTransform extends Player {
             g.drawImage(revAnimation[state][drawIndex], (int) ((int) hitbox.x - xLevelOffset - xDrawOffset), (int) ((int) hitbox.y - yLevelOffset - yDrawOffset), Constant.HOARDER.WIDTH, Constant.HOARDER.HEIGHT, null);
         else
             g.drawImage(animation[state][drawIndex], (int) ((int) hitbox.x - xLevelOffset - xDrawOffset), (int) ((int) hitbox.y - yLevelOffset - yDrawOffset), Constant.HOARDER.WIDTH, Constant.HOARDER.HEIGHT, null);
-        g.setColor(Color.RED);
-        g.drawRect((int) ((int) attackBox.x - xLevelOffset), (int) ((int) attackBox.y - yLevelOffset), (int) attackBox.width, (int) attackBox.height);
-        g.drawRect((int) ((int) hitbox.x - xLevelOffset), (int) ((int) hitbox.y - yLevelOffset), (int) hitbox.width, (int) hitbox.height);
+//        g.setColor(Color.RED);
+//        g.drawRect((int) ((int) attackBox.x - xLevelOffset), (int) ((int) attackBox.y - yLevelOffset), (int) attackBox.width, (int) attackBox.height);
+//        g.drawRect((int) ((int) hitbox.x - xLevelOffset), (int) ((int) hitbox.y - yLevelOffset), (int) hitbox.width, (int) hitbox.height);
     }
 
     private void drawTransform(Graphics g) {
-        g.drawImage(transformation[transformIndex], 650, 70, Constant.POWER_BAR.WIDTH * 2, Constant.POWER_BAR.HEIGHT, null);
+        g.drawImage(transformation[transformIndex], 650, 150, Constant.POWER_BAR.WIDTH * 2, Constant.POWER_BAR.HEIGHT, null);
     }
     private void updateTransformTick(){
         transformTick++;

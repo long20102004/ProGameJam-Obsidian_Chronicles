@@ -20,6 +20,7 @@ public class Gunslinger extends Player{
         initPlayer();
     }
     public void initPlayer() {
+        speed = 1.5f;
         hitbox = new Rectangle2D.Float(xPos, yPos, 15 * Game.MODE, 40 * Game.MODE);
         attackBox = new Rectangle2D.Float(xPos, yPos, 60 * Game.MODE, 40 * Game.MODE);
         gun = new Gun(this);
@@ -50,6 +51,7 @@ public class Gunslinger extends Player{
     }
     @Override
     public void update(Game game) {
+        super.update(game);
         updateAniTick();
         light.update();
         updatePosition();
@@ -65,9 +67,9 @@ public class Gunslinger extends Player{
         else
             g.drawImage(animation[state][drawIndex], (int) ((int) hitbox.x - xDrawOffset - xLevelOffset), (int) ((int) hitbox.y - yDrawOffset - yLevelOffset), Constant.PLAYER.GUNSLINGER.WIDTH, Constant.PLAYER.GUNSLINGER.HEIGHT, null);
         gun.draw(g, xLevelOffset, yLevelOffset);
-        g.setColor(Color.RED);
-        g.drawRect((int) ((int) hitbox.x - xLevelOffset), (int) ((int) hitbox.y - yLevelOffset), (int) hitbox.width, (int) hitbox.height);
-        g.drawRect((int) ((int) attackBox.x - xLevelOffset), (int) ((int) attackBox.y - yLevelOffset), (int) attackBox.width, (int) attackBox.height);
+//        g.setColor(Color.RED);
+//        g.drawRect((int) ((int) hitbox.x - xLevelOffset), (int) ((int) hitbox.y - yLevelOffset), (int) hitbox.width, (int) hitbox.height);
+//        g.drawRect((int) ((int) attackBox.x - xLevelOffset), (int) ((int) attackBox.y - yLevelOffset), (int) attackBox.width, (int) attackBox.height);
     }
     public void updateInAir() {
         if (ExtraMethods.isEntityOnFloor(hitbox))  resetInAir();

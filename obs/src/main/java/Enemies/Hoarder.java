@@ -20,7 +20,7 @@ public class Hoarder extends Enemy {
 
     private void initClass(int xPos, int yPos) {
         setRawImage(LoadSave.getImg(LoadSave.HOARDER));
-        setAniSpeed(40);
+        setAniSpeed(30);
         setAttackSight((int) (Game.TILE_SIZE * 2.5));
         setSight(20 * attackSight);
         setXDrawOffset((int) (50 * Game.MODE));
@@ -33,7 +33,7 @@ public class Hoarder extends Enemy {
         setAttackBoxHeight((int) (Constant.HOARDER.HEIGHT / 1.5f));
         setHealthBarWidth((int) (Constant.HOARDER.WIDTH / 2.5));
         setHealthBarHeight(Constant.HOARDER.HEIGHT / 12);
-        setMaxHealth(1000);
+        setMaxHealth(500);
         setCurrentHealth(maxHealth);
         setDrawWidth(Constant.HOARDER.WIDTH);
         setDrawHeight(Constant.HOARDER.HEIGHT);

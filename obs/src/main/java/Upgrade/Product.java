@@ -19,7 +19,7 @@ public class Product {
     protected int xPos, yPos, number;
     protected Font numberFont, wordFont;
     protected String price = "20";
-    protected String description = "Description: ...";
+    protected String description = "Description: Guess it baby";
     protected boolean isMoved, isPressed, isReleased;
     protected int xDrawOffset, yDrawOffset;
     protected boolean isPicking;

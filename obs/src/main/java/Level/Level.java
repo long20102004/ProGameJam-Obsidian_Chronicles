@@ -162,6 +162,11 @@ public class Level {
             case 232 -> npc_buttonsList.add(new NPC_Buttons(NPC_Buttons.W, j * Game.TILE_SIZE, i * Game.TILE_SIZE));
             case 233 -> npc_buttonsList.add(new NPC_Buttons(NPC_Buttons.F, j * Game.TILE_SIZE, i * Game.TILE_SIZE));
             case 234 -> npc_buttonsList.add(new NPC_Buttons(NPC_Buttons.J, j * Game.TILE_SIZE, i * Game.TILE_SIZE));
+            case 235 -> npc_buttonsList.add(new NPC_Buttons(NPC_Buttons.K, j * Game.TILE_SIZE, i * Game.TILE_SIZE));
+            case 236 -> npc_buttonsList.add(new NPC_Buttons(NPC_Buttons.G, j * Game.TILE_SIZE, i * Game.TILE_SIZE));
+            case 237 -> npc_buttonsList.add(new NPC_Buttons(NPC_Buttons.H, j * Game.TILE_SIZE, i * Game.TILE_SIZE));
+            case 238 -> npc_buttonsList.add(new NPC_Buttons(NPC_Buttons.U, j * Game.TILE_SIZE, i * Game.TILE_SIZE));
+
         }
     }
     public int getTileType(int x, int y) {

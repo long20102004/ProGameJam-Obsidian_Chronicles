@@ -75,6 +75,7 @@ public class SwordHero extends Player {
 
     @Override
     public void update(Game game) {
+        super.update(game);
         updateAniTick();
         light.update();
         updatePosition();
@@ -227,7 +228,7 @@ public class SwordHero extends Player {
 
     public void setState(int state) {
         if (state != Constant.PLAYER.SWORD_HERO.RUN_FAST && state != this.state) drawIndex = 0;
-        if (state == Constant.PLAYER.SWORD_HERO.DASH && currentPower <= 30) return;
+        if (state == Constant.PLAYER.SWORD_HERO.DASH && currentPower < 20) return;
         this.state = state;
     }
 
@@ -252,7 +253,7 @@ public class SwordHero extends Player {
     private void handleDashState() {
         if (drawIndex >= 2 && readyToDash) {
             ExtraMethods.updateLongMove(hitbox, 200, isRight);
-            currentPower -= 30;
+            currentPower -= 20;
             readyToDash = false;
             game.getAudioPlayer().playEffectSound(AudioPlayer.DASH);
         }

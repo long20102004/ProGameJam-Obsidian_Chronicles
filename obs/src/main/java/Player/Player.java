@@ -18,6 +18,7 @@ import java.awt.image.BufferedImage;
 import java.time.Instant;
 import java.util.Random;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import static Main.Game.reward;
 
@@ -108,9 +109,16 @@ public abstract class Player implements PlayerMethods {
     int xDeltaRandom, yDeltaRandom;
     protected Timer timer = new Timer();
     public Player(int x, int y, Game game) {
+
         this.game = game;
         this.xPos = x;
         this.yPos = y;
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                updateHealthAndPower(20, 10, 0);
+            }
+        }, 0, 7000);
     }
     protected void updateWallJump() {
     }
